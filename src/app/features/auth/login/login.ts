@@ -7,7 +7,8 @@ import { AuthStore } from '../../../core/store/auth.store'
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html'
+  templateUrl: './login.html',
+  styleUrl: "./login.scss",
 })
 export class LoginComponent {
   private fb = inject(FormBuilder)

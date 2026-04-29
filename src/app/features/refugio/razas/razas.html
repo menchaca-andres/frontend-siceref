@@ -1,0 +1,74 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Razas</h2>
+        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+        <button (click)="abrirFormCrear()">+ Nueva Raza</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (raza of razas(); track raza.id_raza) {
+            <tr>
+                <td>{{ raza.nom_raza }}</td>
+                <td>{{ raza.nom_espe }}</td>
+                <td>
+                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                    <button (click)="abrirFormEditar(raza)">Editar</button>
+                    <button (click)="eliminar(raza.id_raza)">Eliminar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ razaEditando() ? 'Editar Raza' : 'Nueva Raza' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div>
+                    <label>Especie</label>
+                    <select formControlName="id_espe">
+                        <option value="">Selecciona una especie</option>
+                        @for (especie of especies(); track especie.id_espe) {
+                        <option [value]="especie.id_espe">{{ especie.nom_espe }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Nombre de la Raza</label>
+                    <input type="text" formControlName="nom_raza" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ razaEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+</div>

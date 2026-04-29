@@ -1,0 +1,93 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Refugios</h2>
+        <button (click)="abrirFormCrear()">+ Nuevo Refugio</button>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Licencia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (refugio of refugios(); track refugio.id_refug) {
+            <tr>
+                <td>{{ refugio.nom_refug }}</td>
+                <td>{{ refugio.dir_refug }}</td>
+                <td>{{ refugio.telf_refug }}</td>
+                <td>{{ refugio.corr_refug }}</td>
+                <td>{{ refugio.licencia_refug }}</td>
+                <td>
+                    <button (click)="abrirFormEditar(refugio)">Editar</button>
+                    <button (click)="eliminar(refugio.id_refug)">Eliminar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ refugioEditando() ? 'Editar Refugio' : 'Nuevo Refugio' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_refug" />
+                </div>
+
+                <div>
+                    <label>Dirección</label>
+                    <input type="text" formControlName="dir_refug" />
+                </div>
+
+                <div>
+                    <label>Teléfono</label>
+                    <input type="text" formControlName="telf_refug" />
+                </div>
+
+                <div>
+                    <label>Correo</label>
+                    <input type="email" formControlName="corr_refug" />
+                </div>
+
+                @if (!refugioEditando()) {
+                <div>
+                    <label>Contraseña</label>
+                    <input type="password" formControlName="contra_refug" />
+                </div>
+                }
+
+                <div>
+                    <label>Licencia</label>
+                    <input type="text" formControlName="licencia_refug" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ refugioEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+</div>

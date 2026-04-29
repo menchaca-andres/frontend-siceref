@@ -1,0 +1,85 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Usuarios</h2>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>Refugio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (usuario of usuarios(); track usuario.id_usuario) {
+            <tr>
+                <td>{{ usuario.nom_usuario }}</td>
+                <td>{{ usuario.apell_usuario }}</td>
+                <td>{{ usuario.corr_usuario }}</td>
+                <td>{{ usuario.telf_usuario }}</td>
+                <td>{{ usuario.nom_rol }}</td>
+                <td>{{ usuario.nom_refug ?? 'Sin refugio' }}</td>
+                <td>
+                    <button (click)="abrirFormEditar(usuario)">Editar</button>
+                    <button (click)="eliminar(usuario.id_usuario)">Eliminar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>Editar Usuario</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_usuario" />
+                </div>
+
+                <div>
+                    <label>Apellido</label>
+                    <input type="text" formControlName="apell_usuario" />
+                </div>
+
+                <div>
+                    <label>Correo</label>
+                    <input type="email" formControlName="corr_usuario" />
+                </div>
+
+                <div>
+                    <label>Teléfono</label>
+                    <input type="text" formControlName="telf_usuario" />
+                </div>
+
+                <div>
+                    <label>Dirección</label>
+                    <input type="text" formControlName="direc_usuario" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">Actualizar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+</div>

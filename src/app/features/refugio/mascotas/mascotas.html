@@ -1,0 +1,118 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Mascotas</h2>
+        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+        <button (click)="abrirFormCrear()">+ Nueva Mascota</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Raza</th>
+                <th>Especie</th>
+                <th>Edad</th>
+                <th>Género</th>
+                <th>Esterilizado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (mascota of mascotas(); track mascota.id_mascot) {
+            <tr>
+                <td>{{ mascota.nom_mascot }}</td>
+                <td>{{ mascota.nom_raza }}</td>
+                <td>{{ mascota.nom_espe }}</td>
+                <td>{{ mascota.edad_mascot }} años</td>
+                <td>{{ mascota.gen_mascot ? 'Macho' : 'Hembra' }}</td>
+                <td>{{ mascota.esterilizado ? 'Sí' : 'No' }}</td>
+                <td>
+                    <button (click)="abrirFormEditar(mascota)">Editar</button>
+                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                    <button (click)="eliminar(mascota.id_mascot)">Eliminar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ mascotaEditando() ? 'Editar Mascota' : 'Nueva Mascota' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_mascot" />
+                </div>
+
+                <div>
+                    <label>Raza</label>
+                    <select formControlName="id_raza">
+                        <option value="">Selecciona una raza</option>
+                        @for (raza of razas(); track raza.id_raza) {
+                        <option [value]="raza.id_raza">{{ raza.nom_raza }} - {{ raza.nom_espe }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Edad (años)</label>
+                    <input type="number" formControlName="edad_mascot" min="0" />
+                </div>
+
+                <div>
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" formControlName="fenac_mascot" />
+                </div>
+
+                <div>
+                    <label>Descripción</label>
+                    <textarea formControlName="descrip_mascot" rows="3"></textarea>
+                </div>
+
+                <div>
+                    <label>Género</label>
+                    <select formControlName="gen_mascot">
+                        <option [value]="true">Macho</option>
+                        <option [value]="false">Hembra</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Esterilizado</label>
+                    <select formControlName="esterilizado">
+                        <option [value]="false">No</option>
+                        <option [value]="true">Sí</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Imagen (nombre del archivo)</label>
+                    <input type="text" formControlName="img_mascot" placeholder="mascota.jpg" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ mascotaEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+</div>

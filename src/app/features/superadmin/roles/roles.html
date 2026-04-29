@@ -1,0 +1,59 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Roles</h2>
+        <button (click)="abrirFormCrear()">+ Nuevo Rol</button>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (rol of roles(); track rol.id_rol) {
+            <tr>
+                <td>{{ rol.id_rol }}</td>
+                <td>{{ rol.nom_rol }}</td>
+                <td>
+                    <button (click)="abrirFormEditar(rol)">Editar</button>
+                    <button (click)="eliminar(rol.id_rol)">Eliminar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ rolEditando() ? 'Editar Rol' : 'Nuevo Rol' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div>
+                    <label>Nombre del Rol</label>
+                    <input type="text" formControlName="nom_rol" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ rolEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    }
+</div>

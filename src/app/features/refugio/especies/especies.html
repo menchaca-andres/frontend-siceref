@@ -1,0 +1,63 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Especies</h2>
+        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+        <button (click)="abrirFormCrear()">+ Nueva Especie</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (especie of especies(); track especie.id_espe) {
+            <tr>
+                <td>{{ especie.id_espe }}</td>
+                <td>{{ especie.nom_espe }}</td>
+                <td>
+                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                    <button (click)="abrirFormEditar(especie)">Editar</button>
+                    <button (click)="eliminar(especie.id_espe)">Eliminar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ especieEditando() ? 'Editar Especie' : 'Nueva Especie' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_espe" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ especieEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    }
+</div>

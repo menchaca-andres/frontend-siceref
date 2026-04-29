@@ -1,0 +1,106 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Mi Perfil</h2>
+        @if (!editando()) {
+        <button (click)="activarEdicion()">Editar Perfil</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (success()) {
+    <p class="success">{{ success() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (usuario()) {
+
+    @if (!editando()) {
+    <!-- Vista de solo lectura -->
+    <div class="perfil-info">
+        <div class="perfil-row">
+            <span class="label">Nombre</span>
+            <span>{{ usuario()!.nom_usuario }} {{ usuario()!.apell_usuario }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Correo</span>
+            <span>{{ usuario()!.corr_usuario }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Teléfono</span>
+            <span>{{ usuario()!.telf_usuario }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Dirección</span>
+            <span>{{ usuario()!.direc_usuario }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Fecha de Nacimiento</span>
+            <span>{{ usuario()!.fenac_usuario | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Género</span>
+            <span>{{ usuario()!.gen_usuario ? 'Masculino' : 'Femenino' }}</span>
+        </div>
+        <div class="perfil-row">
+            <span class="label">Rol</span>
+            <span>{{ usuario()!.nom_rol }}</span>
+        </div>
+    </div>
+
+    } @else {
+    <!-- Formulario de edición -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div>
+            <label>Nombre</label>
+            <input type="text" formControlName="nom_usuario" />
+            @if (form.get('nom_usuario')?.invalid && form.get('nom_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Apellido</label>
+            <input type="text" formControlName="apell_usuario" />
+            @if (form.get('apell_usuario')?.invalid && form.get('apell_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Correo</label>
+            <input type="email" formControlName="corr_usuario" />
+            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+            <span>Correo inválido</span>
+            }
+        </div>
+
+        <div>
+            <label>Teléfono</label>
+            <input type="text" formControlName="telf_usuario" />
+            @if (form.get('telf_usuario')?.invalid && form.get('telf_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Dirección</label>
+            <input type="text" formControlName="direc_usuario" />
+            @if (form.get('direc_usuario')?.invalid && form.get('direc_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div class="form-actions">
+            <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+            <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+        </div>
+
+    </form>
+    }
+    }
+</div>
