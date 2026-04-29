@@ -1,1 +1,22 @@
-<p>sidebar works!</p>
+<aside class="sidebar">
+
+    @if (authStore.isSuperadmin()) {
+    <p class="menu-title">Administración</p>
+    <a routerLink="/superadmin/refugios" routerLinkActive="active">Refugios</a>
+    <a routerLink="/superadmin/usuarios" routerLinkActive="active">Usuarios</a>
+    <a routerLink="/superadmin/roles" routerLinkActive="active">Roles</a>
+    }
+
+    @if (authStore.isAdminRefugio() || authStore.isTrabajador()) {
+    <p class="menu-title">Mi Refugio</p>
+    <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
+    <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
+    <a routerLink="/refugio/especies" routerLinkActive="active">Especies</a>
+    }
+
+    @if (authStore.isAdoptante()) {
+    <p class="menu-title">Mi Cuenta</p>
+    <a routerLink="/adoptante/perfil" routerLinkActive="active">Mi Perfil</a>
+    }
+
+</aside>

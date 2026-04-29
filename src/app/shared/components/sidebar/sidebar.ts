@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core'
+import { RouterLink, RouterLinkActive } from '@angular/router'
+import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
   selector: 'app-sidebar',
-  imports: [],
-  templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss',
+  imports: [RouterLink, RouterLinkActive],
+  templateUrl: './sidebar.html'
 })
-export class Sidebar {}
+export class SidebarComponent {
+  authStore = inject(AuthStore)
+}
