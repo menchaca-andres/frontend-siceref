@@ -1,0 +1,33 @@
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div>
+            <label>Correo</label>
+            <input type="email" formControlName="corr_usuario" placeholder="correo@gmail.com" />
+            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+            <span>Correo inválido</span>
+            }
+        </div>
+
+        <div>
+            <label>Contraseña</label>
+            <input type="password" formControlName="contra_usuario" placeholder="••••••" />
+            @if (form.get('contra_usuario')?.invalid && form.get('contra_usuario')?.touched) {
+            <span>Mínimo 6 caracteres</span>
+            }
+        </div>
+
+        @if (error) {
+        <p class="error">{{ error }}</p>
+        }
+
+        <button type="submit" [disabled]="form.invalid || loading">
+            {{ loading ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+
+    </form>
+
+    <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate</a></p>
+</div>

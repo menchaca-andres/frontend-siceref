@@ -1,0 +1,85 @@
+<div class="register-container">
+    <h2>Crear Cuenta</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div>
+            <label>Nombre</label>
+            <input type="text" formControlName="nom_usuario" placeholder="Juan" />
+            @if (form.get('nom_usuario')?.invalid && form.get('nom_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Apellido</label>
+            <input type="text" formControlName="apell_usuario" placeholder="Pérez" />
+            @if (form.get('apell_usuario')?.invalid && form.get('apell_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Correo</label>
+            <input type="email" formControlName="corr_usuario" placeholder="correo@gmail.com" />
+            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+            <span>Correo inválido</span>
+            }
+        </div>
+
+        <div>
+            <label>Contraseña</label>
+            <input type="password" formControlName="contra_usuario" placeholder="••••••" />
+            @if (form.get('contra_usuario')?.invalid && form.get('contra_usuario')?.touched) {
+            <span>Mínimo 6 caracteres</span>
+            }
+        </div>
+
+        <div>
+            <label>Teléfono</label>
+            <input type="text" formControlName="telf_usuario" placeholder="77712345" />
+            @if (form.get('telf_usuario')?.invalid && form.get('telf_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Fecha de Nacimiento</label>
+            <input type="date" formControlName="fenac_usuario" />
+            @if (form.get('fenac_usuario')?.invalid && form.get('fenac_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        <div>
+            <label>Género</label>
+            <select formControlName="gen_usuario">
+                <option [value]="true">Masculino</option>
+                <option [value]="false">Femenino</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Dirección</label>
+            <input type="text" formControlName="direc_usuario" placeholder="Av. Example 123" />
+            @if (form.get('direc_usuario')?.invalid && form.get('direc_usuario')?.touched) {
+            <span>Campo requerido</span>
+            }
+        </div>
+
+        @if (error) {
+        <p class="error">{{ error }}</p>
+        }
+
+        @if (success) {
+        <p class="success">{{ success }}</p>
+        }
+
+        <button type="submit" [disabled]="form.invalid || loading">
+            {{ loading ? 'Registrando...' : 'Registrarse' }}
+        </button>
+
+    </form>
+
+    <p>¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
+</div>
