@@ -8,8 +8,8 @@ export interface Mascota {
     descrip_mascot: string
     gen_mascot: boolean
     esterilizado: boolean
-    nom_raza?: string   // viene del JOIN con razas
-    nom_espe?: string   // viene del JOIN con especies
+    nom_raza?: string
+    nom_espe?: string
 }
 
 export interface CreateMascotaDto {
