@@ -26,4 +26,8 @@ export class AuthService {
     registerSuperadmin(data: RegisterDto): Observable<any> {
         return this.http.post(`${this.apiUrl}/auth/register/superadmin`, data)
     }
+
+    registerAdminRefugio(data: RegisterWorkerDto): Observable<any> {
+        return this.http.post(`${this.apiUrl}/auth/register/admin-refugio`, data)
+    }
 }

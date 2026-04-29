@@ -8,6 +8,10 @@
     <p class="error">{{ error() }}</p>
     }
 
+    @if (success()) {
+    <p class="success">{{ success() }}</p>
+    }
+
     @if (loading()) {
     <p>Cargando...</p>
     } @else {
@@ -30,7 +34,8 @@
                 <td>{{ refugio.telf_refug }}</td>
                 <td>{{ refugio.corr_refug }}</td>
                 <td>{{ refugio.licencia_refug }}</td>
-                <td>
+                <td class="acciones">
+                    <button (click)="abrirFormAdmin(refugio)">+ Admin</button>
                     <button (click)="abrirFormEditar(refugio)">Editar</button>
                     <button (click)="eliminar(refugio.id_refug)">Eliminar</button>
                 </td>
@@ -40,12 +45,13 @@
     </table>
     }
 
-    @if (mostrarForm()) {
+    <!-- Modal Refugio -->
+    @if (mostrarFormRefugio()) {
     <div class="modal-overlay">
         <div class="modal">
             <h3>{{ refugioEditando() ? 'Editar Refugio' : 'Nuevo Refugio' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="formRefugio" (ngSubmit)="onSubmitRefugio()">
 
                 <div>
                     <label>Nombre</label>
@@ -80,8 +86,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" (click)="cerrarFormRefugio()">Cancelar</button>
+                    <button type="submit" [disabled]="formRefugio.invalid">
                         {{ refugioEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -90,4 +96,66 @@
         </div>
     </div>
     }
+
+    <!-- Modal Admin Refugio -->
+    @if (mostrarFormAdmin()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>Crear Administrador — {{ refugioSeleccionado()?.nom_refug }}</h3>
+
+            <form [formGroup]="formAdmin" (ngSubmit)="onSubmitAdmin()">
+
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_usuario" />
+                </div>
+
+                <div>
+                    <label>Apellido</label>
+                    <input type="text" formControlName="apell_usuario" />
+                </div>
+
+                <div>
+                    <label>Correo</label>
+                    <input type="email" formControlName="corr_usuario" />
+                </div>
+
+                <div>
+                    <label>Contraseña</label>
+                    <input type="password" formControlName="contra_usuario" />
+                </div>
+
+                <div>
+                    <label>Teléfono</label>
+                    <input type="text" formControlName="telf_usuario" />
+                </div>
+
+                <div>
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" formControlName="fenac_usuario" />
+                </div>
+
+                <div>
+                    <label>Género</label>
+                    <select formControlName="gen_usuario">
+                        <option [value]="true">Masculino</option>
+                        <option [value]="false">Femenino</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Dirección</label>
+                    <input type="text" formControlName="direc_usuario" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarFormAdmin()">Cancelar</button>
+                    <button type="submit" [disabled]="formAdmin.invalid">Crear Administrador</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+
 </div>
