@@ -1,20 +1,25 @@
+import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
-import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
-import { RazaService } from '../../../shared/services/razas/raza.service'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Mascota } from '../../../core/models/mascotas/mascota.model'
 import { Raza } from '../../../core/models/razas/raza.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component'
+import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { RazaService } from '../../../shared/services/razas/raza.service'
 
 @Component({
   selector: 'app-mascotas',
-  imports: [ReactiveFormsModule],
-  templateUrl: './mascotas.html'
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent],
+  templateUrl: './mascotas.html',
+  styleUrl: './mascotas.scss'
 })
 export class MascotasComponent implements OnInit {
   private mascotaService = inject(MascotaService)
   private razaService = inject(RazaService)
   private fb = inject(FormBuilder)
+  private notificationService = inject(NotificationService)
   authStore = inject(AuthStore)
 
   mascotas = signal<Mascota[]>([])
@@ -23,6 +28,9 @@ export class MascotasComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   mascotaEditando = signal<Mascota | null>(null)
+  mostrarConfirm = signal(false)
+  mascotaAEliminar = signal<Mascota | null>(null)
+  eliminando = signal(false)
 
   form: FormGroup = this.fb.group({
     id_raza: ['', Validators.required],
@@ -48,7 +56,7 @@ export class MascotasComponent implements OnInit {
         this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message)
+        this.notificationService.error('Error al cargar las mascotas')
         this.loading.set(false)
       }
     })
@@ -56,7 +64,8 @@ export class MascotasComponent implements OnInit {
 
   cargarRazas(): void {
     this.razaService.getAll().subscribe({
-      next: (data) => this.razas.set(data)
+      next: (data) => this.razas.set(data),
+      error: () => this.notificationService.error('Error al cargar las razas')
     })
   }
 
@@ -85,28 +94,50 @@ export class MascotasComponent implements OnInit {
     if (editando) {
       this.mascotaService.update(editando.id_mascot, this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('Mascota actualizada correctamente')
           this.cerrarForm()
           this.cargarMascotas()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al actualizar la mascota')
       })
     } else {
       this.mascotaService.create(this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('Mascota creada correctamente')
           this.cerrarForm()
           this.cargarMascotas()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al crear la mascota')
       })
     }
   }
 
-  eliminar(id: number): void {
-    if (!confirm('¿Estás seguro de eliminar esta mascota?')) return
+  abrirConfirmarEliminar(mascota: Mascota): void {
+    this.mascotaAEliminar.set(mascota)
+    this.mostrarConfirm.set(true)
+  }
 
-    this.mascotaService.delete(id).subscribe({
-      next: () => this.cargarMascotas(),
-      error: (err) => this.error.set(err.error.message)
+  confirmarEliminar(): void {
+    const mascota = this.mascotaAEliminar()
+    if (!mascota) return
+
+    this.eliminando.set(true)
+    this.mascotaService.delete(mascota.id_mascot).subscribe({
+      next: () => {
+        this.notificationService.success('Mascota eliminada correctamente')
+        this.cerrarConfirm()
+        this.cargarMascotas()
+      },
+      error: () => {
+        this.notificationService.error('Error al eliminar la mascota')
+        this.eliminando.set(false)
+      }
     })
+  }
+
+  cerrarConfirm(): void {
+    this.mostrarConfirm.set(false)
+    this.mascotaAEliminar.set(null)
+    this.eliminando.set(false)
   }
 }

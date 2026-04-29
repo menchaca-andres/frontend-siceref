@@ -1,44 +1,49 @@
 <div class="page">
     <div class="page-header">
-        <h2>Mascotas</h2>
+        <h2>🐾 Mascotas</h2>
         @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-        <button (click)="abrirFormCrear()">+ Nueva Mascota</button>
+        <button class="btn-primary" (click)="abrirFormCrear()">+ Nueva Mascota</button>
         }
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando mascotas...</p>
+    </div>
     } @else {
-    <table>
+    <table role="table">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Raza</th>
-                <th>Especie</th>
-                <th>Edad</th>
-                <th>Género</th>
-                <th>Esterilizado</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Raza</th>
+                <th scope="col">Especie</th>
+                <th scope="col">Edad</th>
+                <th scope="col">Género</th>
+                <th scope="col">Esterilizado</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @for (mascota of mascotas(); track mascota.id_mascot) {
             <tr>
-                <td>{{ mascota.nom_mascot }}</td>
-                <td>{{ mascota.nom_raza }}</td>
-                <td>{{ mascota.nom_espe }}</td>
-                <td>{{ mascota.edad_mascot }} años</td>
-                <td>{{ mascota.gen_mascot ? 'Macho' : 'Hembra' }}</td>
-                <td>{{ mascota.esterilizado ? 'Sí' : 'No' }}</td>
-                <td>
-                    <button (click)="abrirFormEditar(mascota)">Editar</button>
-                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-                    <button (click)="eliminar(mascota.id_mascot)">Eliminar</button>
-                    }
+                <td data-label="Nombre">{{ mascota.nom_mascot }}</td>
+                <td data-label="Raza">{{ mascota.nom_raza }}</td>
+                <td data-label="Especie">{{ mascota.nom_espe }}</td>
+                <td data-label="Edad">{{ mascota.edad_mascot }} años</td>
+                <td data-label="Género">{{ mascota.gen_mascot ? '♂ Macho' : '♀ Hembra' }}</td>
+                <td data-label="Esterilizado">{{ mascota.esterilizado ? '✓ Sí' : '✗ No' }}</td>
+                <td data-label="Acciones">
+                    <div class="mascota-actions">
+                        <button class="btn-primary btn-sm" (click)="abrirFormEditar(mascota)" aria-label="Editar mascota">Editar</button>
+                        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                        <button class="btn-danger btn-sm" (click)="abrirConfirmarEliminar(mascota)" aria-label="Eliminar mascota">Eliminar</button>
+                        }
+                    </div>
                 </td>
             </tr>
             }
@@ -47,20 +52,26 @@
     }
 
     @if (mostrarForm()) {
-    <div class="modal-overlay">
-        <div class="modal">
-            <h3>{{ mascotaEditando() ? 'Editar Mascota' : 'Nueva Mascota' }}</h3>
+    <div class="modal-overlay" (click)="cerrarForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h3>{{ mascotaEditando() ? '✏️ Editar Mascota' : '➕ Nueva Mascota' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
                 <div>
-                    <label>Nombre</label>
-                    <input type="text" formControlName="nom_mascot" />
+                    <label for="nom_mascot">Nombre *</label>
+                    <input 
+                        id="nom_mascot"
+                        type="text" 
+                        formControlName="nom_mascot"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
                 <div>
-                    <label>Raza</label>
-                    <select formControlName="id_raza">
+                    <label for="id_raza">Raza *</label>
+                    <select id="id_raza" formControlName="id_raza" required aria-required="true">
                         <option value="">Selecciona una raza</option>
                         @for (raza of razas(); track raza.id_raza) {
                         <option [value]="raza.id_raza">{{ raza.nom_raza }} - {{ raza.nom_espe }}</option>
@@ -69,44 +80,70 @@
                 </div>
 
                 <div>
-                    <label>Edad (años)</label>
-                    <input type="number" formControlName="edad_mascot" min="0" />
+                    <label for="edad_mascot">Edad (años) *</label>
+                    <input 
+                        id="edad_mascot"
+                        type="number" 
+                        formControlName="edad_mascot" 
+                        min="0"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
                 <div>
-                    <label>Fecha de Nacimiento</label>
-                    <input type="date" formControlName="fenac_mascot" />
+                    <label for="fenac_mascot">Fecha de Nacimiento *</label>
+                    <input 
+                        id="fenac_mascot"
+                        type="date" 
+                        formControlName="fenac_mascot"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
                 <div>
-                    <label>Descripción</label>
-                    <textarea formControlName="descrip_mascot" rows="3"></textarea>
+                    <label for="descrip_mascot">Descripción *</label>
+                    <textarea 
+                        id="descrip_mascot"
+                        formControlName="descrip_mascot" 
+                        rows="3"
+                        required
+                        aria-required="true"
+                    ></textarea>
                 </div>
 
                 <div>
-                    <label>Género</label>
-                    <select formControlName="gen_mascot">
-                        <option [value]="true">Macho</option>
-                        <option [value]="false">Hembra</option>
+                    <label for="gen_mascot">Género *</label>
+                    <select id="gen_mascot" formControlName="gen_mascot" required aria-required="true">
+                        <option [value]="true">♂ Macho</option>
+                        <option [value]="false">♀ Hembra</option>
                     </select>
                 </div>
 
                 <div>
-                    <label>Esterilizado</label>
-                    <select formControlName="esterilizado">
-                        <option [value]="false">No</option>
-                        <option [value]="true">Sí</option>
+                    <label for="esterilizado">Esterilizado *</label>
+                    <select id="esterilizado" formControlName="esterilizado" required aria-required="true">
+                        <option [value]="false">✗ No</option>
+                        <option [value]="true">✓ Sí</option>
                     </select>
                 </div>
 
                 <div>
-                    <label>Imagen (nombre del archivo)</label>
-                    <input type="text" formControlName="img_mascot" placeholder="mascota.jpg" />
+                    <label for="img_mascot">Imagen (nombre del archivo) *</label>
+                    <input 
+                        id="img_mascot"
+                        type="text" 
+                        formControlName="img_mascot" 
+                        placeholder="mascota.jpg"
+                        required
+                        aria-required="true"
+                    />
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" class="btn-secondary" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid">
                         {{ mascotaEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -115,4 +152,15 @@
         </div>
     </div>
     }
+
+    <app-confirm-dialog
+        title="Eliminar Mascota"
+        message="¿Estás seguro de que deseas eliminar esta mascota? Esta acción no se puede deshacer."
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        [isOpen]="mostrarConfirm"
+        [isLoading]="eliminando"
+        (confirm)="confirmarEliminar()"
+        (cancel)="cerrarConfirm()"
+    ></app-confirm-dialog>
 </div>

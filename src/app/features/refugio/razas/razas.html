@@ -1,36 +1,41 @@
 <div class="page">
     <div class="page-header">
-        <h2>Razas</h2>
+        <h2>🦮 Razas</h2>
         @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-        <button (click)="abrirFormCrear()">+ Nueva Raza</button>
+        <button class="btn-primary" (click)="abrirFormCrear()">+ Nueva Raza</button>
         }
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando razas...</p>
+    </div>
     } @else {
-    <table>
+    <table role="table">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Especie</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Especie</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @for (raza of razas(); track raza.id_raza) {
             <tr>
-                <td>{{ raza.nom_raza }}</td>
-                <td>{{ raza.nom_espe }}</td>
-                <td>
-                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-                    <button (click)="abrirFormEditar(raza)">Editar</button>
-                    <button (click)="eliminar(raza.id_raza)">Eliminar</button>
-                    }
+                <td data-label="Nombre">{{ raza.nom_raza }}</td>
+                <td data-label="Especie">{{ raza.nom_espe }}</td>
+                <td data-label="Acciones">
+                    <div class="actions-buttons">
+                        <button class="btn-primary btn-sm" (click)="abrirFormEditar(raza)" aria-label="Editar raza">Editar</button>
+                        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                        <button class="btn-danger btn-sm" (click)="abrirConfirmarEliminar(raza)" aria-label="Eliminar raza">Eliminar</button>
+                        }
+                    </div>
                 </td>
             </tr>
             }
@@ -39,15 +44,15 @@
     }
 
     @if (mostrarForm()) {
-    <div class="modal-overlay">
-        <div class="modal">
-            <h3>{{ razaEditando() ? 'Editar Raza' : 'Nueva Raza' }}</h3>
+    <div class="modal-overlay" (click)="cerrarForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h3>{{ razaEditando() ? '✏️ Editar Raza' : '➕ Nueva Raza' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
                 <div>
-                    <label>Especie</label>
-                    <select formControlName="id_espe">
+                    <label for="id_espe">Especie *</label>
+                    <select id="id_espe" formControlName="id_espe" required aria-required="true">
                         <option value="">Selecciona una especie</option>
                         @for (especie of especies(); track especie.id_espe) {
                         <option [value]="especie.id_espe">{{ especie.nom_espe }}</option>
@@ -56,13 +61,13 @@
                 </div>
 
                 <div>
-                    <label>Nombre de la Raza</label>
-                    <input type="text" formControlName="nom_raza" />
+                    <label for="nom_raza">Nombre de la Raza *</label>
+                    <input id="nom_raza" type="text" formControlName="nom_raza" required aria-required="true" />
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" class="btn-secondary" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid">
                         {{ razaEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -71,4 +76,15 @@
         </div>
     </div>
     }
+
+    <app-confirm-dialog 
+        [title]="'Eliminar Raza'"
+        [message]="'¿Estás seguro de que deseas eliminar esta raza? No podrá recuperarse.'"
+        [confirmText]="'Eliminar'"
+        [cancelText]="'Cancelar'"
+        [isOpen]="mostrarConfirm"
+        [isLoading]="eliminando"
+        (confirm)="confirmarEliminar()"
+        (cancel)="cerrarConfirm()"
+    ></app-confirm-dialog>
 </div>

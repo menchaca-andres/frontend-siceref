@@ -1,38 +1,43 @@
 <div class="page">
     <div class="page-header">
-        <h2>Refugios</h2>
-        <button (click)="abrirFormCrear()">+ Nuevo Refugio</button>
+        <h2>🏠 Refugios</h2>
+        <button class="btn-primary" (click)="abrirFormCrear()">+ Nuevo Refugio</button>
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando refugios...</p>
+    </div>
     } @else {
-    <table>
+    <table role="table">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-                <th>Licencia</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Licencia</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @for (refugio of refugios(); track refugio.id_refug) {
             <tr>
-                <td>{{ refugio.nom_refug }}</td>
-                <td>{{ refugio.dir_refug }}</td>
-                <td>{{ refugio.telf_refug }}</td>
-                <td>{{ refugio.corr_refug }}</td>
-                <td>{{ refugio.licencia_refug }}</td>
-                <td>
-                    <button (click)="abrirFormEditar(refugio)">Editar</button>
-                    <button (click)="eliminar(refugio.id_refug)">Eliminar</button>
+                <td data-label="Nombre">{{ refugio.nom_refug }}</td>
+                <td data-label="Dirección">{{ refugio.dir_refug }}</td>
+                <td data-label="Teléfono">{{ refugio.telf_refug }}</td>
+                <td data-label="Correo">{{ refugio.corr_refug }}</td>
+                <td data-label="Licencia">{{ refugio.licencia_refug }}</td>
+                <td data-label="Acciones">
+                    <div class="actions-buttons">
+                        <button class="btn-primary btn-sm" (click)="abrirFormEditar(refugio)" aria-label="Editar refugio">Editar</button>
+                        <button class="btn-danger btn-sm" (click)="abrirConfirmarEliminar(refugio)" aria-label="Eliminar refugio">Eliminar</button>
+                    </div>
                 </td>
             </tr>
             }
@@ -41,47 +46,47 @@
     }
 
     @if (mostrarForm()) {
-    <div class="modal-overlay">
-        <div class="modal">
-            <h3>{{ refugioEditando() ? 'Editar Refugio' : 'Nuevo Refugio' }}</h3>
+    <div class="modal-overlay" (click)="cerrarForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h3>{{ refugioEditando() ? '✏️ Editar Refugio' : '➕ Nuevo Refugio' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
                 <div>
-                    <label>Nombre</label>
-                    <input type="text" formControlName="nom_refug" />
+                    <label for="nom_refug">Nombre *</label>
+                    <input id="nom_refug" type="text" formControlName="nom_refug" required aria-required="true" />
                 </div>
 
                 <div>
-                    <label>Dirección</label>
-                    <input type="text" formControlName="dir_refug" />
+                    <label for="dir_refug">Dirección *</label>
+                    <input id="dir_refug" type="text" formControlName="dir_refug" required aria-required="true" />
                 </div>
 
                 <div>
-                    <label>Teléfono</label>
-                    <input type="text" formControlName="telf_refug" />
+                    <label for="telf_refug">Teléfono *</label>
+                    <input id="telf_refug" type="text" formControlName="telf_refug" required aria-required="true" />
                 </div>
 
                 <div>
-                    <label>Correo</label>
-                    <input type="email" formControlName="corr_refug" />
+                    <label for="corr_refug">Correo *</label>
+                    <input id="corr_refug" type="email" formControlName="corr_refug" required aria-required="true" />
                 </div>
 
                 @if (!refugioEditando()) {
                 <div>
-                    <label>Contraseña</label>
-                    <input type="password" formControlName="contra_refug" />
+                    <label for="contra_refug">Contraseña *</label>
+                    <input id="contra_refug" type="password" formControlName="contra_refug" required aria-required="true" />
                 </div>
                 }
 
                 <div>
-                    <label>Licencia</label>
-                    <input type="text" formControlName="licencia_refug" />
+                    <label for="licencia_refug">Licencia *</label>
+                    <input id="licencia_refug" type="text" formControlName="licencia_refug" required aria-required="true" />
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" class="btn-secondary" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid">
                         {{ refugioEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -90,4 +95,15 @@
         </div>
     </div>
     }
+
+    <app-confirm-dialog 
+        [title]="'Eliminar Refugio'"
+        [message]="'¿Estás seguro de que deseas eliminar este refugio? No podrá recuperarse.'"
+        [confirmText]="'Eliminar'"
+        [cancelText]="'Cancelar'"
+        [isOpen]="mostrarConfirm"
+        [isLoading]="eliminando"
+        (confirm)="confirmarEliminar()"
+        (cancel)="cerrarConfirm()"
+    ></app-confirm-dialog>
 </div>

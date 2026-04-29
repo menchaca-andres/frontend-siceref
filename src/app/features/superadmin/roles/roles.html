@@ -1,32 +1,35 @@
 <div class="page">
     <div class="page-header">
-        <h2>Roles</h2>
-        <button (click)="abrirFormCrear()">+ Nuevo Rol</button>
+        <h2>👑 Roles</h2>
+        <button class="btn-primary" (click)="abrirFormCrear()">+ Nuevo Rol</button>
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando roles...</p>
+    </div>
     } @else {
-    <table>
+    <table role="table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @for (rol of roles(); track rol.id_rol) {
             <tr>
-                <td>{{ rol.id_rol }}</td>
-                <td>{{ rol.nom_rol }}</td>
-                <td>
-                    <button (click)="abrirFormEditar(rol)">Editar</button>
-                    <button (click)="eliminar(rol.id_rol)">Eliminar</button>
+                <td data-label="Nombre">{{ rol.nom_rol }}</td>
+                <td data-label="Acciones">
+                    <div class="actions-buttons">
+                        <button class="btn-primary btn-sm" (click)="abrirFormEditar(rol)" aria-label="Editar rol">Editar</button>
+                        <button class="btn-danger btn-sm" (click)="abrirConfirmarEliminar(rol)" aria-label="Eliminar rol">Eliminar</button>
+                    </div>
                 </td>
             </tr>
             }
@@ -35,19 +38,19 @@
     }
 
     @if (mostrarForm()) {
-    <div class="modal-overlay">
-        <div class="modal">
-            <h3>{{ rolEditando() ? 'Editar Rol' : 'Nuevo Rol' }}</h3>
+    <div class="modal-overlay" (click)="cerrarForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h3>{{ rolEditando() ? '✏️ Editar Rol' : '➕ Nuevo Rol' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
                 <div>
-                    <label>Nombre del Rol</label>
-                    <input type="text" formControlName="nom_rol" />
+                    <label for="nom_rol">Nombre del Rol *</label>
+                    <input id="nom_rol" type="text" formControlName="nom_rol" required aria-required="true" />
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" class="btn-secondary" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid">
                         {{ rolEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -56,4 +59,15 @@
         </div>
     </div>
     }
+
+    <app-confirm-dialog 
+        [title]="'Eliminar Rol'"
+        [message]="'¿Estás seguro de que deseas eliminar este rol? No podrá recuperarse.'"
+        [confirmText]="'Eliminar'"
+        [cancelText]="'Cancelar'"
+        [isOpen]="mostrarConfirm"
+        [isLoading]="eliminando"
+        (confirm)="confirmarEliminar()"
+        (cancel)="cerrarConfirm()"
+    ></app-confirm-dialog>
 </div>

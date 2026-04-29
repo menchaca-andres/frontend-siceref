@@ -1,36 +1,39 @@
 <div class="page">
     <div class="page-header">
-        <h2>Especies</h2>
+        <h2>🦁 Especies</h2>
         @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-        <button (click)="abrirFormCrear()">+ Nueva Especie</button>
+        <button class="btn-primary" (click)="abrirFormCrear()">+ Nueva Especie</button>
         }
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando especies...</p>
+    </div>
     } @else {
-    <table>
+    <table role="table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @for (especie of especies(); track especie.id_espe) {
             <tr>
-                <td>{{ especie.id_espe }}</td>
-                <td>{{ especie.nom_espe }}</td>
-                <td>
-                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
-                    <button (click)="abrirFormEditar(especie)">Editar</button>
-                    <button (click)="eliminar(especie.id_espe)">Eliminar</button>
-                    }
+                <td data-label="Nombre">{{ especie.nom_espe }}</td>
+                <td data-label="Acciones">
+                    <div class="actions-buttons">
+                        <button class="btn-primary btn-sm" (click)="abrirFormEditar(especie)" aria-label="Editar especie">Editar</button>
+                        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                        <button class="btn-danger btn-sm" (click)="abrirConfirmarEliminar(especie)" aria-label="Eliminar especie">Eliminar</button>
+                        }
+                    </div>
                 </td>
             </tr>
             }
@@ -39,19 +42,19 @@
     }
 
     @if (mostrarForm()) {
-    <div class="modal-overlay">
-        <div class="modal">
-            <h3>{{ especieEditando() ? 'Editar Especie' : 'Nueva Especie' }}</h3>
+    <div class="modal-overlay" (click)="cerrarForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h3>{{ especieEditando() ? '✏️ Editar Especie' : '➕ Nueva Especie' }}</h3>
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
                 <div>
-                    <label>Nombre</label>
-                    <input type="text" formControlName="nom_espe" />
+                    <label for="nom_espe">Nombre *</label>
+                    <input id="nom_espe" type="text" formControlName="nom_espe" required aria-required="true" />
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" (click)="cerrarForm()">Cancelar</button>
-                    <button type="submit" [disabled]="form.invalid">
+                    <button type="button" class="btn-secondary" (click)="cerrarForm()">Cancelar</button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid">
                         {{ especieEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
                 </div>
@@ -60,4 +63,15 @@
         </div>
     </div>
     }
+
+    <app-confirm-dialog 
+        [title]="'Eliminar Especie'"
+        [message]="'¿Estás seguro de que deseas eliminar esta especie? No podrá recuperarse.'"
+        [confirmText]="'Eliminar'"
+        [cancelText]="'Cancelar'"
+        [isOpen]="mostrarConfirm"
+        [isLoading]="eliminando"
+        (confirm)="confirmarEliminar()"
+        (cancel)="cerrarConfirm()"
+    ></app-confirm-dialog>
 </div>

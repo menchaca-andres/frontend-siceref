@@ -1,106 +1,147 @@
 <div class="page">
     <div class="page-header">
-        <h2>Mi Perfil</h2>
-        @if (!editando()) {
-        <button (click)="activarEdicion()">Editar Perfil</button>
+        <h2>👤 Mi Perfil</h2>
+        @if (!editando() && !loading()) {
+        <button class="btn-primary" (click)="activarEdicion()">✏️ Editar Perfil</button>
         }
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
-    }
-
-    @if (success()) {
-    <p class="success">{{ success() }}</p>
+    <div class="alert alert-danger" role="alert">⚠️ {{ error() }}</div>
     }
 
     @if (loading()) {
-    <p>Cargando...</p>
+    <div class="loading-text">
+        <div class="spinner"></div>
+        <p>Cargando perfil...</p>
+    </div>
     } @else if (usuario()) {
 
     @if (!editando()) {
-    <!-- Vista de solo lectura -->
-    <div class="perfil-info">
-        <div class="perfil-row">
-            <span class="label">Nombre</span>
-            <span>{{ usuario()!.nom_usuario }} {{ usuario()!.apell_usuario }}</span>
+    <!-- Vista de solo lectura con tarjetas -->
+    <div class="perfil-container">
+        <div class="perfil-card perfil-card-principal">
+            <div class="card-header">
+                <h3>👤 Información Personal</h3>
+            </div>
+            <div class="card-body">
+                <div class="perfil-row">
+                    <span class="label">Nombre Completo</span>
+                    <span class="value name">{{ usuario()!.nom_usuario }} {{ usuario()!.apell_usuario }}</span>
+                </div>
+                <div class="perfil-row">
+                    <span class="label">📧 Correo Electrónico</span>
+                    <span class="value email">{{ usuario()!.corr_usuario }}</span>
+                </div>
+                <div class="perfil-row">
+                    <span class="label">📱 Teléfono</span>
+                    <span class="value">{{ usuario()!.telf_usuario }}</span>
+                </div>
+                <div class="perfil-row">
+                    <span class="label">📍 Dirección</span>
+                    <span class="value">{{ usuario()!.direc_usuario }}</span>
+                </div>
+            </div>
         </div>
-        <div class="perfil-row">
-            <span class="label">Correo</span>
-            <span>{{ usuario()!.corr_usuario }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Teléfono</span>
-            <span>{{ usuario()!.telf_usuario }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Dirección</span>
-            <span>{{ usuario()!.direc_usuario }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Fecha de Nacimiento</span>
-            <span>{{ usuario()!.fenac_usuario | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Género</span>
-            <span>{{ usuario()!.gen_usuario ? 'Masculino' : 'Femenino' }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Rol</span>
-            <span>{{ usuario()!.nom_rol }}</span>
+
+        <div class="perfil-card">
+            <div class="card-header">
+                <h3>ℹ️ Información Adicional</h3>
+            </div>
+            <div class="card-body">
+                <div class="perfil-row">
+                    <span class="label">🎂 Nacimiento</span>
+                    <span class="value">{{ usuario()!.fenac_usuario | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="perfil-row">
+                    <span class="label">👤 Género</span>
+                    <span class="value">{{ usuario()!.gen_usuario ? '♂ Masculino' : '♀ Femenino' }}</span>
+                </div>
+                <div class="perfil-row">
+                    <span class="label">🔐 Rol</span>
+                    <span class="badge">{{ usuario()!.nom_rol }}</span>
+                </div>
+            </div>
         </div>
     </div>
 
     } @else {
     <!-- Formulario de edición -->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="perfil-form-wrapper">
+        <div class="form-card">
+            <div class="form-header">
+                <h3>✏️ Editar Información Personal</h3>
+                <p class="form-subtitle">Actualiza tus datos personales</p>
+            </div>
 
-        <div>
-            <label>Nombre</label>
-            <input type="text" formControlName="nom_usuario" />
-            @if (form.get('nom_usuario')?.invalid && form.get('nom_usuario')?.touched) {
-            <span>Campo requerido</span>
-            }
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+                <div class="form-section">
+                    <h4>Datos Básicos</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom_usuario">Nombre *</label>
+                            <input id="nom_usuario" type="text" formControlName="nom_usuario" required aria-required="true" placeholder="Tu nombre" />
+                            @if (form.get('nom_usuario')?.invalid && form.get('nom_usuario')?.touched) {
+                            <span class="error-text">✗ Campo requerido</span>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apell_usuario">Apellido *</label>
+                            <input id="apell_usuario" type="text" formControlName="apell_usuario" required aria-required="true" placeholder="Tu apellido" />
+                            @if (form.get('apell_usuario')?.invalid && form.get('apell_usuario')?.touched) {
+                            <span class="error-text">✗ Campo requerido</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>Contacto</h4>
+                    <div class="form-group">
+                        <label for="corr_usuario">📧 Correo Electrónico *</label>
+                        <input id="corr_usuario" type="email" formControlName="corr_usuario" required aria-required="true" placeholder="tu@email.com" />
+                        @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+                        <span class="error-text">✗ Correo inválido</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telf_usuario">📱 Teléfono *</label>
+                        <input id="telf_usuario" type="tel" formControlName="telf_usuario" required aria-required="true" placeholder="+57 3XX XXXXXXX" />
+                        @if (form.get('telf_usuario')?.invalid && form.get('telf_usuario')?.touched) {
+                        <span class="error-text">✗ Campo requerido</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4>Ubicación</h4>
+                    <div class="form-group">
+                        <label for="direc_usuario">📍 Dirección *</label>
+                        <input id="direc_usuario" type="text" formControlName="direc_usuario" required aria-required="true" placeholder="Calle, número, apartamento" />
+                        @if (form.get('direc_usuario')?.invalid && form.get('direc_usuario')?.touched) {
+                        <span class="error-text">✗ Campo requerido</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" (click)="cancelarEdicion()">
+                        ✕ Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary" [disabled]="form.invalid || loading()">
+                        @if (loading()) {
+                        <span>💾 Guardando...</span>
+                        } @else {
+                        <span>💾 Guardar Cambios</span>
+                        }
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div>
-            <label>Apellido</label>
-            <input type="text" formControlName="apell_usuario" />
-            @if (form.get('apell_usuario')?.invalid && form.get('apell_usuario')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Correo</label>
-            <input type="email" formControlName="corr_usuario" />
-            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
-            <span>Correo inválido</span>
-            }
-        </div>
-
-        <div>
-            <label>Teléfono</label>
-            <input type="text" formControlName="telf_usuario" />
-            @if (form.get('telf_usuario')?.invalid && form.get('telf_usuario')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Dirección</label>
-            <input type="text" formControlName="direc_usuario" />
-            @if (form.get('direc_usuario')?.invalid && form.get('direc_usuario')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div class="form-actions">
-            <button type="button" (click)="cancelarEdicion()">Cancelar</button>
-            <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
-        </div>
-
-    </form>
+    </div>
     }
     }
 </div>

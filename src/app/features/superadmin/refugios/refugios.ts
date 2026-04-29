@@ -1,22 +1,30 @@
+import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
-import { RefugioService } from '../../../shared/services/refugios/refugio.service'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Refugio } from '../../../core/models/refugios/refugio.model'
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { RefugioService } from '../../../shared/services/refugios/refugio.service'
 
 @Component({
   selector: 'app-refugios',
-  imports: [ReactiveFormsModule],
-  templateUrl: './refugios.html'
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent],
+  templateUrl: './refugios.html',
+  styleUrl: './refugios.scss'
 })
 export class RefugiosComponent implements OnInit {
   private refugioService = inject(RefugioService)
   private fb = inject(FormBuilder)
+  private notificationService = inject(NotificationService)
 
   refugios = signal<Refugio[]>([])
   loading = signal(false)
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   refugioEditando = signal<Refugio | null>(null)
+  mostrarConfirm = signal(false)
+  refugioAEliminar = signal<Refugio | null>(null)
+  eliminando = signal(false)
 
   form: FormGroup = this.fb.group({
     nom_refug: ['', Validators.required],
@@ -39,7 +47,7 @@ export class RefugiosComponent implements OnInit {
         this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message || 'Error al cargar refugios')
+        this.notificationService.error('Error al cargar los refugios')
         this.loading.set(false)
       }
     })
@@ -74,28 +82,50 @@ export class RefugiosComponent implements OnInit {
     if (editando) {
       this.refugioService.update(editando.id_refug, this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('✓ Refugio actualizado correctamente')
           this.cerrarForm()
           this.cargarRefugios()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al actualizar el refugio')
       })
     } else {
       this.refugioService.create(this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('✓ Refugio creado correctamente')
           this.cerrarForm()
           this.cargarRefugios()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al crear el refugio')
       })
     }
   }
 
-  eliminar(id: number): void {
-    if (!confirm('¿Estás seguro de eliminar este refugio?')) return
+  abrirConfirmarEliminar(refugio: Refugio): void {
+    this.refugioAEliminar.set(refugio)
+    this.mostrarConfirm.set(true)
+  }
 
-    this.refugioService.delete(id).subscribe({
-      next: () => this.cargarRefugios(),
-      error: (err) => this.error.set(err.error.message)
+  confirmarEliminar(): void {
+    const refugio = this.refugioAEliminar()
+    if (!refugio) return
+
+    this.eliminando.set(true)
+    this.refugioService.delete(refugio.id_refug).subscribe({
+      next: () => {
+        this.notificationService.success('✓ Refugio eliminado correctamente')
+        this.cerrarConfirm()
+        this.cargarRefugios()
+      },
+      error: () => {
+        this.notificationService.error('Error al eliminar el refugio')
+        this.eliminando.set(false)
+      }
     })
+  }
+
+  cerrarConfirm(): void {
+    this.mostrarConfirm.set(false)
+    this.refugioAEliminar.set(null)
+    this.eliminando.set(false)
   }
 }

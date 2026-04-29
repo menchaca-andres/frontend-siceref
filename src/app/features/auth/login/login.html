@@ -1,33 +1,68 @@
 <div class="login-container">
-    <h2>Iniciar Sesión</h2>
+    <div>
+        <h2>🐾 Siceref</h2>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
-        <div>
-            <label>Correo</label>
-            <input type="email" formControlName="corr_usuario" placeholder="correo@gmail.com" />
-            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
-            <span>Correo inválido</span>
+            @if (error) {
+            <div class="error" role="alert">
+                <span>⚠️</span>
+                <span>{{ error }}</span>
+            </div>
             }
-        </div>
 
-        <div>
-            <label>Contraseña</label>
-            <input type="password" formControlName="contra_usuario" placeholder="••••••" />
-            @if (form.get('contra_usuario')?.invalid && form.get('contra_usuario')?.touched) {
-            <span>Mínimo 6 caracteres</span>
-            }
-        </div>
+            <div>
+                <label for="correo">Correo Electrónico</label>
+                <input 
+                    id="correo"
+                    type="email" 
+                    formControlName="corr_usuario" 
+                    placeholder="correo@ejemplo.com"
+                    required 
+                    aria-required="true"
+                />
+                @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+                <span role="alert">
+                    @if (form.get('corr_usuario')?.errors?.['required']) {
+                        El correo es requerido
+                    } @else if (form.get('corr_usuario')?.errors?.['email']) {
+                        El correo no es válido
+                    }
+                </span>
+                }
+            </div>
 
-        @if (error) {
-        <p class="error">{{ error }}</p>
-        }
+            <div>
+                <label for="password">Contraseña</label>
+                <input 
+                    id="password"
+                    type="password" 
+                    formControlName="contra_usuario" 
+                    placeholder="••••••"
+                    required 
+                    aria-required="true"
+                />
+                @if (form.get('contra_usuario')?.invalid && form.get('contra_usuario')?.touched) {
+                <span role="alert">
+                    @if (form.get('contra_usuario')?.errors?.['required']) {
+                        La contraseña es requerida
+                    } @else if (form.get('contra_usuario')?.errors?.['minlength']) {
+                        La contraseña debe tener mínimo 6 caracteres
+                    }
+                </span>
+                }
+            </div>
 
-        <button type="submit" [disabled]="form.invalid || loading">
-            {{ loading ? 'Ingresando...' : 'Ingresar' }}
-        </button>
+            <button type="submit" [disabled]="form.invalid || loading" aria-label="Iniciar sesión">
+                @if (loading) {
+                    ⏳ Ingresando...
+                } @else {
+                    Ingresar
+                }
+            </button>
 
-    </form>
+        </form>
 
-    <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate</a></p>
+        <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate aquí</a></p>
+    </div>
 </div>

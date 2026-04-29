@@ -1,22 +1,30 @@
+import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
-import { RolService } from '../../../shared/services/roles/rol.service'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Rol } from '../../../core/models/roles/rol.model'
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { RolService } from '../../../shared/services/roles/rol.service'
 
 @Component({
   selector: 'app-roles',
-  imports: [ReactiveFormsModule],
-  templateUrl: './roles.html'
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent],
+  templateUrl: './roles.html',
+  styleUrl: './roles.scss'
 })
 export class RolesComponent implements OnInit {
   private rolService = inject(RolService)
   private fb = inject(FormBuilder)
+  private notificationService = inject(NotificationService)
 
   roles = signal<Rol[]>([])
   loading = signal(false)
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   rolEditando = signal<Rol | null>(null)
+  mostrarConfirm = signal(false)
+  rolAEliminar = signal<Rol | null>(null)
+  eliminando = signal(false)
 
   form: FormGroup = this.fb.group({
     nom_rol: ['', Validators.required]
@@ -34,7 +42,7 @@ export class RolesComponent implements OnInit {
         this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message)
+        this.notificationService.error('Error al cargar los roles')
         this.loading.set(false)
       }
     })
@@ -65,28 +73,50 @@ export class RolesComponent implements OnInit {
     if (editando) {
       this.rolService.update(editando.id_rol, this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('✓ Rol actualizado correctamente')
           this.cerrarForm()
           this.cargarRoles()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al actualizar el rol')
       })
     } else {
       this.rolService.create(this.form.value).subscribe({
         next: () => {
+          this.notificationService.success('✓ Rol creado correctamente')
           this.cerrarForm()
           this.cargarRoles()
         },
-        error: (err) => this.error.set(err.error.message)
+        error: () => this.notificationService.error('Error al crear el rol')
       })
     }
   }
 
-  eliminar(id: number): void {
-    if (!confirm('¿Estás seguro de eliminar este rol?')) return
+  abrirConfirmarEliminar(rol: Rol): void {
+    this.rolAEliminar.set(rol)
+    this.mostrarConfirm.set(true)
+  }
 
-    this.rolService.delete(id).subscribe({
-      next: () => this.cargarRoles(),
-      error: (err) => this.error.set(err.error.message)
+  confirmarEliminar(): void {
+    const rol = this.rolAEliminar()
+    if (!rol) return
+
+    this.eliminando.set(true)
+    this.rolService.delete(rol.id_rol).subscribe({
+      next: () => {
+        this.notificationService.success('✓ Rol eliminado correctamente')
+        this.cerrarConfirm()
+        this.cargarRoles()
+      },
+      error: () => {
+        this.notificationService.error('Error al eliminar el rol')
+        this.eliminando.set(false)
+      }
     })
+  }
+
+  cerrarConfirm(): void {
+    this.mostrarConfirm.set(false)
+    this.rolAEliminar.set(null)
+    this.eliminando.set(false)
   }
 }

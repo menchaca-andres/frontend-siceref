@@ -1,22 +1,30 @@
+import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
-import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
 
 @Component({
   selector: 'app-usuarios',
-  imports: [ReactiveFormsModule],
-  templateUrl: './usuarios.html'
+  imports: [CommonModule, ReactiveFormsModule, ConfirmDialogComponent],
+  templateUrl: './usuarios.html',
+  styleUrl: './usuarios.scss'
 })
 export class UsuariosComponent implements OnInit {
   private usuarioService = inject(UsuarioService)
   private fb = inject(FormBuilder)
+  private notificationService = inject(NotificationService)
 
   usuarios = signal<Usuario[]>([])
   loading = signal(false)
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   usuarioEditando = signal<Usuario | null>(null)
+  mostrarConfirm = signal(false)
+  usuarioAEliminar = signal<Usuario | null>(null)
+  eliminando = signal(false)
 
   form: FormGroup = this.fb.group({
     nom_usuario: ['', Validators.required],
@@ -38,7 +46,7 @@ export class UsuariosComponent implements OnInit {
         this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message)
+        this.notificationService.error('Error al cargar los usuarios')
         this.loading.set(false)
       }
     })
@@ -63,19 +71,40 @@ export class UsuariosComponent implements OnInit {
 
     this.usuarioService.update(editando.id_usuario, this.form.value).subscribe({
       next: () => {
+        this.notificationService.success('✓ Usuario actualizado correctamente')
         this.cerrarForm()
         this.cargarUsuarios()
       },
-      error: (err) => this.error.set(err.error.message)
+      error: () => this.notificationService.error('Error al actualizar el usuario')
     })
   }
 
-  eliminar(id: number): void {
-    if (!confirm('¿Estás seguro de eliminar este usuario?')) return
+  abrirConfirmarEliminar(usuario: Usuario): void {
+    this.usuarioAEliminar.set(usuario)
+    this.mostrarConfirm.set(true)
+  }
 
-    this.usuarioService.delete(id).subscribe({
-      next: () => this.cargarUsuarios(),
-      error: (err) => this.error.set(err.error.message)
+  confirmarEliminar(): void {
+    const usuario = this.usuarioAEliminar()
+    if (!usuario) return
+
+    this.eliminando.set(true)
+    this.usuarioService.delete(usuario.id_usuario).subscribe({
+      next: () => {
+        this.notificationService.success('✓ Usuario eliminado correctamente')
+        this.cerrarConfirm()
+        this.cargarUsuarios()
+      },
+      error: () => {
+        this.notificationService.error('Error al eliminar el usuario')
+        this.eliminando.set(false)
+      }
     })
+  }
+
+  cerrarConfirm(): void {
+    this.mostrarConfirm.set(false)
+    this.usuarioAEliminar.set(null)
+    this.eliminando.set(false)
   }
 }

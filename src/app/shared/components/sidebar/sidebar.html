@@ -1,22 +1,22 @@
-<aside class="sidebar">
+<aside class="sidebar" role="navigation" aria-label="Menú principal">
 
     @if (authStore.isSuperadmin()) {
-    <p class="menu-title">Administración</p>
-    <a routerLink="/superadmin/refugios" routerLinkActive="active">Refugios</a>
-    <a routerLink="/superadmin/usuarios" routerLinkActive="active">Usuarios</a>
-    <a routerLink="/superadmin/roles" routerLinkActive="active">Roles</a>
+    <p class="menu-title">👑 Administración</p>
+    <a routerLink="/superadmin/refugios" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Refugios</a>
+    <a routerLink="/superadmin/usuarios" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Usuarios</a>
+    <a routerLink="/superadmin/roles" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Roles</a>
     }
 
     @if (authStore.isAdminRefugio() || authStore.isTrabajador()) {
-    <p class="menu-title">Mi Refugio</p>
-    <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
-    <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
-    <a routerLink="/refugio/especies" routerLinkActive="active">Especies</a>
+    <p class="menu-title">🏠 Mi Refugio</p>
+    <a routerLink="/refugio/mascotas" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Mascotas</a>
+    <a routerLink="/refugio/razas" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Razas</a>
+    <a routerLink="/refugio/especies" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Especies</a>
     }
 
     @if (authStore.isAdoptante()) {
-    <p class="menu-title">Mi Cuenta</p>
-    <a routerLink="/adoptante/perfil" routerLinkActive="active">Mi Perfil</a>
+    <p class="menu-title">👤 Mi Cuenta</p>
+    <a routerLink="/adoptante/perfil" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">Mi Perfil</a>
     }
 
 </aside>

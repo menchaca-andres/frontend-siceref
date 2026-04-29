@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { AuthService } from '../../../shared/services/auth/auth.service'
 import { AuthStore } from '../../../core/store/auth.store'
+import { AuthService } from '../../../shared/services/auth/auth.service'
+import { NotificationService } from '../../../shared/services/notification.service'
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent {
   private authService = inject(AuthService)
   private authStore = inject(AuthStore)
   private router = inject(Router)
+  private notificationService = inject(NotificationService)
 
   form: FormGroup = this.fb.group({
     corr_usuario: ['', [Validators.required, Validators.email]],
@@ -33,10 +35,14 @@ export class LoginComponent {
     this.authService.login(this.form.value).subscribe({
       next: (response) => {
         this.authStore.setUsuario(response)
+        this.notificationService.success('¡Bienvenido!')
         this.redirigirPorRol(response.usuario.nom_rol)
       },
       error: (err) => {
-        this.error = err.error.message || 'Error al iniciar sesión'
+        this.error = err.error?.message || 'Error al iniciar sesión. Intenta de nuevo.'
+        if (this.error) {
+          this.notificationService.error(this.error)
+        }
         this.loading = false
       }
     })

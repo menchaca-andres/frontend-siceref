@@ -1,24 +1,26 @@
+import { CommonModule, DatePipe } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
-import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
-import { AuthStore } from '../../../core/store/auth.store'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
-import { DatePipe } from '@angular/common'
+import { AuthStore } from '../../../core/store/auth.store'
+import { NotificationService } from '../../../shared/services/notification.service'
+import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
 
 @Component({
   selector: 'app-perfil',
-  imports: [ReactiveFormsModule, DatePipe],
-  templateUrl: './perfil.html'
+  imports: [CommonModule, ReactiveFormsModule, DatePipe],
+  templateUrl: './perfil.html',
+  styleUrl: './perfil.scss'
 })
 export class PerfilComponent implements OnInit {
   private usuarioService = inject(UsuarioService)
   private fb = inject(FormBuilder)
+  private notificationService = inject(NotificationService)
   authStore = inject(AuthStore)
 
   usuario = signal<Usuario | null>(null)
   loading = signal(false)
   error = signal<string | null>(null)
-  success = signal<string | null>(null)
   editando = signal(false)
 
   form: FormGroup = this.fb.group({
@@ -45,7 +47,7 @@ export class PerfilComponent implements OnInit {
         this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message)
+        this.notificationService.error('Error al cargar el perfil')
         this.loading.set(false)
       }
     })
@@ -53,8 +55,6 @@ export class PerfilComponent implements OnInit {
 
   activarEdicion(): void {
     this.editando.set(true)
-    this.success.set(null)
-    this.error.set(null)
   }
 
   cancelarEdicion(): void {
@@ -69,14 +69,17 @@ export class PerfilComponent implements OnInit {
     const id = this.authStore.id_usuario()
     if (!id) return
 
+    this.loading.set(true)
     this.usuarioService.update(id, this.form.value).subscribe({
       next: (data) => {
         this.usuario.set(data)
         this.editando.set(false)
-        this.success.set('Perfil actualizado correctamente')
+        this.notificationService.success('✓ Perfil actualizado correctamente')
+        this.loading.set(false)
       },
       error: (err) => {
-        this.error.set(err.error.message)
+        this.notificationService.error('Error al actualizar el perfil')
+        this.loading.set(false)
       }
     })
   }

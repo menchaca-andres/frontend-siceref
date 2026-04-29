@@ -1,0 +1,67 @@
+.mascota-actions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+
+    &:first-child {
+      background-color: var(--accent-color);
+      color: white;
+
+      &:hover:not(:disabled) {
+        background-color: var(--accent-dark);
+      }
+    }
+
+    &:last-child {
+      background-color: var(--danger-color);
+      color: white;
+
+      &:hover:not(:disabled) {
+        background-color: #A93226;
+      }
+    }
+  }
+}
+
+table {
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem;
+
+    thead, tbody {
+      display: block;
+
+      tr {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        border: 1px solid #eee;
+        border-radius: var(--border-radius);
+      }
+
+      th {
+        display: none;
+      }
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+
+        &::before {
+          content: attr(data-label);
+          font-weight: 600;
+          color: var(--dark-gray);
+        }
+      }
+    }
+  }
+}
