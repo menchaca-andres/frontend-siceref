@@ -5,7 +5,8 @@ import { AuthStore } from './core/store/auth.store'
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  template: `<router-outlet />`
+  template: `<router-outlet />`,
+  styleUrl: "./app.scss",
 })
 export class App implements OnInit {
   private authStore = inject(AuthStore)
