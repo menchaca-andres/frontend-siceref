@@ -29,7 +29,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'home',
-                loadComponent: () => import('./features/home/home').then(m => m.HomeComponent)
+                loadComponent: () => import('./features/home/home/home').then(m => m.Home)
             },
             {
                 path: 'superadmin',
@@ -81,7 +81,7 @@ export const routes: Routes = [
     },
     {
         path: 'not-found',
-        loadComponent: () => import('./features/not-found/not-found').then(m => m.NotFoundComponent)
+        loadComponent: () => import('./features/not-found/not-found/not-found').then(m => m.NotFound)
     },
     {
         path: '**',
