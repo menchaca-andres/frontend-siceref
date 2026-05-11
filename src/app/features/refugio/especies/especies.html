@@ -22,16 +22,16 @@
             </tr>
         </thead>
         <tbody>
-            @for (especie of especies(); track especie.id_espe) {
+            @for (especie of especies(); track especie.id_esp) {
             <tr>
-                <td>{{ especie.id_espe }}</td>
-                <td>{{ especie.nom_espe }}</td>
+                <td>{{ especie.id_esp }}</td>
+                <td>{{ especie.nom_esp }}</td>
                 <td>
                     @if (authStore.hasPermission('especies:modificar')) {
                     <button (click)="abrirFormEditar(especie)">Editar</button>
                     }
                     @if (authStore.hasPermission('especies:eliminar')) {
-                    <button (click)="eliminar(especie.id_espe)">Eliminar</button>
+                    <button (click)="eliminar(especie.id_esp)">Eliminar</button>
                     }
                 </td>
             </tr>
@@ -48,7 +48,7 @@
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div>
                     <label>Nombre</label>
-                    <input type="text" formControlName="nom_espe" />
+                    <input type="text" formControlName="nom_esp" />
                 </div>
 
                 <div class="form-actions">

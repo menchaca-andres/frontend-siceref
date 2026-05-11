@@ -21,7 +21,7 @@ export class EspeciesComponent implements OnInit {
   especieEditando = signal<Especie | null>(null)
 
   form: FormGroup = this.fb.group({
-    nom_espe: ['', Validators.required]
+    nom_esp: ['', Validators.required]
   })
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class EspeciesComponent implements OnInit {
     const editando = this.especieEditando()
 
     if (editando) {
-      this.especieService.update(editando.id_espe, this.form.value).subscribe({
+      this.especieService.update(editando.id_esp, this.form.value).subscribe({
         next: () => {
           this.cerrarForm()
           this.cargarEspecies()
