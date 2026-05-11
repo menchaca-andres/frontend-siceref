@@ -1,32 +1,39 @@
+import { Raza } from '../razas/raza.model'
+import { Refugio } from '../refugios/refugio.model'
+
 export interface Mascota {
-    id_mascot: number
-    id_raza: number
-    img_mascot: string
+    id_ani: number
     nom_mascot: string
-    edad_mascot: number
-    fenac_mascot: Date
-    descrip_mascot: string
-    gen_mascot: boolean
-    esterilizado: boolean
-    nom_raza?: string   // viene del JOIN con razas
-    nom_espe?: string   // viene del JOIN con especies
+    img_mascot: string
+    fechanac_mascot: Date | string
+    esteril_mascot: boolean
+    sexo_mascot: string
+    caract_mascot: string
+    fechaing_mascot: Date | string
+    id_raza: number
+    id_ref: number
+    raza?: Raza
+    refugio?: Refugio
 }
 
 export interface CreateMascotaDto {
-    id_raza: number
-    img_mascot: string
     nom_mascot: string
-    edad_mascot: number
-    fenac_mascot: Date
-    descrip_mascot: string
-    gen_mascot: boolean
-    esterilizado: boolean
+    img_mascot?: string | File
+    fechanac_mascot: Date | string
+    esteril_mascot: boolean | string
+    sexo_mascot: string
+    caract_mascot: string
+    id_raza: number | string
+    id_ref: number | string
 }
 
 export interface UpdateMascotaDto {
-    img_mascot?: string
     nom_mascot?: string
-    edad_mascot?: number
-    descrip_mascot?: string
-    esterilizado?: boolean
+    img_mascot?: string | File
+    fechanac_mascot?: Date | string
+    esteril_mascot?: boolean | string
+    sexo_mascot?: string
+    caract_mascot?: string
+    id_raza?: number | string
+    id_ref?: number | string
 }

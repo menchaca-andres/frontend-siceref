@@ -1,16 +1,18 @@
+import { Especie } from '../especies/especie.model'
+
 export interface Raza {
     id_raza: number
-    id_espe: number
+    id_esp: number
     nom_raza: string
-    nom_espe?: string
+    especie?: Especie
 }
 
 export interface CreateRazaDto {
-    id_espe: number
+    id_esp: number
     nom_raza: string
 }
 
 export interface UpdateRazaDto {
-    id_espe?: number
+    id_esp?: number
     nom_raza?: string
 }

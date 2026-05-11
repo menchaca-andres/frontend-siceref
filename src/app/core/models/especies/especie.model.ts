@@ -1,12 +1,12 @@
 export interface Especie {
-    id_espe: number
-    nom_espe: string
+    id_esp: number
+    nom_esp: string
 }
 
 export interface CreateEspecieDto {
-    nom_espe: string
+    nom_esp: string
 }
 
 export interface UpdateEspecieDto {
-    nom_espe?: string
+    nom_esp?: string
 }

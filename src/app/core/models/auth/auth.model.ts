@@ -1,38 +1,37 @@
 export interface LoginDto {
-    corr_usuario: string
-    contra_usuario: string
+    email_usu: string
+    pass_usu: string
 }
 
 export interface RegisterDto {
-    nom_usuario: string
-    apell_usuario: string
-    corr_usuario: string
-    contra_usuario: string
-    telf_usuario: string
-    fenac_usuario: string
-    gen_usuario: boolean
-    direc_usuario: string
+    nom_usu: string
+    apell_usu: string
+    email_usu: string
+    pass_usu: string
+    numcel_usu: string
+    fecnac_usu: string
 }
 
 export interface RegisterWorkerDto extends RegisterDto {
-    id_refug: number
+    id_ref: number
 }
 
 export interface AuthResponse {
     token: string
     usuario: {
-        id_usuario: number
-        nom_usuario: string
-        apell_usuario: string
-        corr_usuario: string
+        id_usu: number
+        nom_usu: string
+        apell_usu: string
+        email_usu: string
         nom_rol: string
-        id_refug: number | null
+        id_ref: number | null
+        permisos: string[]
     }
 }
 
 export interface JwtPayload {
-    id_usuario: number
+    id_usu: number
     id_rol: number
     nom_rol: string
-    id_refug: number | null
+    id_ref: number | null
 }

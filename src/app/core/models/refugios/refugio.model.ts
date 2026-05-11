@@ -1,25 +1,24 @@
 export interface Refugio {
-    id_refug: number
-    nom_refug: string
-    dir_refug: string
-    telf_refug: string
-    corr_refug: string
-    licencia_refug: string
+    id_ref: number
+    nom_ref: string
+    direc_ref: string
+    telef_ref: string
+    email_ref: string
+    estado_ref: boolean
 }
 
 export interface CreateRefugioDto {
-    nom_refug: string
-    dir_refug: string
-    telf_refug: string
-    corr_refug: string
-    contra_refug: string
-    licencia_refug: string
+    nom_ref: string
+    direc_ref: string
+    telef_ref: string
+    email_ref: string
+    estado_ref?: boolean
 }
 
 export interface UpdateRefugioDto {
-    nom_refug?: string
-    dir_refug?: string
-    telf_refug?: string
-    corr_refug?: string
-    licencia_refug?: string
+    nom_ref?: string
+    direc_ref?: string
+    telef_ref?: string
+    email_ref?: string
+    estado_ref?: boolean
 }
