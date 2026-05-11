@@ -1,3 +1,5 @@
+import { Usuario } from '../usuarios/usuario.model'
+
 export interface LoginDto {
     email_usu: string
     pass_usu: string
@@ -14,6 +16,12 @@ export interface RegisterDto {
 
 export interface RegisterWorkerDto extends RegisterDto {
     id_ref: number
+}
+
+export interface RegisterResponse {
+    message: string
+    usuario?: Usuario
+    worker?: Usuario
 }
 
 export interface AuthResponse {
