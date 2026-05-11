@@ -21,7 +21,9 @@ export class RolesComponent implements OnInit {
   rolEditando = signal<Rol | null>(null)
 
   form: FormGroup = this.fb.group({
-    nom_rol: ['', Validators.required]
+    codigo: ['', Validators.required],
+    nom_rol: ['', Validators.required],
+    descrip_rol: ['', Validators.required]
   })
 
   ngOnInit(): void {

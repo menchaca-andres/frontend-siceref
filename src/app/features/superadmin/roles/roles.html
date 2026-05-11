@@ -17,7 +17,9 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Código</th>
                 <th>Nombre</th>
+                <th>Descripción</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -25,7 +27,9 @@
             @for (rol of roles(); track rol.id_rol) {
             <tr>
                 <td>{{ rol.id_rol }}</td>
+                <td>{{ rol.codigo }}</td>
                 <td>{{ rol.nom_rol }}</td>
+                <td>{{ rol.descrip_rol }}</td>
                 <td>
                     @if (authStore.hasPermission('roles:modificar')) {
                     <button (click)="abrirFormEditar(rol)">Editar</button>
@@ -47,8 +51,18 @@
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div>
+                    <label>Código</label>
+                    <input type="text" formControlName="codigo" placeholder="admin-refugio" />
+                </div>
+
+                <div>
                     <label>Nombre del Rol</label>
                     <input type="text" formControlName="nom_rol" />
+                </div>
+
+                <div>
+                    <label>Descripción</label>
+                    <textarea formControlName="descrip_rol" rows="3"></textarea>
                 </div>
 
                 <div class="form-actions">
