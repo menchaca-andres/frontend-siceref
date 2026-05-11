@@ -1,0 +1,28 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Administradores del Sistema</h2>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+    @if (success()) {
+    <p class="success">{{ success() }}</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div><label>Nombre</label><input type="text" formControlName="nom_usu" /></div>
+        <div><label>Apellido</label><input type="text" formControlName="apell_usu" /></div>
+        <div><label>Correo</label><input type="email" formControlName="email_usu" /></div>
+        <div><label>Contraseña</label><input type="password" formControlName="pass_usu" /></div>
+        <div><label>Teléfono</label><input type="text" formControlName="numcel_usu" /></div>
+        <div><label>Fecha de Nacimiento</label><input type="date" formControlName="fecnac_usu" /></div>
+        <div class="form-actions">
+            @if (authStore.hasPermission('admins-sistema:crear')) {
+            <button type="submit" [disabled]="form.invalid || loading()">
+                {{ loading() ? 'Creando...' : 'Crear Administrador' }}
+            </button>
+            }
+        </div>
+    </form>
+</div>
