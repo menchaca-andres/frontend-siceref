@@ -22,11 +22,11 @@ export class PerfilComponent implements OnInit {
   editando = signal(false)
 
   form: FormGroup = this.fb.group({
-    nom_usuario: ['', Validators.required],
-    apell_usuario: ['', Validators.required],
-    corr_usuario: ['', [Validators.required, Validators.email]],
-    telf_usuario: ['', Validators.required],
-    direc_usuario: ['', Validators.required]
+    nom_usu: ['', Validators.required],
+    apell_usu: ['', Validators.required],
+    email_usu: ['', [Validators.required, Validators.email]],
+    numcel_usu: ['', Validators.required],
+    fecnac_usu: ['', Validators.required]
   })
 
   ngOnInit(): void {
@@ -34,14 +34,14 @@ export class PerfilComponent implements OnInit {
   }
 
   cargarPerfil(): void {
-    const id = this.authStore.id_usuario()
+    const id = this.authStore.id_usu()
     if (!id) return
 
     this.loading.set(true)
     this.usuarioService.getById(id).subscribe({
       next: (data) => {
         this.usuario.set(data)
-        this.form.patchValue(data)
+        this.patchForm(data)
         this.loading.set(false)
       },
       error: (err) => {
@@ -60,13 +60,13 @@ export class PerfilComponent implements OnInit {
   cancelarEdicion(): void {
     this.editando.set(false)
     const u = this.usuario()
-    if (u) this.form.patchValue(u)
+    if (u) this.patchForm(u)
   }
 
   onSubmit(): void {
     if (this.form.invalid) return
 
-    const id = this.authStore.id_usuario()
+    const id = this.authStore.id_usu()
     if (!id) return
 
     this.usuarioService.update(id, this.form.value).subscribe({
@@ -79,5 +79,19 @@ export class PerfilComponent implements OnInit {
         this.error.set(err.error.message)
       }
     })
+  }
+
+  private patchForm(usuario: Usuario): void {
+    this.form.patchValue({
+      nom_usu: usuario.nom_usu,
+      apell_usu: usuario.apell_usu,
+      email_usu: usuario.email_usu,
+      numcel_usu: usuario.numcel_usu,
+      fecnac_usu: this.toDateInputValue(usuario.fecnac_usu)
+    })
+  }
+
+  private toDateInputValue(value: Date | string): string {
+    return new Date(value).toISOString().slice(0, 10)
   }
 }
