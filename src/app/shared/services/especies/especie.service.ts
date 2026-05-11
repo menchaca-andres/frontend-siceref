@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../../environment/environment'
+import { ApiMessage } from '../../../core/models/api/api-message.model'
 import { Especie, CreateEspecieDto, UpdateEspecieDto } from '../../../core/models/especies/especie.model'
 
 @Injectable({
@@ -27,7 +28,7 @@ export class EspecieService {
         return this.http.put<Especie>(`${this.apiUrl}/especies/${id}`, data)
     }
 
-    delete(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/especies/${id}`)
+    delete(id: number): Observable<ApiMessage> {
+        return this.http.delete<ApiMessage>(`${this.apiUrl}/especies/${id}`)
     }
 }

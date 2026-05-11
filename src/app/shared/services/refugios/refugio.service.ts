@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../../environment/environment'
+import { ApiMessage } from '../../../core/models/api/api-message.model'
 import { Refugio, CreateRefugioDto, UpdateRefugioDto } from '../../../core/models/refugios/refugio.model'
 
 @Injectable({
@@ -27,7 +28,7 @@ export class RefugioService {
         return this.http.put<Refugio>(`${this.apiUrl}/refugios/${id}`, data)
     }
 
-    delete(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/refugios/${id}`)
+    delete(id: number): Observable<ApiMessage> {
+        return this.http.delete<ApiMessage>(`${this.apiUrl}/refugios/${id}`)
     }
 }
