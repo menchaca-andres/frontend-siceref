@@ -4,22 +4,26 @@ import { TokenHelper } from '../../shared/utils/token.helper'
 import { AuthResponse } from '../models/auth/auth.model'
 
 export interface AuthState {
-    id_usuario: number | null
-    nom_usuario: string | null
-    apell_usuario: string | null
-    corr_usuario: string | null
+    id_usu: number | null
+    nom_usu: string | null
+    apell_usu: string | null
+    email_usu: string | null
+    id_rol: number | null
     nom_rol: string | null
-    id_refug: number | null
+    id_ref: number | null
+    permisos: string[]
     isLoggedIn: boolean
 }
 
 const initialState: AuthState = {
-    id_usuario: null,
-    nom_usuario: null,
-    apell_usuario: null,
-    corr_usuario: null,
+    id_usu: null,
+    nom_usu: null,
+    apell_usu: null,
+    email_usu: null,
+    id_rol: null,
     nom_rol: null,
-    id_refug: null,
+    id_ref: null,
+    permisos: [],
     isLoggedIn: false
 }
 
@@ -29,23 +33,37 @@ export const AuthStore = signalStore(
     withState<AuthState>(initialState),
 
     withComputed((state) => ({
-        isSuperadmin: computed(() => state.nom_rol() === 'Superadmin'),
-        isAdminRefugio: computed(() => state.nom_rol() === 'Administrador Refugio'),
-        isTrabajador: computed(() => state.nom_rol() === 'Trabajador Refugio'),
+        isAdminSistema: computed(() => state.nom_rol() === 'Administrador del sistema'),
+        isAdminRefugio: computed(() => state.nom_rol() === 'Administrador del refugio'),
+        isTrabajadorRefugio: computed(() => state.nom_rol() === 'Trabajador del refugio'),
         isAdoptante: computed(() => state.nom_rol() === 'Adoptante'),
-        nombreCompleto: computed(() => `${state.nom_usuario()} ${state.apell_usuario()}`)
+        nombreCompleto: computed(() => [state.nom_usu(), state.apell_usu()].filter(Boolean).join(' '))
     })),
 
     withMethods((store) => ({
+        hasPermission(permiso: string): boolean {
+            return store.permisos().includes(permiso)
+        },
+
+        hasAnyPermission(...permisos: string[]): boolean {
+            return permisos.some((permiso) => store.permisos().includes(permiso))
+        },
+
+        hasEveryPermission(...permisos: string[]): boolean {
+            return permisos.every((permiso) => store.permisos().includes(permiso))
+        },
+
         setUsuario(response: AuthResponse): void {
             TokenHelper.setToken(response.token)
             patchState(store, {
-                id_usuario: response.usuario.id_usuario,
-                nom_usuario: response.usuario.nom_usuario,
-                apell_usuario: response.usuario.apell_usuario,
-                corr_usuario: response.usuario.corr_usuario,
+                id_usu: response.usuario.id_usu,
+                nom_usu: response.usuario.nom_usu,
+                apell_usu: response.usuario.apell_usu,
+                email_usu: response.usuario.email_usu,
+                id_rol: TokenHelper.getPayload()?.id_rol ?? null,
                 nom_rol: response.usuario.nom_rol,
-                id_refug: response.usuario.id_refug,
+                id_ref: response.usuario.id_ref,
+                permisos: response.usuario.permisos,
                 isLoggedIn: true
             })
         },
@@ -60,9 +78,10 @@ export const AuthStore = signalStore(
             if (!payload) return
 
             patchState(store, {
-                id_usuario: payload.id_usuario,
+                id_usu: payload.id_usu,
+                id_rol: payload.id_rol,
                 nom_rol: payload.nom_rol,
-                id_refug: payload.id_refug,
+                id_ref: payload.id_ref,
                 isLoggedIn: true
             })
         }
