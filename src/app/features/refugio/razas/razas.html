@@ -64,9 +64,11 @@
 
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((razaEditando() && authStore.hasPermission('razas:modificar')) || (!razaEditando() && authStore.hasPermission('razas:crear'))) {
                     <button type="submit" [disabled]="form.invalid">
                         {{ razaEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
+                    }
                 </div>
 
             </form>

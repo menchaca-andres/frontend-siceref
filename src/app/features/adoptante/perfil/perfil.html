@@ -89,7 +89,9 @@
 
         <div class="form-actions">
             <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+            @if (authStore.hasPermission('perfil:modificar')) {
             <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+            }
         </div>
 
     </form>

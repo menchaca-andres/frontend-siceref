@@ -67,9 +67,11 @@
 
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((rolEditando() && authStore.hasPermission('roles:modificar')) || (!rolEditando() && authStore.hasPermission('roles:crear'))) {
                     <button type="submit" [disabled]="form.invalid">
                         {{ rolEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
+                    }
                 </div>
             </form>
 

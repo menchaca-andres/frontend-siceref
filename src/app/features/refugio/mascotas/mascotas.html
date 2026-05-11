@@ -108,9 +108,11 @@
 
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((mascotaEditando() && authStore.hasPermission('mascotas:modificar')) || (!mascotaEditando() && authStore.hasPermission('mascotas:crear'))) {
                     <button type="submit" [disabled]="form.invalid">
                         {{ mascotaEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
+                    }
                 </div>
 
             </form>

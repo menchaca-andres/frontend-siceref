@@ -53,9 +53,11 @@
 
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((especieEditando() && authStore.hasPermission('especies:modificar')) || (!especieEditando() && authStore.hasPermission('especies:crear'))) {
                     <button type="submit" [disabled]="form.invalid">
                         {{ especieEditando() ? 'Actualizar' : 'Crear' }}
                     </button>
+                    }
                 </div>
             </form>
 
