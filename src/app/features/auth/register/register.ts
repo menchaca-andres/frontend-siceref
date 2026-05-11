@@ -14,14 +14,12 @@ export class RegisterComponent {
   private router = inject(Router)
 
   form: FormGroup = this.fb.group({
-    nom_usuario: ['', Validators.required],
-    apell_usuario: ['', Validators.required],
-    corr_usuario: ['', [Validators.required, Validators.email]],
-    contra_usuario: ['', [Validators.required, Validators.minLength(6)]],
-    telf_usuario: ['', Validators.required],
-    fenac_usuario: ['', Validators.required],
-    gen_usuario: [true, Validators.required],
-    direc_usuario: ['', Validators.required]
+    nom_usu: ['', Validators.required],
+    apell_usu: ['', Validators.required],
+    email_usu: ['', [Validators.required, Validators.email]],
+    pass_usu: ['', [Validators.required, Validators.minLength(6)]],
+    numcel_usu: ['', Validators.required],
+    fecnac_usu: ['', Validators.required]
   })
 
   error: string | null = null
@@ -42,7 +40,7 @@ export class RegisterComponent {
         setTimeout(() => this.router.navigate(['/auth/login']), 2000)
       },
       error: (err) => {
-        this.error = err.error.message || 'Error al registrarse'
+        this.error = err.error?.message || 'Error al registrarse'
         this.loading = false
       }
     })

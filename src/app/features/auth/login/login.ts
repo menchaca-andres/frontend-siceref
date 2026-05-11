@@ -17,8 +17,8 @@ export class LoginComponent {
   private router = inject(Router)
 
   form: FormGroup = this.fb.group({
-    corr_usuario: ['', [Validators.required, Validators.email]],
-    contra_usuario: ['', [Validators.required, Validators.minLength(6)]]
+    email_usu: ['', [Validators.required, Validators.email]],
+    pass_usu: ['', [Validators.required, Validators.minLength(6)]]
   })
 
   error: string | null = null
@@ -36,7 +36,7 @@ export class LoginComponent {
         this.redirigirPorRol(response.usuario.nom_rol)
       },
       error: (err) => {
-        this.error = err.error.message || 'Error al iniciar sesión'
+        this.error = err.error?.message || 'Error al iniciar sesión'
         this.loading = false
       }
     })

@@ -5,16 +5,16 @@
 
         <div>
             <label>Correo</label>
-            <input type="email" formControlName="corr_usuario" placeholder="correo@gmail.com" />
-            @if (form.get('corr_usuario')?.invalid && form.get('corr_usuario')?.touched) {
+            <input type="email" formControlName="email_usu" placeholder="correo@gmail.com" />
+            @if (form.get('email_usu')?.invalid && form.get('email_usu')?.touched) {
             <span>Correo inválido</span>
             }
         </div>
 
         <div>
             <label>Contraseña</label>
-            <input type="password" formControlName="contra_usuario" placeholder="••••••" />
-            @if (form.get('contra_usuario')?.invalid && form.get('contra_usuario')?.touched) {
+            <input type="password" formControlName="pass_usu" placeholder="••••••" />
+            @if (form.get('pass_usu')?.invalid && form.get('pass_usu')?.touched) {
             <span>Mínimo 6 caracteres</span>
             }
         </div>
