@@ -65,9 +65,9 @@
                 <div>
                     <label>Raza</label>
                     <select formControlName="id_raza">
-                        <option value="">Selecciona una raza</option>
+                        <option [ngValue]="null">Selecciona una raza</option>
                         @for (raza of razas(); track raza.id_raza) {
-                        <option [value]="raza.id_raza">{{ raza.nom_raza }} - {{ raza.especie?.nom_esp }}</option>
+                        <option [ngValue]="raza.id_raza">{{ raza.nom_raza }} - {{ raza.especie?.nom_esp }}</option>
                         }
                     </select>
                 </div>

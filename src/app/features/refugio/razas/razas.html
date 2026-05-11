@@ -50,9 +50,9 @@
                 <div>
                     <label>Especie</label>
                     <select formControlName="id_esp">
-                        <option value="">Selecciona una especie</option>
+                        <option [ngValue]="null">Selecciona una especie</option>
                         @for (especie of especies(); track especie.id_esp) {
-                        <option [value]="especie.id_esp">{{ especie.nom_esp }}</option>
+                        <option [ngValue]="especie.id_esp">{{ especie.nom_esp }}</option>
                         }
                     </select>
                 </div>
