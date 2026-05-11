@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router'
 import { authGuard } from './core/guards/auth.guard'
-import { rolesGuard } from './core/guards/roles.guard'
+import { permissionGuard } from './core/guards/permission.guard'
 
 export const routes: Routes = [
     {
@@ -33,46 +33,50 @@ export const routes: Routes = [
             },
             {
                 path: 'superadmin',
-                canActivate: [rolesGuard('Superadmin')],
                 children: [
                     {
                         path: 'refugios',
+                        canActivate: [permissionGuard('refugios:obtener')],
                         loadComponent: () => import('./features/superadmin/refugios/refugios').then(m => m.RefugiosComponent)
                     },
                     {
                         path: 'usuarios',
+                        canActivate: [permissionGuard('usuarios:obtener')],
                         loadComponent: () => import('./features/superadmin/usuarios/usuarios').then(m => m.UsuariosComponent)
                     },
                     {
                         path: 'roles',
+                        canActivate: [permissionGuard('roles:obtener')],
                         loadComponent: () => import('./features/superadmin/roles/roles').then(m => m.RolesComponent)
                     }
                 ]
             },
             {
                 path: 'refugio',
-                canActivate: [rolesGuard('Administrador Refugio', 'Trabajador Refugio')],
                 children: [
                     {
                         path: 'mascotas',
+                        canActivate: [permissionGuard('mascotas:obtener')],
                         loadComponent: () => import('./features/refugio/mascotas/mascotas').then(m => m.MascotasComponent)
                     },
                     {
                         path: 'razas',
+                        canActivate: [permissionGuard('razas:obtener')],
                         loadComponent: () => import('./features/refugio/razas/razas').then(m => m.RazasComponent)
                     },
                     {
                         path: 'especies',
+                        canActivate: [permissionGuard('especies:obtener')],
                         loadComponent: () => import('./features/refugio/especies/especies').then(m => m.EspeciesComponent)
                     }
                 ]
             },
             {
                 path: 'adoptante',
-                canActivate: [rolesGuard('Adoptante')],
                 children: [
                     {
                         path: 'perfil',
+                        canActivate: [permissionGuard('perfil:obtener')],
                         loadComponent: () => import('./features/adoptante/perfil/perfil').then(m => m.PerfilComponent)
                     }
                 ]
