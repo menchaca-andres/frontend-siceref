@@ -9,7 +9,7 @@ export interface RegisterDto {
     email_usu: string
     pass_usu: string
     numcel_usu: string
-    fecnac_usu: string
+    fecnac_usu: Date | string
 }
 
 export interface RegisterWorkerDto extends RegisterDto {
