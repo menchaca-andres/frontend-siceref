@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-usuarios',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './usuarios.html'
 })
 export class UsuariosComponent implements OnInit {
@@ -21,11 +22,11 @@ export class UsuariosComponent implements OnInit {
   usuarioEditando = signal<Usuario | null>(null)
 
   form: FormGroup = this.fb.group({
-    nom_usuario: ['', Validators.required],
-    apell_usuario: ['', Validators.required],
-    corr_usuario: ['', [Validators.required, Validators.email]],
-    telf_usuario: ['', Validators.required],
-    direc_usuario: ['', Validators.required]
+    nom_usu: ['', Validators.required],
+    apell_usu: ['', Validators.required],
+    email_usu: ['', [Validators.required, Validators.email]],
+    numcel_usu: ['', Validators.required],
+    fecnac_usu: ['', Validators.required]
   })
 
   ngOnInit(): void {
@@ -48,7 +49,13 @@ export class UsuariosComponent implements OnInit {
 
   abrirFormEditar(usuario: Usuario): void {
     this.usuarioEditando.set(usuario)
-    this.form.patchValue(usuario)
+    this.form.patchValue({
+      nom_usu: usuario.nom_usu,
+      apell_usu: usuario.apell_usu,
+      email_usu: usuario.email_usu,
+      numcel_usu: usuario.numcel_usu,
+      fecnac_usu: this.toDateInputValue(usuario.fecnac_usu)
+    })
     this.mostrarForm.set(true)
   }
 
@@ -63,13 +70,17 @@ export class UsuariosComponent implements OnInit {
     const editando = this.usuarioEditando()
     if (!editando) return
 
-    this.usuarioService.update(editando.id_usuario, this.form.value).subscribe({
+    this.usuarioService.update(editando.id_usu, this.form.value).subscribe({
       next: () => {
         this.cerrarForm()
         this.cargarUsuarios()
       },
       error: (err) => this.error.set(err.error.message)
     })
+  }
+
+  private toDateInputValue(value: Date | string): string {
+    return new Date(value).toISOString().slice(0, 10)
   }
 
   eliminar(id: number): void {
