@@ -55,6 +55,7 @@ export const AuthStore = signalStore(
 
         setUsuario(response: AuthResponse): void {
             TokenHelper.setToken(response.token)
+            TokenHelper.setPermissions(response.usuario.permisos)
             patchState(store, {
                 id_usu: response.usuario.id_usu,
                 nom_usu: response.usuario.nom_usu,
@@ -70,6 +71,7 @@ export const AuthStore = signalStore(
 
         logout(): void {
             TokenHelper.removeToken()
+            TokenHelper.removePermissions()
             patchState(store, initialState)
         },
 
@@ -82,6 +84,7 @@ export const AuthStore = signalStore(
                 id_rol: payload.id_rol,
                 nom_rol: payload.nom_rol,
                 id_ref: payload.id_ref,
+                permisos: TokenHelper.getPermissions(),
                 isLoggedIn: true
             })
         }
