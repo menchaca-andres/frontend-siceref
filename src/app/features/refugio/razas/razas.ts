@@ -25,7 +25,7 @@ export class RazasComponent implements OnInit {
   razaEditando = signal<Raza | null>(null)
 
   form: FormGroup = this.fb.group({
-    id_espe: ['', Validators.required],
+    id_esp: ['', Validators.required],
     nom_raza: ['', Validators.required]
   })
 

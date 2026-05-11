@@ -25,7 +25,7 @@
             @for (raza of razas(); track raza.id_raza) {
             <tr>
                 <td>{{ raza.nom_raza }}</td>
-                <td>{{ raza.nom_espe }}</td>
+                <td>{{ raza.especie?.nom_esp }}</td>
                 <td>
                     @if (authStore.hasPermission('razas:modificar')) {
                     <button (click)="abrirFormEditar(raza)">Editar</button>
@@ -49,10 +49,10 @@
 
                 <div>
                     <label>Especie</label>
-                    <select formControlName="id_espe">
+                    <select formControlName="id_esp">
                         <option value="">Selecciona una especie</option>
-                        @for (especie of especies(); track especie.id_espe) {
-                        <option [value]="especie.id_espe">{{ especie.nom_espe }}</option>
+                        @for (especie of especies(); track especie.id_esp) {
+                        <option [value]="especie.id_esp">{{ especie.nom_esp }}</option>
                         }
                     </select>
                 </div>
