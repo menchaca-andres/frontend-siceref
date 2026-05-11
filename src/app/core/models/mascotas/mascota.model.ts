@@ -18,7 +18,7 @@ export interface Mascota {
 
 export interface CreateMascotaDto {
     nom_mascot: string
-    img_mascot?: string | File
+    img_mascot?: string
     fechanac_mascot: Date | string
     esteril_mascot: boolean | string
     sexo_mascot: string
@@ -29,7 +29,7 @@ export interface CreateMascotaDto {
 
 export interface UpdateMascotaDto {
     nom_mascot?: string
-    img_mascot?: string | File
+    img_mascot?: string
     fechanac_mascot?: Date | string
     esteril_mascot?: boolean | string
     sexo_mascot?: string
