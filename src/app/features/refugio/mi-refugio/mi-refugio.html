@@ -1,0 +1,49 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Mi Refugio</h2>
+        @if (!editando() && authStore.hasPermission('refugio:modificar:propio')) {
+        <button (click)="activarEdicion()">Editar Refugio</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+    @if (success()) {
+    <p class="success">{{ success() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (refugio()) {
+    @if (!editando()) {
+    <div class="perfil-info">
+        <div class="perfil-row"><span class="label">Nombre</span><span>{{ refugio()!.nom_ref }}</span></div>
+        <div class="perfil-row"><span class="label">Dirección</span><span>{{ refugio()!.direc_ref }}</span></div>
+        <div class="perfil-row"><span class="label">Teléfono</span><span>{{ refugio()!.telef_ref }}</span></div>
+        <div class="perfil-row"><span class="label">Correo</span><span>{{ refugio()!.email_ref }}</span></div>
+        <div class="perfil-row"><span class="label">Estado</span><span>{{ refugio()!.estado_ref ? 'Activo' : 'Inactivo' }}</span></div>
+    </div>
+    } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div><label>Nombre</label><input type="text" formControlName="nom_ref" /></div>
+        <div><label>Dirección</label><input type="text" formControlName="direc_ref" /></div>
+        <div><label>Teléfono</label><input type="text" formControlName="telef_ref" /></div>
+        <div><label>Correo</label><input type="email" formControlName="email_ref" /></div>
+        <div>
+            <label>Estado</label>
+            <select formControlName="estado_ref">
+                <option [ngValue]="true">Activo</option>
+                <option [ngValue]="false">Inactivo</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+            @if (authStore.hasPermission('refugio:modificar:propio')) {
+            <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+            }
+        </div>
+    </form>
+    }
+    }
+</div>
