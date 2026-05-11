@@ -1,20 +1,32 @@
 <aside class="sidebar">
 
-    @if (authStore.isSuperadmin()) {
+    @if (authStore.hasAnyPermission('refugios:obtener', 'usuarios:obtener', 'roles:obtener')) {
     <p class="menu-title">Administración</p>
+    @if (authStore.hasPermission('refugios:obtener')) {
     <a routerLink="/superadmin/refugios" routerLinkActive="active">Refugios</a>
+    }
+    @if (authStore.hasPermission('usuarios:obtener')) {
     <a routerLink="/superadmin/usuarios" routerLinkActive="active">Usuarios</a>
+    }
+    @if (authStore.hasPermission('roles:obtener')) {
     <a routerLink="/superadmin/roles" routerLinkActive="active">Roles</a>
     }
-
-    @if (authStore.isAdminRefugio() || authStore.isTrabajador()) {
-    <p class="menu-title">Mi Refugio</p>
-    <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
-    <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
-    <a routerLink="/refugio/especies" routerLinkActive="active">Especies</a>
     }
 
-    @if (authStore.isAdoptante()) {
+    @if (authStore.hasAnyPermission('mascotas:obtener', 'razas:obtener', 'especies:obtener')) {
+    <p class="menu-title">Mi Refugio</p>
+    @if (authStore.hasPermission('mascotas:obtener')) {
+    <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
+    }
+    @if (authStore.hasPermission('razas:obtener')) {
+    <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
+    }
+    @if (authStore.hasPermission('especies:obtener')) {
+    <a routerLink="/refugio/especies" routerLinkActive="active">Especies</a>
+    }
+    }
+
+    @if (authStore.hasPermission('perfil:obtener')) {
     <p class="menu-title">Mi Cuenta</p>
     <a routerLink="/adoptante/perfil" routerLinkActive="active">Mi Perfil</a>
     }

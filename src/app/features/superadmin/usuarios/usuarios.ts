@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
+import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
   selector: 'app-usuarios',
@@ -11,6 +12,7 @@ import { Usuario } from '../../../core/models/usuarios/usuario.model'
 export class UsuariosComponent implements OnInit {
   private usuarioService = inject(UsuarioService)
   private fb = inject(FormBuilder)
+  authStore = inject(AuthStore)
 
   usuarios = signal<Usuario[]>([])
   loading = signal(false)

@@ -1,7 +1,7 @@
 <div class="page">
     <div class="page-header">
         <h2>Mi Perfil</h2>
-        @if (!editando()) {
+        @if (!editando() && authStore.hasPermission('perfil:modificar')) {
         <button (click)="activarEdicion()">Editar Perfil</button>
         }
     </div>

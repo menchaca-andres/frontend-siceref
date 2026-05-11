@@ -3,7 +3,7 @@
         <h2>Siceref</h2>
     </div>
     <div class="header-right">
-        <span>{{ authStore.nombreCompleto() }}</span>
+        <span>{{ authStore.nombreCompleto() || 'Usuario' }}</span>
         <span class="rol">{{ authStore.nom_rol() }}</span>
         <button (click)="logout()">Cerrar sesión</button>
     </div>

@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { RefugioService } from '../../../shared/services/refugios/refugio.service'
 import { Refugio } from '../../../core/models/refugios/refugio.model'
+import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
   selector: 'app-refugios',
@@ -11,6 +12,7 @@ import { Refugio } from '../../../core/models/refugios/refugio.model'
 export class RefugiosComponent implements OnInit {
   private refugioService = inject(RefugioService)
   private fb = inject(FormBuilder)
+  authStore = inject(AuthStore)
 
   refugios = signal<Refugio[]>([])
   loading = signal(false)

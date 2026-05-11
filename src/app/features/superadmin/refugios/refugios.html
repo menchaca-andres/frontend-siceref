@@ -1,7 +1,9 @@
 <div class="page">
     <div class="page-header">
         <h2>Refugios</h2>
+        @if (authStore.hasPermission('refugios:crear')) {
         <button (click)="abrirFormCrear()">+ Nuevo Refugio</button>
+        }
     </div>
 
     @if (error()) {
@@ -31,8 +33,12 @@
                 <td>{{ refugio.corr_refug }}</td>
                 <td>{{ refugio.licencia_refug }}</td>
                 <td>
+                    @if (authStore.hasPermission('refugios:modificar')) {
                     <button (click)="abrirFormEditar(refugio)">Editar</button>
+                    }
+                    @if (authStore.hasPermission('refugios:eliminar')) {
                     <button (click)="eliminar(refugio.id_refug)">Eliminar</button>
+                    }
                 </td>
             </tr>
             }

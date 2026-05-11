@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { RolService } from '../../../shared/services/roles/rol.service'
 import { Rol } from '../../../core/models/roles/rol.model'
+import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
   selector: 'app-roles',
@@ -11,6 +12,7 @@ import { Rol } from '../../../core/models/roles/rol.model'
 export class RolesComponent implements OnInit {
   private rolService = inject(RolService)
   private fb = inject(FormBuilder)
+  authStore = inject(AuthStore)
 
   roles = signal<Rol[]>([])
   loading = signal(false)

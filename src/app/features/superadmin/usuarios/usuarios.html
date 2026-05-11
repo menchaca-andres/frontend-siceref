@@ -32,8 +32,12 @@
                 <td>{{ usuario.nom_rol }}</td>
                 <td>{{ usuario.nom_refug ?? 'Sin refugio' }}</td>
                 <td>
+                    @if (authStore.hasPermission('usuarios:modificar')) {
                     <button (click)="abrirFormEditar(usuario)">Editar</button>
+                    }
+                    @if (authStore.hasPermission('usuarios:eliminar')) {
                     <button (click)="eliminar(usuario.id_usuario)">Eliminar</button>
+                    }
                 </td>
             </tr>
             }
@@ -75,7 +79,9 @@
 
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if (authStore.hasPermission('usuarios:modificar')) {
                     <button type="submit" [disabled]="form.invalid">Actualizar</button>
+                    }
                 </div>
 
             </form>

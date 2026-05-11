@@ -1,7 +1,7 @@
 <div class="page">
     <div class="page-header">
         <h2>Especies</h2>
-        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+        @if (authStore.hasPermission('especies:crear')) {
         <button (click)="abrirFormCrear()">+ Nueva Especie</button>
         }
     </div>
@@ -27,8 +27,10 @@
                 <td>{{ especie.id_espe }}</td>
                 <td>{{ especie.nom_espe }}</td>
                 <td>
-                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                    @if (authStore.hasPermission('especies:modificar')) {
                     <button (click)="abrirFormEditar(especie)">Editar</button>
+                    }
+                    @if (authStore.hasPermission('especies:eliminar')) {
                     <button (click)="eliminar(especie.id_espe)">Eliminar</button>
                     }
                 </td>

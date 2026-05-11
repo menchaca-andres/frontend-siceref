@@ -1,7 +1,7 @@
 <div class="page">
     <div class="page-header">
         <h2>Mascotas</h2>
-        @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+        @if (authStore.hasPermission('mascotas:crear')) {
         <button (click)="abrirFormCrear()">+ Nueva Mascota</button>
         }
     </div>
@@ -35,8 +35,10 @@
                 <td>{{ mascota.gen_mascot ? 'Macho' : 'Hembra' }}</td>
                 <td>{{ mascota.esterilizado ? 'Sí' : 'No' }}</td>
                 <td>
+                    @if (authStore.hasPermission('mascotas:modificar')) {
                     <button (click)="abrirFormEditar(mascota)">Editar</button>
-                    @if (authStore.isAdminRefugio() || authStore.isSuperadmin()) {
+                    }
+                    @if (authStore.hasPermission('mascotas:eliminar')) {
                     <button (click)="eliminar(mascota.id_mascot)">Eliminar</button>
                     }
                 </td>
