@@ -31,15 +31,26 @@ export class TokenHelper {
         return this.getPayload()?.nom_rol ?? null
     }
 
-    static getIdUsuario(): number | null {
-        return this.getPayload()?.id_usuario ?? null
+    static getIdUsu(): number | null {
+        return this.getPayload()?.id_usu ?? null
     }
 
-    static getIdRefug(): number | null {
-        return this.getPayload()?.id_refug ?? null
+    static getIdRol(): number | null {
+        return this.getPayload()?.id_rol ?? null
+    }
+
+    static getIdRef(): number | null {
+        return this.getPayload()?.id_ref ?? null
+    }
+
+    static isTokenExpired(): boolean {
+        const exp = this.getPayload()?.exp
+        if (!exp) return false
+
+        return Date.now() >= exp * 1000
     }
 
     static isLoggedIn(): boolean {
-        return !!this.getToken()
+        return !!this.getToken() && !this.isTokenExpired()
     }
 }
