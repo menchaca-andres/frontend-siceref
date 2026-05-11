@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../../environment/environment'
-import { Usuario, UpdateUsuarioDto } from '../../../core/models/usuarios/usuario.model'
+import { ApiMessage } from '../../../core/models/api/api-message.model'
+import { CreateUsuarioDto, Usuario, UpdateUsuarioDto } from '../../../core/models/usuarios/usuario.model'
 
 @Injectable({
     providedIn: 'root'
@@ -19,11 +20,19 @@ export class UsuarioService {
         return this.http.get<Usuario>(`${this.apiUrl}/usuarios/${id}`)
     }
 
+    getMyWorkers(): Observable<Usuario[]> {
+        return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios/trabajadores/mis-trabajadores`)
+    }
+
+    create(data: CreateUsuarioDto): Observable<Usuario> {
+        return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, data)
+    }
+
     update(id: number, data: UpdateUsuarioDto): Observable<Usuario> {
         return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${id}`, data)
     }
 
-    delete(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/usuarios/${id}`)
+    delete(id: number): Observable<ApiMessage> {
+        return this.http.delete<ApiMessage>(`${this.apiUrl}/usuarios/${id}`)
     }
 }
