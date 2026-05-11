@@ -16,6 +16,7 @@
     <table>
         <thead>
             <tr>
+                <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Raza</th>
                 <th>Especie</th>
@@ -29,6 +30,16 @@
         <tbody>
             @for (mascota of mascotas(); track mascota.id_ani) {
             <tr>
+                <td>
+                    <div class="pet-image-cell">
+                        @if (mascota.img_mascot) {
+                        <img class="pet-image" [src]="mascota.img_mascot" [alt]="mascota.nom_mascot" (error)="useImageFallback($event)" />
+                        <span class="pet-image-fallback hidden">Sin imagen</span>
+                        } @else {
+                        <span class="pet-image-fallback">Sin imagen</span>
+                        }
+                    </div>
+                </td>
                 <td>{{ mascota.nom_mascot }}</td>
                 <td>{{ mascota.raza?.nom_raza }}</td>
                 <td>{{ mascota.raza?.especie?.nom_esp }}</td>

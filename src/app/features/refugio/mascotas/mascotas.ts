@@ -9,7 +9,8 @@ import { AuthStore } from '../../../core/store/auth.store'
 @Component({
   selector: 'app-mascotas',
   imports: [ReactiveFormsModule],
-  templateUrl: './mascotas.html'
+  templateUrl: './mascotas.html',
+  styleUrl: './mascotas.scss'
 })
 export class MascotasComponent implements OnInit {
   private mascotaService = inject(MascotaService)
@@ -89,6 +90,12 @@ export class MascotasComponent implements OnInit {
   onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement
     this.selectedImage.set(input.files?.[0] ?? null)
+  }
+
+  useImageFallback(event: Event): void {
+    const image = event.target as HTMLImageElement
+    image.style.display = 'none'
+    image.nextElementSibling?.classList.remove('hidden')
   }
 
   onSubmit(): void {

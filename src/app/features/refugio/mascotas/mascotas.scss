@@ -1,0 +1,32 @@
+.pet-image-cell {
+    width: 56px;
+    min-width: 56px;
+}
+
+.pet-image {
+    display: block;
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.pet-image-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.7rem;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
