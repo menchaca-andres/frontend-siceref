@@ -14,6 +14,25 @@ export class TokenHelper {
         localStorage.removeItem('token')
     }
 
+    static getPermissions(): string[] {
+        const permissions = localStorage.getItem('permissions')
+        if (!permissions) return []
+
+        try {
+            return JSON.parse(permissions) as string[]
+        } catch {
+            return []
+        }
+    }
+
+    static setPermissions(permissions: string[]): void {
+        localStorage.setItem('permissions', JSON.stringify(permissions))
+    }
+
+    static removePermissions(): void {
+        localStorage.removeItem('permissions')
+    }
+
     static getPayload(): JwtPayload | null {
         const token = this.getToken()
         if (!token) return null
