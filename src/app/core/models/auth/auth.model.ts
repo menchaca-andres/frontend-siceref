@@ -34,4 +34,5 @@ export interface JwtPayload {
     id_rol: number
     nom_rol: string
     id_ref: number | null
+    exp?: number
 }
