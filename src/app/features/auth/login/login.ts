@@ -33,7 +33,7 @@ export class LoginComponent {
     this.authService.login(this.form.value).subscribe({
       next: (response) => {
         this.authStore.setUsuario(response)
-        this.redirigirPorRol(response.usuario.nom_rol)
+        this.redirigirPorPermisos(response.usuario.permisos)
       },
       error: (err) => {
         this.error = err.error?.message || 'Error al iniciar sesión'
@@ -42,20 +42,22 @@ export class LoginComponent {
     })
   }
 
-  private redirigirPorRol(rol: string): void {
-    switch (rol) {
-      case 'Superadmin':
-        this.router.navigate(['/superadmin/refugios'])
-        break
-      case 'Administrador Refugio':
-      case 'Trabajador Refugio':
-        this.router.navigate(['/refugio/mascotas'])
-        break
-      case 'Adoptante':
-        this.router.navigate(['/adoptante/perfil'])
-        break
-      default:
-        this.router.navigate(['/home'])
+  private redirigirPorPermisos(permisos: string[]): void {
+    if (permisos.includes('refugios:obtener')) {
+      this.router.navigate(['/superadmin/refugios'])
+      return
     }
+
+    if (permisos.includes('mascotas:obtener')) {
+      this.router.navigate(['/refugio/mascotas'])
+      return
+    }
+
+    if (permisos.includes('perfil:obtener')) {
+      this.router.navigate(['/adoptante/perfil'])
+      return
+    }
+
+    this.router.navigate(['/home'])
   }
 }
