@@ -20,24 +20,24 @@
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
-                <th>Licencia</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @for (refugio of refugios(); track refugio.id_refug) {
+            @for (refugio of refugios(); track refugio.id_ref) {
             <tr>
-                <td>{{ refugio.nom_refug }}</td>
-                <td>{{ refugio.dir_refug }}</td>
-                <td>{{ refugio.telf_refug }}</td>
-                <td>{{ refugio.corr_refug }}</td>
-                <td>{{ refugio.licencia_refug }}</td>
+                <td>{{ refugio.nom_ref }}</td>
+                <td>{{ refugio.direc_ref }}</td>
+                <td>{{ refugio.telef_ref }}</td>
+                <td>{{ refugio.email_ref }}</td>
+                <td>{{ refugio.estado_ref ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     @if (authStore.hasPermission('refugios:modificar')) {
                     <button (click)="abrirFormEditar(refugio)">Editar</button>
                     }
                     @if (authStore.hasPermission('refugios:eliminar')) {
-                    <button (click)="eliminar(refugio.id_refug)">Eliminar</button>
+                    <button (click)="eliminar(refugio.id_ref)">Eliminar</button>
                     }
                 </td>
             </tr>
@@ -55,34 +55,30 @@
 
                 <div>
                     <label>Nombre</label>
-                    <input type="text" formControlName="nom_refug" />
+                    <input type="text" formControlName="nom_ref" />
                 </div>
 
                 <div>
                     <label>Dirección</label>
-                    <input type="text" formControlName="dir_refug" />
+                    <input type="text" formControlName="direc_ref" />
                 </div>
 
                 <div>
                     <label>Teléfono</label>
-                    <input type="text" formControlName="telf_refug" />
+                    <input type="text" formControlName="telef_ref" />
                 </div>
 
                 <div>
                     <label>Correo</label>
-                    <input type="email" formControlName="corr_refug" />
+                    <input type="email" formControlName="email_ref" />
                 </div>
 
-                @if (!refugioEditando()) {
                 <div>
-                    <label>Contraseña</label>
-                    <input type="password" formControlName="contra_refug" />
-                </div>
-                }
-
-                <div>
-                    <label>Licencia</label>
-                    <input type="text" formControlName="licencia_refug" />
+                    <label>Estado</label>
+                    <select formControlName="estado_ref">
+                        <option [ngValue]="true">Activo</option>
+                        <option [ngValue]="false">Inactivo</option>
+                    </select>
                 </div>
 
                 <div class="form-actions">

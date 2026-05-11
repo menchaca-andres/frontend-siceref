@@ -21,12 +21,11 @@ export class RefugiosComponent implements OnInit {
   refugioEditando = signal<Refugio | null>(null)
 
   form: FormGroup = this.fb.group({
-    nom_refug: ['', Validators.required],
-    dir_refug: ['', Validators.required],
-    telf_refug: ['', Validators.required],
-    corr_refug: ['', [Validators.required, Validators.email]],
-    contra_refug: ['', Validators.required],
-    licencia_refug: ['', Validators.required]
+    nom_ref: ['', Validators.required],
+    direc_ref: ['', Validators.required],
+    telef_ref: ['', Validators.required],
+    email_ref: ['', [Validators.required, Validators.email]],
+    estado_ref: [true, Validators.required]
   })
 
   ngOnInit(): void {
@@ -49,17 +48,13 @@ export class RefugiosComponent implements OnInit {
 
   abrirFormCrear(): void {
     this.refugioEditando.set(null)
-    this.form.reset()
-    this.form.get('contra_refug')?.setValidators(Validators.required)
-    this.form.get('contra_refug')?.updateValueAndValidity()
+    this.form.reset({ estado_ref: true })
     this.mostrarForm.set(true)
   }
 
   abrirFormEditar(refugio: Refugio): void {
     this.refugioEditando.set(refugio)
     this.form.patchValue(refugio)
-    this.form.get('contra_refug')?.clearValidators()
-    this.form.get('contra_refug')?.updateValueAndValidity()
     this.mostrarForm.set(true)
   }
 
@@ -74,7 +69,7 @@ export class RefugiosComponent implements OnInit {
     const editando = this.refugioEditando()
 
     if (editando) {
-      this.refugioService.update(editando.id_refug, this.form.value).subscribe({
+      this.refugioService.update(editando.id_ref, this.form.value).subscribe({
         next: () => {
           this.cerrarForm()
           this.cargarRefugios()
