@@ -1,23 +1,27 @@
 <div class="login-container">
-    <h2>Iniciar Sesión</h2>
-
+    <div class="titulo-container">
+        <h2>Iniciar sesión en Siceref</h2>
+    </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="inputs-group">
+            <div class="correo-container">
+                <input type="email" formControlName="email_usu" placeholder="Correo" (input)="onEmailInput()" />
+            </div>
 
-        <div>
-            <label>Correo</label>
-            <input type="email" formControlName="email_usu" placeholder="correo@gmail.com" />
-            @if (form.get('email_usu')?.invalid && form.get('email_usu')?.touched) {
-            <span>Correo inválido</span>
+            @if (passwordVisible) {
+            <div class="contrasenia-container animate-slide-down">
+                <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu"
+                    placeholder="Contraseña" />
+            </div>
             }
         </div>
 
-        <div>
-            <label>Contraseña</label>
-            <input type="password" formControlName="pass_usu" placeholder="••••••" />
-            @if (form.get('pass_usu')?.invalid && form.get('pass_usu')?.touched) {
-            <span>Mínimo 6 caracteres</span>
-            }
-        </div>
+        @if (passwordVisible) {
+        <label class="show-password-check animate-slide-down">
+            <input type="checkbox" [checked]="showPassword" (change)="togglePasswordVisibility()" />
+            Mostrar contraseña
+        </label>
+        }
 
         @if (error) {
         <p class="error">{{ error }}</p>
@@ -26,8 +30,6 @@
         <button type="submit" [disabled]="form.invalid || loading">
             {{ loading ? 'Ingresando...' : 'Ingresar' }}
         </button>
-
     </form>
-
     <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate</a></p>
 </div>
