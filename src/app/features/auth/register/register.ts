@@ -6,7 +6,8 @@ import { AuthService } from '../../../shared/services/auth/auth.service'
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
+  styleUrl: "./register.scss"
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder)
@@ -25,6 +26,11 @@ export class RegisterComponent {
   error: string | null = null
   success: string | null = null
   loading = false
+  showPassword = false
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return
