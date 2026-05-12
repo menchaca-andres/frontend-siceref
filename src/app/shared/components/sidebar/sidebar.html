@@ -19,13 +19,16 @@
     }
     }
 
-    @if (authStore.hasAnyPermission('mascotas:obtener', 'razas:obtener', 'especies:obtener', 'trabajadores:obtener', 'refugio:obtener:propio')) {
+    @if (authStore.hasAnyPermission('mascotas:obtener', 'publicaciones:obtener', 'razas:obtener', 'especies:obtener', 'trabajadores:obtener', 'refugio:obtener:propio')) {
     <p class="menu-title">Mi Refugio</p>
     @if (authStore.hasPermission('refugio:obtener:propio')) {
     <a routerLink="/refugio/mi-refugio" routerLinkActive="active">Datos del Refugio</a>
     }
     @if (authStore.hasPermission('mascotas:obtener')) {
     <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
+    }
+    @if (authStore.hasPermission('publicaciones:obtener')) {
+    <a routerLink="/refugio/publicaciones" routerLinkActive="active">Publicaciones</a>
     }
     @if (authStore.hasPermission('razas:obtener')) {
     <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
