@@ -23,6 +23,17 @@ export class LoginComponent {
 
   error: string | null = null
   loading = false
+  showPassword = false
+  passwordVisible = false
+
+  onEmailInput() {
+    const email = this.form.get('email_usu')?.value;
+    this.passwordVisible = email && email.length > 0;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return
@@ -33,7 +44,7 @@ export class LoginComponent {
     this.authService.login(this.form.value).subscribe({
       next: (response) => {
         this.authStore.setUsuario(response)
-        this.redirigirPorPermisos(response.usuario.permisos)
+        this.router.navigate(['/home'])
       },
       error: (err) => {
         this.error = err.error?.message || 'Error al iniciar sesión'
@@ -42,22 +53,4 @@ export class LoginComponent {
     })
   }
 
-  private redirigirPorPermisos(permisos: string[]): void {
-    if (permisos.includes('refugios:obtener')) {
-      this.router.navigate(['/superadmin/refugios'])
-      return
-    }
-
-    if (permisos.includes('mascotas:obtener')) {
-      this.router.navigate(['/refugio/mascotas'])
-      return
-    }
-
-    if (permisos.includes('perfil:obtener')) {
-      this.router.navigate(['/adoptante/perfil'])
-      return
-    }
-
-    this.router.navigate(['/home'])
-  }
 }
