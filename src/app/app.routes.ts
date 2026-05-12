@@ -9,6 +9,10 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'home',
+        loadComponent: () => import('./features/home/home/home').then(m => m.Home)
+    },
+    {
         path: '',
         loadComponent: () => import('./shared/layout/auth-layout/auth-layout').then(m => m.AuthLayoutComponent),
         children: [
@@ -27,10 +31,6 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/layout/main-layout/main-layout').then(m => m.MainLayoutComponent),
         canActivate: [authGuard],
         children: [
-            {
-                path: 'home',
-                loadComponent: () => import('./features/home/home/home').then(m => m.Home)
-            },
             {
                 path: 'superadmin',
                 children: [
@@ -68,6 +68,11 @@ export const routes: Routes = [
                         path: 'mascotas',
                         canActivate: [permissionGuard('mascotas:obtener')],
                         loadComponent: () => import('./features/refugio/mascotas/mascotas').then(m => m.MascotasComponent)
+                    },
+                    {
+                        path: 'publicaciones',
+                        canActivate: [permissionGuard('publicaciones:obtener')],
+                        loadComponent: () => import('./features/refugio/publicaciones/publicaciones').then(m => m.PublicacionesComponent)
                     },
                     {
                         path: 'razas',
