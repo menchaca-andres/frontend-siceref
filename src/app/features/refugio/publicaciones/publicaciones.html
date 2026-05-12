@@ -1,0 +1,96 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Publicaciones</h2>
+        @if (authStore.hasPermission('publicaciones:crear')) {
+        <button (click)="abrirFormCrear()">+ Nueva Publicación</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Mascota</th>
+                <th>Raza</th>
+                <th>Refugio</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (publicacion of publicaciones(); track publicacion.id_publi) {
+            <tr>
+                <td>
+                    <div class="publication-image-cell">
+                        @if (publicacion.mascota?.img_mascot) {
+                        <img class="publication-image" [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot" (error)="useImageFallback($event)" />
+                        <span class="publication-image-fallback hidden">Sin imagen</span>
+                        } @else {
+                        <span class="publication-image-fallback">Sin imagen</span>
+                        }
+                    </div>
+                </td>
+                <td>{{ publicacion.mascota?.nom_mascot || 'Mascota no disponible' }}</td>
+                <td>{{ publicacion.mascota?.raza?.nom_raza }}</td>
+                <td>{{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref }}</td>
+                <td>{{ publicacion.fechapubli | date:'dd/MM/yyyy' }}</td>
+                <td>{{ publicacion.estad_publ ? 'Activa' : 'Inactiva' }}</td>
+                <td>
+                    @if (authStore.hasPermission('publicaciones:modificar')) {
+                    <button (click)="abrirFormEditar(publicacion)">Editar</button>
+                    }
+                    @if (authStore.hasPermission('publicaciones:eliminar')) {
+                    <button (click)="eliminar(publicacion.id_publi)">Eliminar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ publicacionEditando() ? 'Editar Publicación' : 'Nueva Publicación' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div>
+                    <label>Mascota</label>
+                    <select formControlName="id_ani">
+                        <option [ngValue]="null">Selecciona una mascota</option>
+                        @for (mascota of mascotas(); track mascota.id_ani) {
+                        <option [ngValue]="mascota.id_ani">{{ mascota.nom_mascot }} - {{ mascota.raza?.nom_raza }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Estado</label>
+                    <select formControlName="estad_publ">
+                        <option [ngValue]="true">Activa</option>
+                        <option [ngValue]="false">Inactiva</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((publicacionEditando() && authStore.hasPermission('publicaciones:modificar')) || (!publicacionEditando() && authStore.hasPermission('publicaciones:crear'))) {
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ publicacionEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>
