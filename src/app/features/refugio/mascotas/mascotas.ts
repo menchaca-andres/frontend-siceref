@@ -25,6 +25,7 @@ export class MascotasComponent implements OnInit {
   mostrarForm = signal(false)
   mascotaEditando = signal<Mascota | null>(null)
   selectedImage = signal<File | null>(null)
+  imagePreviewUrl = signal<string | null>(null)
 
   form: FormGroup = this.fb.group({
     id_raza: ['', Validators.required],
@@ -62,14 +63,14 @@ export class MascotasComponent implements OnInit {
 
   abrirFormCrear(): void {
     this.mascotaEditando.set(null)
-    this.selectedImage.set(null)
+    this.clearSelectedImage()
     this.form.reset({ sexo_mascot: 'Macho', esteril_mascot: false })
     this.mostrarForm.set(true)
   }
 
   abrirFormEditar(mascota: Mascota): void {
     this.mascotaEditando.set(mascota)
-    this.selectedImage.set(null)
+    this.clearSelectedImage()
     this.form.patchValue({
       id_raza: mascota.id_raza,
       nom_mascot: mascota.nom_mascot,
@@ -83,13 +84,27 @@ export class MascotasComponent implements OnInit {
 
   cerrarForm(): void {
     this.mostrarForm.set(false)
-    this.selectedImage.set(null)
+    this.clearSelectedImage()
     this.form.reset()
   }
 
   onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement
-    this.selectedImage.set(input.files?.[0] ?? null)
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage.set(file)
+
+    if (file) {
+      this.imagePreviewUrl.set(URL.createObjectURL(file))
+    }
+  }
+
+  private clearSelectedImage(): void {
+    const previewUrl = this.imagePreviewUrl()
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+    this.selectedImage.set(null)
+    this.imagePreviewUrl.set(null)
   }
 
   useImageFallback(event: Event): void {

@@ -109,9 +109,21 @@
                     </select>
                 </div>
 
-                <div>
+                <div class="image-field">
                     <label>Imagen</label>
                     <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+                    <div class="image-preview">
+                        @if (imagePreviewUrl()) {
+                        <img [src]="imagePreviewUrl()" alt="Previsualización de la mascota" />
+                        } @else if (mascotaEditando()?.img_mascot) {
+                        <img [src]="mascotaEditando()?.img_mascot" alt="Imagen actual de la mascota" />
+                        } @else {
+                        <div class="image-preview-empty">
+                            <i class="bx bx-image-add"></i>
+                            <span>Selecciona una imagen</span>
+                        </div>
+                        }
+                    </div>
                     @if (mascotaEditando() && !selectedImage()) {
                     <small>Si no seleccionas una imagen nueva, se conservará la actual.</small>
                     }
