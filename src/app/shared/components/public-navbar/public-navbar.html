@@ -1,0 +1,22 @@
+<header class="public-navbar">
+    <a class="brand" routerLink="/home">
+        <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
+    </a>
+
+    <nav class="public-tabs" aria-label="Navegación principal">
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+        <a routerLink="/mascotas" routerLinkActive="active">Mascotas</a>
+        <a routerLink="/home" fragment="sobre-nosotros">Sobre nosotros</a>
+        <a routerLink="/home" fragment="contactanos">Contactanos</a>
+    </nav>
+
+    <nav class="public-actions">
+        @if (authStore.isLoggedIn()) {
+        <a class="secondary-link" [routerLink]="panelRoute()">Panel</a>
+        <button type="button" (click)="logout()">Cerrar sesión</button>
+        } @else if (!isAuthPage()) {
+        <a class="secondary-link" routerLink="/auth/register">Registrarse</a>
+        <a class="login-link" routerLink="/auth/login">Iniciar sesión</a>
+        }
+    </nav>
+</header>
