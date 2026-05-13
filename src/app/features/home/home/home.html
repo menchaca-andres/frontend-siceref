@@ -1,72 +1,27 @@
 <div class="home-page">
-    <header class="home-header">
-        <a class="brand" routerLink="/home">Siceref</a>
+    <app-public-navbar />
 
-        <nav class="home-actions">
-            @if (authStore.isLoggedIn()) {
-            <a class="secondary-link" [routerLink]="panelRoute()">Panel</a>
-            <button type="button" (click)="logout()">Cerrar sesión</button>
-            } @else {
-            <a class="secondary-link" routerLink="/auth/register">Registrarse</a>
-            <a class="login-link" routerLink="/auth/login">Iniciar sesión</a>
-            }
-        </nav>
-    </header>
-
-    <section class="hero">
-        <p class="eyebrow">Adopción responsable</p>
-        <h1>Encuentra mascotas publicadas por refugios registrados</h1>
-        <p>Explora animales disponibles y conoce el refugio que los cuida.</p>
+    <section class="hero cover-image" aria-label="Mascotas en adopción">
+        <img src="/assets/portada3-siceref.jpg" alt="Mascotas en adopción" />
+        <div class="hero-content">
+            <h1>¿Puedes ayudarnos a encontrar nuestros hogares?</h1>
+        </div>
     </section>
 
-    @if (error()) {
-    <p class="error">{{ error() }}</p>
-    }
+    <section id="sobre-nosotros" class="about-section">
+        <div class="about-copy">
+            <p class="eyebrow">Sobre nosotros</p>
+            <h2>Conectamos refugios con personas listas para adoptar</h2>
+            <p>
+                Siceref ayuda a centralizar publicaciones de mascotas disponibles para adopción,
+                facilitando que cada refugio pueda mostrar sus animales y que los adoptantes encuentren
+                una mascota compatible de forma simple y responsable.
+            </p>
+        </div>
 
-    @if (loading()) {
-    <p class="loading">Cargando publicaciones...</p>
-    } @else if (publicaciones().length === 0) {
-    <p class="empty-state">No hay publicaciones activas por ahora.</p>
-    } @else {
-    <section class="publications-grid">
-        @for (publicacion of publicaciones(); track publicacion.id_publi) {
-        <article class="publication-card">
-            <div class="image-wrap">
-                @if (publicacion.mascota?.img_mascot) {
-                <img [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot" (error)="useImageFallback($event)" />
-                <span class="image-fallback hidden">Sin imagen</span>
-                } @else {
-                <span class="image-fallback">Sin imagen</span>
-                }
-            </div>
-
-            <div class="card-body">
-                <div class="card-title-row">
-                    <h2>{{ publicacion.mascota?.nom_mascot || 'Mascota' }}</h2>
-                    <span>{{ publicacion.mascota?.sexo_mascot }}</span>
-                </div>
-                <p class="description">{{ publicacion.mascota?.caract_mascot || 'Sin descripción disponible.' }}</p>
-                <dl>
-                    <div>
-                        <dt>Raza</dt>
-                        <dd>{{ publicacion.mascota?.raza?.nom_raza || 'No registrada' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Especie</dt>
-                        <dd>{{ publicacion.mascota?.raza?.especie?.nom_esp || 'No registrada' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Refugio</dt>
-                        <dd>{{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'No registrado' }}</dd>
-                    </div>
-                    <div>
-                        <dt>Publicado</dt>
-                        <dd>{{ publicacion.fechapubli | date:'dd/MM/yyyy' }}</dd>
-                    </div>
-                </dl>
-            </div>
-        </article>
-        }
+        <div class="about-card">
+            <span>Adopción responsable</span>
+            <strong>Más visibilidad para cada refugio y mejores oportunidades para cada mascota.</strong>
+        </div>
     </section>
-    }
 </div>
