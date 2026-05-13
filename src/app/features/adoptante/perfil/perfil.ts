@@ -72,6 +72,7 @@ export class PerfilComponent implements OnInit {
     this.usuarioService.update(id, this.form.value).subscribe({
       next: (data) => {
         this.usuario.set(data)
+        this.authStore.updateUsuarioBasico(data)
         this.editando.set(false)
         this.success.set('Perfil actualizado correctamente')
       },
