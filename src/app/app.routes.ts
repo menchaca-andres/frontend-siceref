@@ -13,6 +13,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/home/home/home').then(m => m.Home)
     },
     {
+        path: 'mascotas',
+        loadComponent: () => import('./features/public/mascotas/mascotas-publicas').then(m => m.MascotasPublicasComponent)
+    },
+    {
+        path: 'mascotas/:id',
+        loadComponent: () => import('./features/public/mascotas/perfil-mascota/perfil-mascota').then(m => m.PerfilMascotaComponent)
+    },
+    {
         path: '',
         loadComponent: () => import('./shared/layout/auth-layout/auth-layout').then(m => m.AuthLayoutComponent),
         children: [
