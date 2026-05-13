@@ -1,49 +1,64 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.collapsed]="collapsed">
 
-    @if (authStore.hasAnyPermission('refugios:obtener', 'usuarios:obtener', 'roles:obtener', 'admins-sistema:crear', 'admins-refugio:crear')) {
+    <button class="brand" type="button" (click)="toggleCollapsed()" aria-label="Minimizar menú">
+        <img class="logo" src="/face1.ico" alt="Logo de Siceref" />
+        <span>SICEREF</span>
+    </button>
+
+    @if (authStore.hasAnyPermission('refugios:obtener', 'usuarios:obtener', 'roles:obtener', 'admins-sistema:crear',
+    'admins-refugio:crear')) {
     <p class="menu-title">Administración</p>
     @if (authStore.hasPermission('refugios:obtener')) {
-    <a routerLink="/superadmin/refugios" routerLinkActive="active">Refugios</a>
+    <a routerLink="/superadmin/refugios" routerLinkActive="active"><i
+            class="bx bx-building-house"></i><span>Refugios</span></a>
     }
     @if (authStore.hasPermission('usuarios:obtener')) {
-    <a routerLink="/superadmin/usuarios" routerLinkActive="active">Usuarios</a>
+    <a routerLink="/superadmin/usuarios" routerLinkActive="active"><i class="bx bx-user"></i><span>Usuarios</span></a>
     }
     @if (authStore.hasPermission('roles:obtener')) {
-    <a routerLink="/superadmin/roles" routerLinkActive="active">Roles</a>
+    <a routerLink="/superadmin/roles" routerLinkActive="active"><i
+            class="bx bx-shield-quarter"></i><span>Roles</span></a>
     }
     @if (authStore.hasPermission('admins-sistema:crear')) {
-    <a routerLink="/superadmin/admins-sistema" routerLinkActive="active">Admins Sistema</a>
+    <a routerLink="/superadmin/admins-sistema" routerLinkActive="active"><i class="bx bx-user-plus"></i><span>Admins
+            Sistema</span></a>
     }
     @if (authStore.hasPermission('admins-refugio:crear')) {
-    <a routerLink="/superadmin/admins-refugio" routerLinkActive="active">Admins Refugio</a>
+    <a routerLink="/superadmin/admins-refugio" routerLinkActive="active"><i class="bx bx-home-heart"></i><span>Admins
+            Refugio</span></a>
     }
     }
 
-    @if (authStore.hasAnyPermission('mascotas:obtener', 'publicaciones:obtener', 'razas:obtener', 'especies:obtener', 'trabajadores:obtener', 'refugio:obtener:propio')) {
+    @if (authStore.hasAnyPermission('mascotas:obtener', 'publicaciones:obtener', 'razas:obtener', 'especies:obtener',
+    'trabajadores:obtener', 'refugio:obtener:propio')) {
     <p class="menu-title">Mi Refugio</p>
     @if (authStore.hasPermission('refugio:obtener:propio')) {
-    <a routerLink="/refugio/mi-refugio" routerLinkActive="active">Datos del Refugio</a>
+    <a routerLink="/refugio/mi-refugio" routerLinkActive="active"><i class="bx bx-home"></i><span>Datos del
+            Refugio</span></a>
     }
     @if (authStore.hasPermission('mascotas:obtener')) {
-    <a routerLink="/refugio/mascotas" routerLinkActive="active">Mascotas</a>
+    <a routerLink="/refugio/mascotas" routerLinkActive="active"><i class="bx bx-bone"></i><span>Mascotas</span></a>
     }
     @if (authStore.hasPermission('publicaciones:obtener')) {
-    <a routerLink="/refugio/publicaciones" routerLinkActive="active">Publicaciones</a>
+    <a routerLink="/refugio/publicaciones" routerLinkActive="active"><i
+            class="bx bx-news"></i><span>Publicaciones</span></a>
     }
     @if (authStore.hasPermission('razas:obtener')) {
-    <a routerLink="/refugio/razas" routerLinkActive="active">Razas</a>
+    <a routerLink="/refugio/razas" routerLinkActive="active"><i class="bx bx-category"></i><span>Razas</span></a>
     }
     @if (authStore.hasPermission('especies:obtener')) {
-    <a routerLink="/refugio/especies" routerLinkActive="active">Especies</a>
+    <a routerLink="/refugio/especies" routerLinkActive="active"><i class="bx bx-leaf"></i><span>Especies</span></a>
     }
     @if (authStore.hasPermission('trabajadores:obtener')) {
-    <a routerLink="/refugio/trabajadores" routerLinkActive="active">Trabajadores</a>
+    <a routerLink="/refugio/trabajadores" routerLinkActive="active"><i
+            class="bx bx-id-card"></i><span>Trabajadores</span></a>
     }
     }
 
     @if (authStore.hasPermission('perfil:obtener')) {
     <p class="menu-title">Mi Cuenta</p>
-    <a routerLink="/adoptante/perfil" routerLinkActive="active">Mi Perfil</a>
+    <a routerLink="/adoptante/perfil" routerLinkActive="active"><i class="bx bx-user-circle"></i><span>Mi
+            Perfil</span></a>
     }
 
 </aside>
