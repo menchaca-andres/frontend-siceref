@@ -56,6 +56,11 @@ export const AuthStore = signalStore(
         setUsuario(response: AuthResponse): void {
             TokenHelper.setToken(response.token)
             TokenHelper.setPermissions(response.usuario.permisos)
+            TokenHelper.setUser({
+                nom_usu: response.usuario.nom_usu,
+                apell_usu: response.usuario.apell_usu,
+                email_usu: response.usuario.email_usu
+            })
             patchState(store, {
                 id_usu: response.usuario.id_usu,
                 nom_usu: response.usuario.nom_usu,
@@ -69,18 +74,38 @@ export const AuthStore = signalStore(
             })
         },
 
+        updateUsuarioBasico(usuario: { nom_usu?: string; apell_usu?: string; email_usu?: string }): void {
+            const updatedUser = {
+                nom_usu: usuario.nom_usu ?? store.nom_usu(),
+                apell_usu: usuario.apell_usu ?? store.apell_usu(),
+                email_usu: usuario.email_usu ?? store.email_usu()
+            }
+
+            TokenHelper.setUser(updatedUser)
+            patchState(store, {
+                nom_usu: updatedUser.nom_usu,
+                apell_usu: updatedUser.apell_usu,
+                email_usu: updatedUser.email_usu
+            })
+        },
+
         logout(): void {
             TokenHelper.removeToken()
             TokenHelper.removePermissions()
+            TokenHelper.removeUser()
             patchState(store, initialState)
         },
 
         cargarDesdeToken(): void {
             const payload = TokenHelper.getPayload()
             if (!payload) return
+            const user = TokenHelper.getUser()
 
             patchState(store, {
                 id_usu: payload.id_usu,
+                nom_usu: user?.nom_usu ?? null,
+                apell_usu: user?.apell_usu ?? null,
+                email_usu: user?.email_usu ?? null,
                 id_rol: payload.id_rol,
                 nom_rol: payload.nom_rol,
                 id_ref: payload.id_ref,
