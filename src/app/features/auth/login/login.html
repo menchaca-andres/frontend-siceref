@@ -1,35 +1,50 @@
-<div class="login-container">
-    <div class="titulo-container">
-        <h2>Iniciar sesión en Siceref</h2>
-    </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="inputs-group">
-            <div class="correo-container">
-                <input type="email" formControlName="email_usu" placeholder="Correo" (input)="onEmailInput()" />
+<div class="login-page">
+    <app-public-navbar />
+
+    <main class="login-content">
+        <div class="login-container">
+            <a class="brand" routerLink="/home">
+                <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
+            </a>
+
+            <div class="titulo-container">
+                <h2>Iniciar sesión en Siceref</h2>
             </div>
 
-            @if (passwordVisible) {
-            <div class="contrasenia-container animate-slide-down">
-                <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu"
-                    placeholder="Contraseña" />
-            </div>
-            }
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="inputs-group">
+                    <div class="correo-container">
+                        <input type="email" formControlName="email_usu" placeholder="Correo" (input)="onEmailInput()" />
+                    </div>
+
+                    @if (passwordVisible) {
+                    <div class="contrasenia-container animate-slide-down">
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu"
+                            placeholder="Contraseña" />
+                    </div>
+                    }
+                </div>
+
+                @if (passwordVisible) {
+                <label class="show-password-check animate-slide-down">
+                    <input type="checkbox" [checked]="showPassword" (change)="togglePasswordVisibility()" />
+                    Mostrar contraseña
+                </label>
+                }
+
+                @if (error) {
+                <p class="error animate-slide-down">{{ error }}</p>
+                }
+
+                <button type="submit" [disabled]="form.invalid || loading">
+                    {{ loading ? 'Ingresando...' : 'Ingresar' }}
+                </button>
+            </form>
+
+            <p class="register-text">
+                ¿No tienes cuenta?
+                <a routerLink="/auth/register">Regístrate</a>
+            </p>
         </div>
-
-        @if (passwordVisible) {
-        <label class="show-password-check animate-slide-down">
-            <input type="checkbox" [checked]="showPassword" (change)="togglePasswordVisibility()" />
-            Mostrar contraseña
-        </label>
-        }
-
-        @if (error) {
-        <p class="error">{{ error }}</p>
-        }
-
-        <button type="submit" [disabled]="form.invalid || loading">
-            {{ loading ? 'Ingresando...' : 'Ingresar' }}
-        </button>
-    </form>
-    <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate</a></p>
+    </main>
 </div>

@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router'
 import { AuthService } from '../../../shared/services/auth/auth.service'
 import { AuthStore } from '../../../core/store/auth.store'
+import { PublicNavbarComponent } from '../../../shared/components/public-navbar/public-navbar'
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PublicNavbarComponent],
   templateUrl: './login.html',
   styleUrl: "./login.scss",
 })
