@@ -1,5 +1,5 @@
-<div class="main-wrapper">
-    <app-sidebar />
+<div class="main-wrapper" [class.sidebar-collapsed]="sidebarCollapsed()">
+    <app-sidebar [collapsed]="sidebarCollapsed()" (collapsedChange)="sidebarCollapsed.set($event)" />
     <div class="main-content">
         <app-header />
         <div class="page-content">

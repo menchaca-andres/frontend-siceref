@@ -1,0 +1,331 @@
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(12, 112, 1, 0.08), transparent 32rem),
+        #f6f8fb;
+    color: #172033;
+    transition: grid-template-columns 180ms ease;
+}
+
+.main-wrapper.sidebar-collapsed {
+    grid-template-columns: 88px minmax(0, 1fr);
+}
+
+.main-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    flex: 1;
+    padding: 1.5rem 2rem 2rem;
+}
+
+@media (max-width: 900px) {
+    .main-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .page-content {
+        padding: 1rem;
+    }
+}
+
+:host ::ng-deep .page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+:host ::ng-deep .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 24px;
+    padding: 1.25rem;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+:host ::ng-deep .page-header h2 {
+    margin: 0;
+    color: #10251f;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    letter-spacing: -0.05em;
+}
+
+:host ::ng-deep .page-header button,
+:host ::ng-deep .form-actions button[type='submit'],
+:host ::ng-deep .page>form button[type='submit'] {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.75rem 1.1rem;
+    background: #0c7001;
+    color: #fff;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+:host ::ng-deep .page-header button:hover,
+:host ::ng-deep .form-actions button[type='submit']:hover,
+:host ::ng-deep .page>form button[type='submit']:hover {
+    background: #095a01;
+}
+
+:host ::ng-deep button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+:host ::ng-deep .error,
+:host ::ng-deep .success {
+    margin: 0;
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    font-weight: 800;
+}
+
+:host ::ng-deep .page>p:not(.error):not(.success) {
+    margin: 0;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    padding: 1rem;
+    background: #fff;
+    color: #64748b;
+    font-weight: 800;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.05);
+}
+
+:host ::ng-deep .perfil-info {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 920px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 24px;
+    padding: 1.25rem;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+:host ::ng-deep .perfil-row {
+    display: flex;
+    min-height: 86px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1rem;
+    background: #f8fafc;
+}
+
+:host ::ng-deep .perfil-row .label,
+:host ::ng-deep .perfil-row span:first-child {
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+:host ::ng-deep .perfil-row span:last-child {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+:host ::ng-deep .error {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+:host ::ng-deep .success {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+:host ::ng-deep table {
+    width: 100%;
+    border-spacing: 0;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+:host ::ng-deep thead {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+:host ::ng-deep th,
+:host ::ng-deep td {
+    padding: 1rem;
+    text-align: left;
+    vertical-align: middle;
+}
+
+:host ::ng-deep th {
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+:host ::ng-deep td {
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+:host ::ng-deep tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+:host ::ng-deep tbody tr:hover {
+    background: #f8fafc;
+}
+
+:host ::ng-deep td button {
+    margin: 0.15rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    color: #334155;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+:host ::ng-deep td button:hover {
+    border-color: #0c7001;
+    color: #0c7001;
+}
+
+:host ::ng-deep td button:last-child:not(:first-child) {
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+:host ::ng-deep .page>form,
+:host ::ng-deep .modal {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 24px;
+    padding: 1.25rem;
+    background: #fff;
+    box-shadow: 0 20px 55px rgba(15, 23, 42, 0.1);
+}
+
+:host ::ng-deep .page>form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 920px;
+}
+
+:host ::ng-deep form div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+:host ::ng-deep label {
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+:host ::ng-deep input,
+:host ::ng-deep select,
+:host ::ng-deep textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 0.75rem 0.85rem;
+    background: #f8fafc;
+    color: #172033;
+    font: inherit;
+    outline: none;
+}
+
+:host ::ng-deep input:focus,
+:host ::ng-deep select:focus,
+:host ::ng-deep textarea:focus {
+    border-color: #0c7001;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(12, 112, 1, 0.1);
+}
+
+:host ::ng-deep .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+:host ::ng-deep .form-actions button[type='button'] {
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    padding: 0.75rem 1.1rem;
+    background: #fff;
+    color: #334155;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+:host ::ng-deep .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(8px);
+}
+
+:host ::ng-deep .modal {
+    width: min(620px, 100%);
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+}
+
+:host ::ng-deep .modal h3 {
+    margin: 0 0 1rem;
+    color: #10251f;
+    font-size: 1.4rem;
+}
+
+@media (max-width: 760px) {
+    :host ::ng-deep .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    :host ::ng-deep table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    :host ::ng-deep .page>form,
+    :host ::ng-deep .perfil-info {
+        grid-template-columns: 1fr;
+    }
+}
