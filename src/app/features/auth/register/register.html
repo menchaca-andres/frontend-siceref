@@ -1,75 +1,80 @@
-<div class="register-container">
-    <div class="titulo-container">
-        <h2>Crear cuenta en Siceref</h2>
-    </div>
+<div class="register-page">
+    <app-public-navbar />
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <main class="register-content">
+        <div class="register-container">
+            <a class="brand" routerLink="/home">
+                <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
+            </a>
 
-        <div class="nombre-container">
-            <label>Nombre</label>
-            <input type="text" formControlName="nom_usu" placeholder="Juan" />
-            @if (form.get('nom_usu')?.invalid && form.get('nom_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
+            <div class="titulo-container">
+                <h2>Crear cuenta en Siceref</h2>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="inputs-grid">
+                    <div class="nombre-container">
+                        <input type="text" formControlName="nom_usu" placeholder="Nombre" />
+                        @if (form.get('nom_usu')?.invalid && form.get('nom_usu')?.touched) {
+                        <span>Campo requerido</span>
+                        }
+                    </div>
+
+                    <div class="apellido-container">
+                        <input type="text" formControlName="apell_usu" placeholder="Apellido" />
+                        @if (form.get('apell_usu')?.invalid && form.get('apell_usu')?.touched) {
+                        <span>Campo requerido</span>
+                        }
+                    </div>
+
+                    <div class="correo-container full-row">
+                        <input type="email" formControlName="email_usu" placeholder="Correo" />
+                        @if (form.get('email_usu')?.invalid && form.get('email_usu')?.touched) {
+                        <span>Correo inválido</span>
+                        }
+                    </div>
+
+                    <div class="contrasenia-container full-row">
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu" placeholder="Contraseña" />
+                        @if (form.get('pass_usu')?.invalid && form.get('pass_usu')?.touched) {
+                        <span>Mínimo 6 caracteres</span>
+                        }
+                    </div>
+
+                    <div class="telefono-container">
+                        <input type="text" formControlName="numcel_usu" placeholder="Teléfono" />
+                        @if (form.get('numcel_usu')?.invalid && form.get('numcel_usu')?.touched) {
+                        <span>Campo requerido</span>
+                        }
+                    </div>
+
+                    <div class="fecnac-container">
+                        <input type="date" formControlName="fecnac_usu" />
+                        @if (form.get('fecnac_usu')?.invalid && form.get('fecnac_usu')?.touched) {
+                        <span>Campo requerido</span>
+                        }
+                    </div>
+                </div>
+
+                <label class="show-password-check">
+                    <input type="checkbox" [checked]="showPassword" (change)="togglePasswordVisibility()" />
+                    Mostrar contraseña
+                </label>
+
+                @if (error) {
+                <p class="error">{{ error }}</p>
+                }
+
+                @if (success) {
+                <p class="success">{{ success }}</p>
+                }
+
+                <button type="submit" [disabled]="form.invalid || loading">
+                    {{ loading ? 'Registrando...' : 'Registrarse' }}
+                </button>
+            </form>
+
+            <p class="login-text">¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
         </div>
-
-        <div class="apellido-container">
-            <label>Apellido</label>
-            <input type="text" formControlName="apell_usu" placeholder="Pérez" />
-            @if (form.get('apell_usu')?.invalid && form.get('apell_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div class="correo-container">
-            <label>Correo</label>
-            <input type="email" formControlName="email_usu" placeholder="correo@gmail.com" />
-            @if (form.get('email_usu')?.invalid && form.get('email_usu')?.touched) {
-            <span>Correo inválido</span>
-            }
-        </div>
-
-        <div class="contrasenia-container">
-            <label>Contraseña</label>
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu" placeholder="••••••" />
-            <label class="show-password-check">
-                <input type="checkbox" [checked]="showPassword" (change)="togglePasswordVisibility()" />
-                Mostrar contraseña
-            </label>
-            @if (form.get('pass_usu')?.invalid && form.get('pass_usu')?.touched) {
-            <span>Mínimo 6 caracteres</span>
-            }
-        </div>
-
-        <div class="telefono-container">
-            <label>Teléfono</label>
-            <input type="text" formControlName="numcel_usu" placeholder="77712345" />
-            @if (form.get('numcel_usu')?.invalid && form.get('numcel_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div class="fecnac-container">
-            <label>Fecha de Nacimiento</label>
-            <input type="date" formControlName="fecnac_usu" />
-            @if (form.get('fecnac_usu')?.invalid && form.get('fecnac_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        @if (error) {
-        <p class="error">{{ error }}</p>
-        }
-
-        @if (success) {
-        <p class="success">{{ success }}</p>
-        }
-
-        <button type="submit" [disabled]="form.invalid || loading">
-            {{ loading ? 'Registrando...' : 'Registrarse' }}
-        </button>
-
-    </form>
-
-    <p>¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
+    </main>
 </div>

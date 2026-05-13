@@ -1,127 +1,214 @@
 * {
+    box-sizing: border-box;
     font-family: Source Sans Pro, Arial, sans-serif;
 }
 
-:host {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.register-page {
     min-height: 100vh;
-    width: 100%;
+    background: #ffecad;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+}
+
+.register-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 .register-container {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 30px;
-    padding: 20px;
-    justify-content: center;
+    display: flex;
+    width: min(720px, 100%);
+    min-height: 680px;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    padding: 24px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.brand {
+    display: flex;
+    width: auto;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    display: block;
+    width: auto;
+    height: 60px;
+    object-fit: contain;
+}
+
+.titulo-container {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 22px;
+}
+
+.titulo-container h2 {
+    margin: 20px 0;
+}
+
+form {
     display: flex;
     flex-direction: column;
-    width: 680px;
-    height: 680px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
 
-    .titulo-container {
-        justify-content: center;
-        align-items: center;
-        display: block;
-        font-size: 22px;
+.inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(480px, 100%);
+    overflow: hidden;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+}
+
+.inputs-grid > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    position: relative;
+}
+
+.full-row {
+    grid-column: 1 / -1;
+}
+
+.inputs-grid > div:nth-child(odd):not(.full-row) {
+    border-right: 1px solid #c0c0c0;
+}
+
+.inputs-grid > div:not(:nth-last-child(-n + 2)) {
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.inputs-grid input:not([type='checkbox']) {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 14px 16px;
+    background-color: #f5f5f7;
+    font-size: 16px;
+    outline: none;
+}
+
+.inputs-grid input::placeholder {
+    color: #999;
+}
+
+.inputs-grid span {
+    padding: 0 16px 10px;
+    background-color: #f5f5f7;
+    color: #a42a2a;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.show-password-check {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    margin-left: calc((100% - min(480px, 100%)) / 2);
+    font-size: 14px;
+}
+
+.show-password-check input {
+    width: auto;
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.error,
+.success {
+    width: min(480px, 100%);
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 0;
+    padding: 7px;
+    font-size: 15px;
+}
+
+.error {
+    border: 1px solid #ff0000;
+    background-color: #ffd1d1;
+    color: #a42a2a;
+}
+
+.success {
+    border: 1px solid #2f9e44;
+    background-color: #d3f9d8;
+    color: #1b6b2a;
+}
+
+button {
+    width: 150px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ffa500;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.login-text {
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.login-text a {
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .register-container {
+        min-height: auto;
     }
 
-    .nombre-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
+    .inputs-grid {
+        grid-template-columns: 1fr;
     }
 
-    .apellido-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
+    .inputs-grid > div:nth-child(odd):not(.full-row) {
+        border-right: 0;
     }
 
-    .correo-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
-    }
-
-    .contrasenia-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
-    }
-
-    .telefono-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
-    }
-
-    .fecnac-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
-        font-size: 18px;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    input {
-        border: 1px solid black;
-        border-radius: 10px;
-        padding: 10px;
-        width: 450px;
-        font-size: 18px;
+    .inputs-grid > div:not(:last-child) {
+        border-bottom: 1px solid #c0c0c0;
     }
 
     .show-password-check {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-
-        input {
-            width: auto;
-            padding: 0;
-        }
-    }
-
-    button {
-        border: 1px solid #000000;
-        border-radius: 10px;
-        padding: 5px;
-        width: 150px;
-        font-size: 15px;
-        color: #000000;
-        background-color: #ffffff;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #ffa500;
-        }
+        margin-left: 0;
     }
 }
