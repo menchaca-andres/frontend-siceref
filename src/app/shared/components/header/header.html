@@ -1,10 +1,30 @@
 <header class="header">
     <div class="header-left">
-        <h2>Siceref</h2>
+        <p>Panel</p>
+        <h1>Administración SICEREF</h1>
     </div>
+
     <div class="header-right">
-        <span>{{ authStore.nombreCompleto() || 'Usuario' }}</span>
-        <span class="rol">{{ authStore.nom_rol() }}</span>
-        <button (click)="logout()">Cerrar sesión</button>
+        <button class="icon-button" type="button" aria-label="Notificaciones">
+            <i class="bx bx-bell"></i>
+        </button>
+
+        <div class="profile-chip" aria-label="Mi perfil">
+            <i class="bx bx-user-circle"></i>
+            <div>
+                <span>{{ authStore.nombreCompleto() || 'Usuario' }}</span>
+                <small>{{ authStore.nom_rol() || 'Mi perfil' }}</small>
+            </div>
+        </div>
+
+        <a class="site-button" routerLink="/home">
+            <i class="bx bx-home"></i>
+            <span>Ir al sitio</span>
+        </a>
+
+        <button class="logout-button" type="button" (click)="logout()">
+            <i class="bx bx-log-out"></i>
+            <span>Cerrar sesión</span>
+        </button>
     </div>
 </header>
