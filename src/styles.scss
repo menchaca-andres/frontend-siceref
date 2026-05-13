@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'boxicons/css/boxicons.min.css';
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Source Sans Pro, Arial, sans-serif;
+}
