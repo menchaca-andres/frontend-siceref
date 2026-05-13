@@ -1,0 +1,119 @@
+<div class="pet-profile-page">
+    <app-public-navbar />
+
+    @if (loading()) {
+    <p class="state-message">Cargando mascota...</p>
+    } @else if (error()) {
+    <section class="state-card">
+        <h1>{{ error() }}</h1>
+        <a routerLink="/mascotas">Volver a mascotas</a>
+    </section>
+    } @else if (publicacion(); as publicacion) {
+    <main class="profile-shell">
+        <section class="pet-hero-card">
+            <div class="pet-image-wrap">
+                @if (publicacion.mascota?.img_mascot) {
+                <img [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot"
+                    (error)="useImageFallback($event)" />
+                <span class="image-fallback hidden">Sin imagen</span>
+                } @else {
+                <span class="image-fallback">Sin imagen</span>
+                }
+            </div>
+
+            <div class="pet-summary">
+                <a class="back-link" routerLink="/mascotas">← Volver a mascotas</a>
+                <p class="eyebrow">Mascota en adopción</p>
+                <h1>{{ publicacion.mascota?.nom_mascot || 'Mascota' }}</h1>
+                <p class="description">{{ publicacion.mascota?.caract_mascot || 'Sin descripción registrada.' }}</p>
+
+                <div class="summary-pills">
+                    <span>{{ publicacion.mascota?.sexo_mascot || 'Sexo no registrado' }}</span>
+                    <span>
+                        {{ calcularEdad(publicacion.mascota?.fechanac_mascot) ?? 'Edad no registrada' }}
+                        @if (calcularEdad(publicacion.mascota?.fechanac_mascot) !== null) {
+                        años
+                        }
+                    </span>
+                    <span>{{ publicacion.mascota?.esteril_mascot ? 'Esterilizado' : 'No esterilizado' }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-grid">
+            <article class="info-card">
+                <h2>Datos de la mascota</h2>
+                <dl>
+                    <div>
+                        <dt>Nombre</dt>
+                        <dd>{{ publicacion.mascota?.nom_mascot || 'No registrado' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Sexo</dt>
+                        <dd>{{ publicacion.mascota?.sexo_mascot || 'No registrado' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Fecha de nacimiento</dt>
+                        <dd>{{ publicacion.mascota?.fechanac_mascot | date:'dd/MM/yyyy' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Edad</dt>
+                        <dd>
+                            {{ calcularEdad(publicacion.mascota?.fechanac_mascot) ?? 'No registrada' }}
+                            @if (calcularEdad(publicacion.mascota?.fechanac_mascot) !== null) {
+                            años
+                            }
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>Esterilizado</dt>
+                        <dd>{{ publicacion.mascota?.esteril_mascot ? 'Sí' : 'No' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Ingreso al refugio</dt>
+                        <dd>{{ publicacion.mascota?.fechaing_mascot | date:'dd/MM/yyyy' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Raza</dt>
+                        <dd>{{ publicacion.mascota?.raza?.nom_raza || 'No registrada' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Especie</dt>
+                        <dd>{{ publicacion.mascota?.raza?.especie?.nom_esp || 'No registrada' }}</dd>
+                    </div>
+                    <div class="full-row">
+                        <dt>Características</dt>
+                        <dd>{{ publicacion.mascota?.caract_mascot || 'Sin descripción registrada.' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Publicado</dt>
+                        <dd>{{ publicacion.fechapubli | date:'dd/MM/yyyy' }}</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="info-card shelter-card">
+                <h2>Refugio responsable</h2>
+                <dl>
+                    <div>
+                        <dt>Nombre</dt>
+                        <dd>{{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'No registrado' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Dirección</dt>
+                        <dd>{{ publicacion.refugio?.direc_ref || publicacion.mascota?.refugio?.direc_ref || 'No registrada' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Teléfono</dt>
+                        <dd>{{ publicacion.refugio?.telef_ref || publicacion.mascota?.refugio?.telef_ref || 'No registrado' }}</dd>
+                    </div>
+                    <div>
+                        <dt>Correo</dt>
+                        <dd>{{ publicacion.refugio?.email_ref || publicacion.mascota?.refugio?.email_ref || 'No registrado' }}</dd>
+                    </div>
+                </dl>
+            </article>
+        </section>
+    </main>
+    }
+</div>
