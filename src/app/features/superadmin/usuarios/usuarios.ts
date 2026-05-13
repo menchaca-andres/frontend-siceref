@@ -71,7 +71,11 @@ export class UsuariosComponent implements OnInit {
     if (!editando) return
 
     this.usuarioService.update(editando.id_usu, this.form.value).subscribe({
-      next: () => {
+      next: (data) => {
+        if (data.id_usu === this.authStore.id_usu()) {
+          this.authStore.updateUsuarioBasico(data)
+        }
+
         this.cerrarForm()
         this.cargarUsuarios()
       },
