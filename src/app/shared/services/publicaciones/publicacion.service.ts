@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../../environment/environment'
 import { ApiMessage } from '../../../core/models/api/api-message.model'
@@ -12,8 +12,18 @@ export class PublicacionService {
     private http = inject(HttpClient)
     private apiUrl = environment.apiUrl
 
-    getAll(): Observable<Publicacion[]> {
-        return this.http.get<Publicacion[]>(`${this.apiUrl}/publicaciones`)
+    getAll(filters: { id_ref?: number | string; id_ani?: number | string } = {}): Observable<Publicacion[]> {
+        let params = new HttpParams()
+
+        if (filters.id_ref !== undefined && filters.id_ref !== '') {
+            params = params.set('id_ref', String(filters.id_ref))
+        }
+
+        if (filters.id_ani !== undefined && filters.id_ani !== '') {
+            params = params.set('id_ani', String(filters.id_ani))
+        }
+
+        return this.http.get<Publicacion[]>(`${this.apiUrl}/publicaciones`, { params })
     }
 
     getMine(): Observable<Publicacion[]> {
