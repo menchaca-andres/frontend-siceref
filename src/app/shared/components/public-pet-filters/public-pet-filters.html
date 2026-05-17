@@ -1,0 +1,47 @@
+<aside class="filters-card" aria-label="Filtros de mascotas">
+    <div class="filters-heading">
+        <span>Filtros</span>
+        <strong>Encontrá tu mascota</strong>
+    </div>
+
+    <label>
+        Especie
+        <select [value]="especieSeleccionada" (change)="actualizarEspecie($event)">
+            <option value="">Todas las especies</option>
+            @for (especie of especies; track especie.id) {
+            <option [value]="especie.id">{{ especie.nombre }}</option>
+            }
+        </select>
+    </label>
+
+    <label>
+        Raza
+        <select [value]="razaSeleccionada" (change)="actualizarRaza($event)">
+            <option value="">Todas las razas</option>
+            @for (raza of razas; track raza.id) {
+            <option [value]="raza.id">{{ raza.nombre }}</option>
+            }
+        </select>
+    </label>
+
+    <label>
+        Sexo
+        <select [value]="sexoSeleccionado" (change)="actualizarSexo($event)">
+            <option value="">Todos</option>
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+        </select>
+    </label>
+
+    <label>
+        Tamaño
+        <select [value]="tamanioSeleccionado" (change)="actualizarTamanio($event)">
+            <option value="">Todos los tamaños</option>
+            @for (tamanio of tamanios; track tamanio.id) {
+            <option [value]="tamanio.id">{{ tamanio.nombre }}</option>
+            }
+        </select>
+    </label>
+
+    <button type="button" (click)="clearFilters.emit()">Limpiar filtros</button>
+</aside>
