@@ -58,6 +58,21 @@ export const routes: Routes = [
                         loadComponent: () => import('./features/superadmin/roles/roles').then(m => m.RolesComponent)
                     },
                     {
+                        path: 'razas',
+                        canActivate: [permissionGuard('razas:obtener')],
+                        loadComponent: () => import('./features/superadmin/razas/razas').then(m => m.RazasComponent)
+                    },
+                    {
+                        path: 'especies',
+                        canActivate: [permissionGuard('especies:obtener')],
+                        loadComponent: () => import('./features/superadmin/especies/especies').then(m => m.EspeciesComponent)
+                    },
+                    {
+                        path: 'tamanios',
+                        canActivate: [permissionGuard('tamanios:obtener')],
+                        loadComponent: () => import('./features/superadmin/tamanios/tamanios').then(m => m.TamaniosComponent)
+                    },
+                    {
                         path: 'admins-sistema',
                         canActivate: [permissionGuard('admins-sistema:crear')],
                         loadComponent: () => import('./features/superadmin/admins-sistema/admins-sistema').then(m => m.AdminsSistemaComponent)
@@ -81,16 +96,6 @@ export const routes: Routes = [
                         path: 'publicaciones',
                         canActivate: [permissionGuard('publicaciones:obtener')],
                         loadComponent: () => import('./features/refugio/publicaciones/publicaciones').then(m => m.PublicacionesComponent)
-                    },
-                    {
-                        path: 'razas',
-                        canActivate: [permissionGuard('razas:obtener')],
-                        loadComponent: () => import('./features/refugio/razas/razas').then(m => m.RazasComponent)
-                    },
-                    {
-                        path: 'especies',
-                        canActivate: [permissionGuard('especies:obtener')],
-                        loadComponent: () => import('./features/refugio/especies/especies').then(m => m.EspeciesComponent)
                     },
                     {
                         path: 'trabajadores',
