@@ -5,7 +5,7 @@
         <span>SICEREF</span>
     </button>
 
-    @if (authStore.hasAnyPermission('refugios:obtener', 'usuarios:obtener', 'roles:obtener', 'admins-sistema:crear',
+    @if (authStore.hasAnyPermission('refugios:obtener', 'usuarios:obtener', 'roles:obtener', 'razas:obtener', 'especies:obtener', 'tamanios:obtener', 'admins-sistema:crear',
     'admins-refugio:crear')) {
     <p class="menu-title">Administración</p>
     @if (authStore.hasPermission('refugios:obtener')) {
@@ -19,6 +19,15 @@
     <a routerLink="/superadmin/roles" routerLinkActive="active"><i
             class="bx bx-shield-quarter"></i><span>Roles</span></a>
     }
+    @if (authStore.hasPermission('razas:obtener')) {
+    <a routerLink="/superadmin/razas" routerLinkActive="active"><i class="bx bx-category"></i><span>Razas</span></a>
+    }
+    @if (authStore.hasPermission('especies:obtener')) {
+    <a routerLink="/superadmin/especies" routerLinkActive="active"><i class="bx bx-leaf"></i><span>Especies</span></a>
+    }
+    @if (authStore.hasPermission('tamanios:obtener')) {
+    <a routerLink="/superadmin/tamanios" routerLinkActive="active"><i class="bx bx-ruler"></i><span>Tamaños</span></a>
+    }
     @if (authStore.hasPermission('admins-sistema:crear')) {
     <a routerLink="/superadmin/admins-sistema" routerLinkActive="active"><i class="bx bx-user-plus"></i><span>Admins
             Sistema</span></a>
@@ -29,8 +38,8 @@
     }
     }
 
-    @if (authStore.hasAnyPermission('mascotas:obtener', 'publicaciones:obtener', 'razas:obtener', 'especies:obtener',
-    'trabajadores:obtener', 'refugio:obtener:propio')) {
+    @if (authStore.hasAnyPermission('mascotas:obtener', 'publicaciones:obtener', 'trabajadores:obtener',
+    'refugio:obtener:propio')) {
     <p class="menu-title">Mi Refugio</p>
     @if (authStore.hasPermission('refugio:obtener:propio')) {
     <a routerLink="/refugio/mi-refugio" routerLinkActive="active"><i class="bx bx-home"></i><span>Datos del
@@ -42,12 +51,6 @@
     @if (authStore.hasPermission('publicaciones:obtener')) {
     <a routerLink="/refugio/publicaciones" routerLinkActive="active"><i
             class="bx bx-news"></i><span>Publicaciones</span></a>
-    }
-    @if (authStore.hasPermission('razas:obtener')) {
-    <a routerLink="/refugio/razas" routerLinkActive="active"><i class="bx bx-category"></i><span>Razas</span></a>
-    }
-    @if (authStore.hasPermission('especies:obtener')) {
-    <a routerLink="/refugio/especies" routerLinkActive="active"><i class="bx bx-leaf"></i><span>Especies</span></a>
     }
     @if (authStore.hasPermission('trabajadores:obtener')) {
     <a routerLink="/refugio/trabajadores" routerLinkActive="active"><i
