@@ -1,0 +1,79 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Tamaños</h2>
+        @if (authStore.hasPermission('tamanios:crear')) {
+        <button (click)="abrirFormCrear()">+ Nuevo Tamaño</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (tamanio of tamanios(); track tamanio.id_tam) {
+            <tr>
+                <td>{{ tamanio.id_tam }}</td>
+                <td>{{ tamanio.nom_tam }}</td>
+                <td>{{ tamanio.estado_tam ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    @if (authStore.hasPermission('tamanios:modificar')) {
+                    <button (click)="abrirFormEditar(tamanio)">Editar</button>
+                    }
+                    @if (tamanio.estado_tam && authStore.hasPermission('tamanios:eliminar')) {
+                    <button (click)="desactivar(tamanio.id_tam)">Desactivar</button>
+                    }
+                    @if (!tamanio.estado_tam && authStore.hasPermission('tamanios:modificar')) {
+                    <button (click)="activar(tamanio.id_tam)">Activar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ tamanioEditando() ? 'Editar Tamaño' : 'Nuevo Tamaño' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div>
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nom_tam" />
+                </div>
+
+                <div>
+                    <label>Estado</label>
+                    <select formControlName="estado_tam">
+                        <option [ngValue]="true">Activo</option>
+                        <option [ngValue]="false">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((tamanioEditando() && authStore.hasPermission('tamanios:modificar')) || (!tamanioEditando() && authStore.hasPermission('tamanios:crear'))) {
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ tamanioEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+</div>

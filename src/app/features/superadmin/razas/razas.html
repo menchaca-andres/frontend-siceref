@@ -1,0 +1,78 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Razas</h2>
+        @if (authStore.hasPermission('razas:crear')) {
+        <button (click)="abrirFormCrear()">+ Nueva Raza</button>
+        }
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (raza of razas(); track raza.id_raza) {
+            <tr>
+                <td>{{ raza.nom_raza }}</td>
+                <td>{{ raza.especie?.nom_esp }}</td>
+                <td>
+                    @if (authStore.hasPermission('razas:modificar')) {
+                    <button (click)="abrirFormEditar(raza)">Editar</button>
+                    }
+                    @if (authStore.hasPermission('razas:eliminar')) {
+                    <button (click)="eliminar(raza.id_raza)">Eliminar</button>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    @if (mostrarForm()) {
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>{{ razaEditando() ? 'Editar Raza' : 'Nueva Raza' }}</h3>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div>
+                    <label>Especie</label>
+                    <select formControlName="id_esp">
+                        <option [ngValue]="null">Selecciona una especie</option>
+                        @for (especie of especies(); track especie.id_esp) {
+                        <option [ngValue]="especie.id_esp">{{ especie.nom_esp }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div>
+                    <label>Nombre de la Raza</label>
+                    <input type="text" formControlName="nom_raza" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" (click)="cerrarForm()">Cancelar</button>
+                    @if ((razaEditando() && authStore.hasPermission('razas:modificar')) || (!razaEditando() && authStore.hasPermission('razas:crear'))) {
+                    <button type="submit" [disabled]="form.invalid">
+                        {{ razaEditando() ? 'Actualizar' : 'Crear' }}
+                    </button>
+                    }
+                </div>
+
+            </form>
+        </div>
+    </div>
+    }
+</div>
