@@ -20,6 +20,7 @@
                 <th>Nombre</th>
                 <th>Raza</th>
                 <th>Especie</th>
+                <th>Tamaño</th>
                 <th>Edad</th>
                 <th>Sexo</th>
                 <th>Esterilizado</th>
@@ -43,6 +44,7 @@
                 <td>{{ mascota.nom_mascot }}</td>
                 <td>{{ mascota.raza?.nom_raza }}</td>
                 <td>{{ mascota.raza?.especie?.nom_esp }}</td>
+                <td>{{ mascota.tamano?.nom_tam || 'No registrado' }}</td>
                 <td>{{ calcularEdad(mascota.fechanac_mascot) }} años</td>
                 <td>{{ mascota.sexo_mascot }}</td>
                 <td>{{ mascota.esteril_mascot ? 'Sí' : 'No' }}</td>
@@ -86,6 +88,16 @@
                 <div>
                     <label>Fecha de Nacimiento</label>
                     <input type="date" formControlName="fechanac_mascot" />
+                </div>
+
+                <div>
+                    <label>Tamaño</label>
+                    <select formControlName="id_tam">
+                        <option [ngValue]="null">Selecciona un tamaño</option>
+                        @for (tamanio of tamanios(); track tamanio.id_tam) {
+                        <option [ngValue]="tamanio.id_tam">{{ tamanio.nom_tam }}</option>
+                        }
+                    </select>
                 </div>
 
                 <div>

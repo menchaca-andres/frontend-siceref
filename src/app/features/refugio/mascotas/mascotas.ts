@@ -2,8 +2,10 @@ import { Component, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
 import { RazaService } from '../../../shared/services/razas/raza.service'
+import { TamanioService } from '../../../shared/services/tamanios/tamanio.service'
 import { Mascota } from '../../../core/models/mascotas/mascota.model'
 import { Raza } from '../../../core/models/razas/raza.model'
+import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
@@ -15,11 +17,13 @@ import { AuthStore } from '../../../core/store/auth.store'
 export class MascotasComponent implements OnInit {
   private mascotaService = inject(MascotaService)
   private razaService = inject(RazaService)
+  private tamanioService = inject(TamanioService)
   private fb = inject(FormBuilder)
   authStore = inject(AuthStore)
 
   mascotas = signal<Mascota[]>([])
   razas = signal<Raza[]>([])
+  tamanios = signal<Tamanio[]>([])
   loading = signal(false)
   error = signal<string | null>(null)
   mostrarForm = signal(false)
@@ -29,6 +33,7 @@ export class MascotasComponent implements OnInit {
 
   form: FormGroup = this.fb.group({
     id_raza: ['', Validators.required],
+    id_tam: ['', Validators.required],
     nom_mascot: ['', Validators.required],
     fechanac_mascot: ['', Validators.required],
     caract_mascot: ['', Validators.required],
@@ -39,6 +44,7 @@ export class MascotasComponent implements OnInit {
   ngOnInit(): void {
     this.cargarMascotas()
     this.cargarRazas()
+    this.cargarTamanios()
   }
 
   cargarMascotas(): void {
@@ -61,6 +67,12 @@ export class MascotasComponent implements OnInit {
     })
   }
 
+  cargarTamanios(): void {
+    this.tamanioService.getAll().subscribe({
+      next: (data) => this.tamanios.set(data)
+    })
+  }
+
   abrirFormCrear(): void {
     this.mascotaEditando.set(null)
     this.clearSelectedImage()
@@ -73,6 +85,7 @@ export class MascotasComponent implements OnInit {
     this.clearSelectedImage()
     this.form.patchValue({
       id_raza: mascota.id_raza,
+      id_tam: mascota.id_tam,
       nom_mascot: mascota.nom_mascot,
       fechanac_mascot: this.toDateInputValue(mascota.fechanac_mascot),
       caract_mascot: mascota.caract_mascot,
@@ -173,6 +186,7 @@ export class MascotasComponent implements OnInit {
     formData.append('sexo_mascot', this.form.value.sexo_mascot)
     formData.append('caract_mascot', this.form.value.caract_mascot)
     formData.append('id_raza', String(this.form.value.id_raza))
+    formData.append('id_tam', String(this.form.value.id_tam))
     formData.append('id_ref', String(idRef))
 
     if (image) {
