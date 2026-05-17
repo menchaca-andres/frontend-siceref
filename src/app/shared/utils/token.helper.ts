@@ -60,7 +60,9 @@ export class TokenHelper {
 
         try {
             const base64 = token.split('.')[1]
-            const decoded = atob(base64)
+            const normalized = base64.replace(/-/g, '+').replace(/_/g, '/')
+            const padded = normalized.padEnd(normalized.length + (4 - normalized.length % 4) % 4, '=')
+            const decoded = atob(padded)
             return JSON.parse(decoded) as JwtPayload
         } catch {
             return null
