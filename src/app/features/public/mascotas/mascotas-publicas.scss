@@ -34,14 +34,26 @@
     font-size: 1.15rem;
 }
 
-.error,
-.loading,
-.empty-state {
+.error {
     margin: 1rem clamp(1rem, 4vw, 4rem);
+    color: #b91c1c;
 }
 
-.error {
-    color: #b91c1c;
+.content-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    padding: 1rem clamp(1rem, 4vw, 4rem) 4rem;
+}
+
+.publications-section {
+    min-width: 0;
+}
+
+.loading,
+.empty-state {
+    margin: 1rem 0;
 }
 
 .publications-grid {
@@ -49,7 +61,7 @@
     grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
     gap: 1rem;
     justify-content: center;
-    padding: 1rem clamp(1rem, 4vw, 4rem) 4rem;
+    padding: 0;
 }
 
 .publication-card {
@@ -144,4 +156,10 @@
 
 .hidden {
     display: none;
+}
+
+@media (max-width: 820px) {
+    .content-layout {
+        grid-template-columns: 1fr;
+    }
 }

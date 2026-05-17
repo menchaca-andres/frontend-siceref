@@ -9,44 +9,57 @@
     <p class="error">{{ error() }}</p>
     }
 
-    @if (loading()) {
-    <p class="loading">Cargando publicaciones...</p>
-    } @else if (publicaciones().length === 0) {
-    <p class="empty-state">No hay publicaciones activas por ahora.</p>
-    } @else {
-    <section class="publications-grid">
-        @for (publicacion of publicaciones(); track publicacion.id_publi) {
-        <article class="publication-card">
-            <div class="image-wrap">
-                @if (publicacion.mascota?.img_mascot) {
-                <img [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot"
-                    (error)="useImageFallback($event)" />
-                <span class="image-fallback hidden">Sin imagen</span>
-                } @else {
-                <span class="image-fallback">Sin imagen</span>
+    <main class="content-layout">
+        <app-public-pet-filters [especies]="especies()" [razas]="razas()" [tamanios]="tamaniosFiltro()"
+            [especieSeleccionada]="especieSeleccionada()" [razaSeleccionada]="razaSeleccionada()"
+            [tamanioSeleccionado]="tamanioSeleccionado()" [sexoSeleccionado]="sexoSeleccionado()"
+            (especieChange)="actualizarEspecie($event)" (razaChange)="razaSeleccionada.set($event)"
+            (tamanioChange)="tamanioSeleccionado.set($event)" (sexoChange)="sexoSeleccionado.set($event)"
+            (clearFilters)="limpiarFiltros()" />
+
+        <section class="publications-section">
+            @if (loading()) {
+            <p class="loading">Cargando publicaciones...</p>
+            } @else if (publicaciones().length === 0) {
+            <p class="empty-state">No hay publicaciones activas por ahora.</p>
+            } @else if (publicacionesFiltradas().length === 0) {
+            <p class="empty-state">No encontramos mascotas con esos filtros.</p>
+            } @else {
+            <div class="publications-grid">
+                @for (publicacion of publicacionesFiltradas(); track publicacion.id_publi) {
+                <article class="publication-card">
+                    <div class="image-wrap">
+                        @if (publicacion.mascota?.img_mascot) {
+                        <img [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot"
+                            (error)="useImageFallback($event)" />
+                        <span class="image-fallback hidden">Sin imagen</span>
+                        } @else {
+                        <span class="image-fallback">Sin imagen</span>
+                        }
+                    </div>
+
+                    <div class="card-body">
+                        <div class="card-title-row">
+                            <h2>{{ publicacion.mascota?.nom_mascot || 'Mascota' }}</h2>
+                            <span>{{ publicacion.mascota?.sexo_mascot }}</span>
+                        </div>
+                        <p class="pet-age">
+                            {{ calcularEdad(publicacion.mascota?.fechanac_mascot) ?? 'Edad no registrada' }}
+                            @if (calcularEdad(publicacion.mascota?.fechanac_mascot) !== null) {
+                            años
+                            }
+                        </p>
+
+                        <p class="pet-shelter">
+                            {{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'Refugio no registrado'
+                            }}
+                        </p>
+                        <a class="more-button" [routerLink]="['/mascotas', publicacion.id_publi]">Ver más</a>
+                    </div>
+                </article>
                 }
             </div>
-
-            <div class="card-body">
-                <div class="card-title-row">
-                    <h2>{{ publicacion.mascota?.nom_mascot || 'Mascota' }}</h2>
-                    <span>{{ publicacion.mascota?.sexo_mascot }}</span>
-                </div>
-                <p class="pet-age">
-                    {{ calcularEdad(publicacion.mascota?.fechanac_mascot) ?? 'Edad no registrada' }}
-                    @if (calcularEdad(publicacion.mascota?.fechanac_mascot) !== null) {
-                    años
-                    }
-                </p>
-
-                <p class="pet-shelter">
-                    {{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'Refugio no registrado'
-                    }}
-                </p>
-                <a class="more-button" [routerLink]="['/mascotas', publicacion.id_publi]">Ver más</a>
-            </div>
-        </article>
-        }
-    </section>
-    }
+            }
+        </section>
+    </main>
 </div>
