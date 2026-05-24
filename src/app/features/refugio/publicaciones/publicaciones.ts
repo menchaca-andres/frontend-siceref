@@ -1,15 +1,16 @@
 import { DatePipe } from '@angular/common'
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Mascota } from '../../../core/models/mascotas/mascota.model'
 import { Publicacion } from '../../../core/models/publicaciones/publicacion.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
 import { PublicacionService } from '../../../shared/services/publicaciones/publicacion.service'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TablePaginationComponent],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.scss'
 })
@@ -25,6 +26,9 @@ export class PublicacionesComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   publicacionEditando = signal<Publicacion | null>(null)
+  pageSize = 5
+  page = signal(1)
+  publicacionesPaginadas = computed(() => this.publicaciones().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     id_ani: [null, Validators.required],
@@ -41,6 +45,7 @@ export class PublicacionesComponent implements OnInit {
     this.publicacionService.getMine().subscribe({
       next: (data) => {
         this.publicaciones.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

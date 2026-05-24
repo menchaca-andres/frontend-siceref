@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (publicacion of publicaciones(); track publicacion.id_publi) {
+            @for (publicacion of publicacionesPaginadas(); track publicacion.id_publi) {
             <tr>
                 <td>
                     <div class="publication-image-cell">
@@ -55,6 +55,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="publicaciones().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {
