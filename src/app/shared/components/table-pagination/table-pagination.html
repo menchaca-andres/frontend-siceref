@@ -1,0 +1,9 @@
+<nav class="table-pagination" aria-label="Paginación de tabla">
+    <span>Mostrando {{ rangeStart() }}-{{ rangeEnd() }} de {{ totalItems }}</span>
+
+    <div class="pagination-actions">
+        <button type="button" (click)="previous()" [disabled]="page <= 1">Anterior</button>
+        <strong>{{ page }} / {{ totalPages() }}</strong>
+        <button type="button" (click)="next()" [disabled]="page >= totalPages()">Siguiente</button>
+    </div>
+</nav>
