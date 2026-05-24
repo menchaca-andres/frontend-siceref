@@ -1,0 +1,50 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2>Conversaciones</h2>
+            <p>Seguimiento de tus chats con refugios y adoptantes.</p>
+        </div>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (conversaciones().length === 0) {
+    <section class="empty-card">
+        <i class="bx bx-message-rounded-dots"></i>
+        <h3>No tienes conversaciones</h3>
+        <p>Cuando inicies una conversación, va a aparecer en esta bandeja.</p>
+    </section>
+    } @else {
+    <section class="conversation-list">
+        @for (conversacion of conversaciones(); track conversacion.id_conv) {
+        <a class="conversation-card" [routerLink]="['/conversaciones', conversacion.id_conv]">
+            <div class="conversation-icon">
+                <i class="bx bx-message-square-dots"></i>
+            </div>
+            <div class="conversation-body">
+                <div class="conversation-topline">
+                    <app-status-badge [status]="conversacion.publicacion?.estad_publ ? 'Disponible' : 'No disponible'" />
+                    <span>{{ (ultimoMensaje(conversacion)?.fecha_msj || conversacion.fecha_creacion) | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+
+                <h3>{{ conversacion.publicacion?.mascota?.nom_mascot || 'Mascota no registrada' }}</h3>
+                <p class="conversation-context">
+                    {{ conversacion.publicacion?.refugio?.nom_ref || 'Refugio no registrado' }}
+                </p>
+
+                @if (ultimoMensaje(conversacion); as mensaje) {
+                <p class="last-message">{{ mensaje.contenido }}</p>
+                } @else {
+                <p class="last-message muted">Sin mensajes todavía.</p>
+                }
+            </div>
+            <i class="bx bx-chevron-right open-icon"></i>
+        </a>
+        }
+    </section>
+    }
+</div>

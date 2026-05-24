@@ -1,0 +1,127 @@
+.conversation-list {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.conversation-card,
+.empty-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.conversation-card {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.95rem;
+    padding: 1rem;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.conversation-card:hover {
+    border-color: rgba(12, 112, 1, 0.35);
+    box-shadow: 0 22px 54px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+.conversation-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: #f0fdf4;
+    color: #0c7001;
+}
+
+.conversation-icon i {
+    font-size: 1.7rem;
+}
+
+.conversation-body {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.conversation-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+h3,
+p {
+    margin: 0;
+}
+
+h3 {
+    overflow: hidden;
+    color: #0f172a;
+    font-size: 1.08rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.conversation-context {
+    color: #64748b;
+    font-weight: 800;
+}
+
+.last-message {
+    overflow: hidden;
+    color: #334155;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.last-message.muted {
+    color: #94a3b8;
+}
+
+.open-icon {
+    color: #94a3b8;
+    font-size: 1.5rem;
+}
+
+.empty-card {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    color: #475569;
+    text-align: center;
+}
+
+.empty-card i {
+    color: #0c7001;
+    font-size: 3rem;
+}
+
+.page-header p {
+    margin: 0.25rem 0 0;
+    color: #64748b;
+    font-weight: 800;
+}
+
+@media (max-width: 640px) {
+    .conversation-card {
+        grid-template-columns: 1fr;
+    }
+
+    .conversation-icon,
+    .open-icon {
+        display: none;
+    }
+}
