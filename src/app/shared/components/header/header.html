@@ -5,9 +5,41 @@
     </div>
 
     <div class="header-right">
-        <button class="icon-button" type="button" aria-label="Notificaciones">
-            <i class="bx bx-bell"></i>
-        </button>
+        @if (authStore.hasPermission('notificaciones:obtener')) {
+        <div class="notification-menu">
+            <button class="icon-button" type="button" (click)="toggleNotificaciones()" aria-label="Notificaciones">
+                <i class="bx bx-bell"></i>
+                @if (notificacionesNoLeidas() > 0) {
+                <span class="notification-badge">{{ notificacionesNoLeidas() > 99 ? '99+' : notificacionesNoLeidas() }}</span>
+                }
+            </button>
+
+            @if (mostrarNotificaciones()) {
+            <section class="notifications-panel">
+                <div class="notifications-heading">
+                    <strong>Notificaciones</strong>
+                </div>
+
+                @if (notificaciones().length === 0) {
+                <p>No tienes notificaciones.</p>
+                } @else {
+                @for (notificacion of notificaciones(); track notificacion.id_noti) {
+                <article [class.unread]="!notificacion.leida">
+                    <strong>{{ notificacion.titulo }}</strong>
+                    <span>{{ notificacion.mensaje }}</span>
+                    <small>{{ notificacion.fecha_noti | date:'dd/MM HH:mm' }}</small>
+                    @if (!notificacion.leida) {
+                    <button type="button" (click)="marcarLeida(notificacion)">Marcar leída</button>
+                    }
+                </article>
+                }
+                }
+
+                <a class="view-all-notifications" routerLink="/notificaciones">Ver todo</a>
+            </section>
+            }
+        </div>
+        }
 
         <div class="profile-chip" aria-label="Mi perfil">
             <i class="bx bx-user-circle"></i>
