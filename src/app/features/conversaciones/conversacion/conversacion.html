@@ -1,0 +1,59 @@
+<div class="page">
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (conversacion(); as conversacion) {
+    <section class="chat-window">
+        <header class="chat-header">
+            <div class="chat-avatar">
+                <i class="bx bx-bone"></i>
+            </div>
+
+            <div class="chat-title">
+                <h2>{{ conversacion.publicacion?.mascota?.nom_mascot || 'Mascota no registrada' }}</h2>
+                <p>{{ conversacion.publicacion?.refugio?.nom_ref || 'Refugio no registrado' }}</p>
+            </div>
+
+            <app-status-badge [status]="conversacion.publicacion?.estad_publ ? 'Disponible' : 'No disponible'" />
+        </header>
+
+        <div class="message-panel">
+            @if (conversacion.mensajes.length === 0) {
+            <div class="empty-thread">
+                <i class="bx bx-message-rounded-dots"></i>
+                <p>No hay mensajes todavía. Escribe el primero cuando quieras coordinar.</p>
+            </div>
+            } @else {
+            @for (mensaje of conversacion.mensajes; track mensaje.id_msj) {
+            <article class="message" [class.mine]="esMensajePropio(mensaje.id_remitente)">
+                <div class="message-bubble">
+                    <p>{{ mensaje.contenido }}</p>
+                    <small>
+                        {{ mensaje.remitente?.nom_usu }} {{ mensaje.remitente?.apell_usu }} · {{ mensaje.fecha_msj | date:'dd/MM/yyyy HH:mm' }}
+                    </small>
+                </div>
+            </article>
+            }
+            }
+        </div>
+
+        @if (puedeEnviarMensajes(conversacion)) {
+        <form class="chat-composer" [formGroup]="form" (ngSubmit)="enviarMensaje()">
+            <textarea rows="3" formControlName="contenido" placeholder="Escribe un mensaje"></textarea>
+            <button type="submit" [disabled]="form.invalid">
+                <i class="bx bx-send"></i>
+                Enviar
+            </button>
+        </form>
+        } @else {
+        <div class="closed-thread">
+            <i class="bx bx-lock-alt"></i>
+            <p>El chat no está disponible para esta publicación.</p>
+        </div>
+        }
+    </section>
+    }
+</div>
