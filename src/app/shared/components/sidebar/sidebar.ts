@@ -10,6 +10,7 @@ import { AuthStore } from '../../../core/store/auth.store'
 })
 export class SidebarComponent {
   authStore = inject(AuthStore)
+
   @Input() collapsed = false
   @Output() collapsedChange = new EventEmitter<boolean>()
 
