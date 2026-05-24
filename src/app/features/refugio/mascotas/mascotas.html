@@ -29,7 +29,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (mascota of mascotas(); track mascota.id_ani) {
+            @for (mascota of mascotasPaginadas(); track mascota.id_ani) {
             <tr>
                 <td>
                     <div class="pet-image-cell">
@@ -61,6 +61,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="mascotas().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {

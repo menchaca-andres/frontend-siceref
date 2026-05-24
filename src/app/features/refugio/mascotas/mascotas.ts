@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
 import { RazaService } from '../../../shared/services/razas/raza.service'
@@ -7,10 +7,11 @@ import { Mascota } from '../../../core/models/mascotas/mascota.model'
 import { Raza } from '../../../core/models/razas/raza.model'
 import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-mascotas',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './mascotas.html',
   styleUrl: './mascotas.scss'
 })
@@ -30,6 +31,9 @@ export class MascotasComponent implements OnInit {
   mascotaEditando = signal<Mascota | null>(null)
   selectedImage = signal<File | null>(null)
   imagePreviewUrl = signal<string | null>(null)
+  pageSize = 5
+  page = signal(1)
+  mascotasPaginadas = computed(() => this.mascotas().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     id_raza: ['', Validators.required],
@@ -52,6 +56,7 @@ export class MascotasComponent implements OnInit {
     this.mascotaService.getAll().subscribe({
       next: (data) => {
         this.mascotas.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {
