@@ -1,0 +1,48 @@
+<app-public-navbar />
+
+<div class="page">
+    <div class="page-header">
+        <h2>Notificaciones</h2>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (notificaciones().length === 0) {
+    <section class="empty-card">
+        <i class="bx bx-bell-off"></i>
+        <h3>No tienes notificaciones</h3>
+        <p>Cuando haya novedades de mensajes, van a aparecer acá.</p>
+    </section>
+    } @else {
+    <section class="notification-list">
+        @for (notificacion of notificaciones(); track notificacion.id_noti) {
+        <article class="notification-card" [class.unread]="!notificacion.leida">
+            <div class="notification-icon">
+                <i class="bx" [class.bx-message-dots]="notificacion.tipo === 'MENSAJE_CHAT'"
+                    [class.bx-heart]="notificacion.tipo !== 'MENSAJE_CHAT'"></i>
+            </div>
+            <div class="notification-body">
+                <div class="notification-topline">
+                    <app-status-badge [status]="notificationStatus(notificacion)" />
+                    <span>{{ notificacion.fecha_noti | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <h3>{{ notificacion.titulo }}</h3>
+                <p>{{ notificacion.mensaje }}</p>
+                <div class="notification-actions">
+                    @if (notificacion.id_publi) {
+                    <a [routerLink]="['/conversaciones/publicacion', notificacion.id_publi]">Abrir conversación</a>
+                    }
+                    @if (!notificacion.leida) {
+                    <button type="button" (click)="marcarLeida(notificacion.id_noti)">Marcar leída</button>
+                    }
+                </div>
+            </div>
+        </article>
+        }
+    </section>
+    }
+</div>

@@ -1,0 +1,115 @@
+.notification-list {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.notification-card,
+.empty-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.notification-card {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 0.9rem;
+    padding: 1rem;
+}
+
+.notification-card.unread {
+    border-color: rgba(12, 112, 1, 0.35);
+    background: linear-gradient(135deg, #fff, #f0fdf4);
+}
+
+.notification-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    background: #f1f5f9;
+    color: #0c7001;
+}
+
+.notification-icon i {
+    font-size: 1.65rem;
+}
+
+.notification-body {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.notification-topline,
+.notification-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.notification-topline {
+    justify-content: space-between;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+h3,
+p {
+    margin: 0;
+}
+
+h3 {
+    color: #0f172a;
+    font-size: 1.05rem;
+}
+
+p {
+    color: #475569;
+    line-height: 1.45;
+}
+
+.notification-actions a,
+.notification-actions button,
+.notification-actions .disabled-action,
+.empty-card a {
+    border: 1px solid #0c7001;
+    border-radius: 999px;
+    padding: 0.55rem 0.8rem;
+    background: #0c7001;
+    color: #fff;
+    font: inherit;
+    font-size: 0.84rem;
+    font-weight: 900;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.notification-actions .disabled-action {
+    border-color: #e2e8f0;
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.notification-actions button {
+    background: #fff;
+    color: #0c7001;
+}
+
+.empty-card {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.empty-card i {
+    color: #0c7001;
+    font-size: 3rem;
+}
