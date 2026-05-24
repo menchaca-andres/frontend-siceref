@@ -1,10 +1,14 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { Especie } from '../../../core/models/especies/especie.model'
 import { Publicacion } from '../../../core/models/publicaciones/publicacion.model'
+import { Raza } from '../../../core/models/razas/raza.model'
 import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { PublicPetFiltersComponent } from '../../../shared/components/public-pet-filters/public-pet-filters'
 import { PublicNavbarComponent } from '../../../shared/components/public-navbar/public-navbar'
+import { EspecieService } from '../../../shared/services/especies/especie.service'
 import { PublicacionService } from '../../../shared/services/publicaciones/publicacion.service'
+import { RazaService } from '../../../shared/services/razas/raza.service'
 import { TamanioService } from '../../../shared/services/tamanios/tamanio.service'
 
 @Component({
@@ -15,10 +19,14 @@ import { TamanioService } from '../../../shared/services/tamanios/tamanio.servic
 })
 export class MascotasPublicasComponent implements OnInit {
   private publicacionService = inject(PublicacionService)
+  private especieService = inject(EspecieService)
+  private razaService = inject(RazaService)
   private tamanioService = inject(TamanioService)
 
   publicaciones = signal<Publicacion[]>([])
-  tamanios = signal<Tamanio[]>([])
+  especiesCatalogo = signal<Especie[]>([])
+  razasCatalogo = signal<Raza[]>([])
+  tamaniosCatalogo = signal<Tamanio[]>([])
   razaSeleccionada = signal('')
   especieSeleccionada = signal('')
   tamanioSeleccionado = signal('')
@@ -26,32 +34,22 @@ export class MascotasPublicasComponent implements OnInit {
   loading = signal(false)
   error = signal<string | null>(null)
 
-  especies = computed(() => {
-    const especies = new Map<number, string>()
-
-    for (const publicacion of this.publicaciones()) {
-      const especie = publicacion.mascota?.raza?.especie
-      if (especie) especies.set(especie.id_esp, especie.nom_esp)
-    }
-
-    return Array.from(especies, ([id, nombre]) => ({ id, nombre })).sort((a, b) => a.nombre.localeCompare(b.nombre))
-  })
+  especies = computed(() => this.especiesCatalogo()
+    .map((especie) => ({ id: especie.id_esp, nombre: especie.nom_esp }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre)))
 
   razas = computed(() => {
-    const razas = new Map<number, { id: number; nombre: string; id_esp?: number }>()
     const especieSeleccionada = Number(this.especieSeleccionada())
 
-    for (const publicacion of this.publicaciones()) {
-      const raza = publicacion.mascota?.raza
-      if (!raza) continue
-      if (especieSeleccionada && raza.id_esp !== especieSeleccionada) continue
-      razas.set(raza.id_raza, { id: raza.id_raza, nombre: raza.nom_raza, id_esp: raza.id_esp })
-    }
-
-    return Array.from(razas.values()).sort((a, b) => a.nombre.localeCompare(b.nombre))
+    return this.razasCatalogo()
+      .filter((raza) => !especieSeleccionada || raza.id_esp === especieSeleccionada)
+      .map((raza) => ({ id: raza.id_raza, nombre: raza.nom_raza, id_esp: raza.id_esp }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre))
   })
 
-  tamaniosFiltro = computed(() => this.tamanios().map((tamanio) => ({ id: tamanio.id_tam, nombre: tamanio.nom_tam })))
+  tamaniosFiltro = computed(() => this.tamaniosCatalogo()
+    .map((tamanio) => ({ id: tamanio.id_tam, nombre: tamanio.nom_tam }))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre)))
 
   publicacionesFiltradas = computed(() => {
     const razaSeleccionada = Number(this.razaSeleccionada())
@@ -73,7 +71,7 @@ export class MascotasPublicasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarPublicaciones()
-    this.cargarTamanios()
+    this.cargarCatalogos()
   }
 
   cargarPublicaciones(): void {
@@ -92,9 +90,17 @@ export class MascotasPublicasComponent implements OnInit {
     })
   }
 
-  cargarTamanios(): void {
-    this.tamanioService.getAll().subscribe({
-      next: (data) => this.tamanios.set(data)
+  cargarCatalogos(): void {
+    this.especieService.getPublic().subscribe({
+      next: (data) => this.especiesCatalogo.set(data)
+    })
+
+    this.razaService.getPublic().subscribe({
+      next: (data) => this.razasCatalogo.set(data)
+    })
+
+    this.tamanioService.getPublic().subscribe({
+      next: (data) => this.tamaniosCatalogo.set(data)
     })
   }
 
