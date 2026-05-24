@@ -16,6 +16,10 @@ export class TamanioService {
         return this.http.get<Tamanio[]>(`${this.apiUrl}/tamanios${includeInactive ? '?all=true' : ''}`)
     }
 
+    getPublic(): Observable<Tamanio[]> {
+        return this.http.get<Tamanio[]>(`${this.apiUrl}/tamanios/public`)
+    }
+
     getById(id: number): Observable<Tamanio> {
         return this.http.get<Tamanio>(`${this.apiUrl}/tamanios/${id}`)
     }
