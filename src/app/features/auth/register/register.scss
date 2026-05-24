@@ -5,7 +5,7 @@
 
 .register-page {
     min-height: 100vh;
-    background: #ffecad;
+    //background: #ffecad;
     color: #0f172a;
     display: flex;
     flex-direction: column;
@@ -77,7 +77,7 @@ form {
     border-radius: 10px;
 }
 
-.inputs-grid > div {
+.inputs-grid>div {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -88,11 +88,11 @@ form {
     grid-column: 1 / -1;
 }
 
-.inputs-grid > div:nth-child(odd):not(.full-row) {
+.inputs-grid>div:nth-child(odd):not(.full-row) {
     border-right: 1px solid #c0c0c0;
 }
 
-.inputs-grid > div:not(:nth-last-child(-n + 2)) {
+.inputs-grid>div:not(:nth-last-child(-n + 2)) {
     border-bottom: 1px solid #c0c0c0;
 }
 
@@ -200,11 +200,11 @@ button:disabled {
         grid-template-columns: 1fr;
     }
 
-    .inputs-grid > div:nth-child(odd):not(.full-row) {
+    .inputs-grid>div:nth-child(odd):not(.full-row) {
         border-right: 0;
     }
 
-    .inputs-grid > div:not(:last-child) {
+    .inputs-grid>div:not(:last-child) {
         border-bottom: 1px solid #c0c0c0;
     }
 
