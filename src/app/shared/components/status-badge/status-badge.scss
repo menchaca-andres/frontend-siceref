@@ -1,0 +1,32 @@
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 0.38rem 0.7rem;
+    font-size: 0.74rem;
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.muted {
+    background: #e2e8f0;
+    color: #475569;
+}
