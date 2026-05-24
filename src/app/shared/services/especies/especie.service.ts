@@ -16,6 +16,10 @@ export class EspecieService {
         return this.http.get<Especie[]>(`${this.apiUrl}/especies`)
     }
 
+    getPublic(): Observable<Especie[]> {
+        return this.http.get<Especie[]>(`${this.apiUrl}/especies/public`)
+    }
+
     getById(id: number): Observable<Especie> {
         return this.http.get<Especie>(`${this.apiUrl}/especies/${id}`)
     }
