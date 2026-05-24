@@ -37,6 +37,16 @@
                     </span>
                     <span>{{ publicacion.mascota?.esteril_mascot ? 'Esterilizado' : 'No esterilizado' }}</span>
                 </div>
+
+                @if (authStore.isLoggedIn()) {
+                <div class="pet-actions">
+                    @if (authStore.hasEveryPermission('conversaciones:obtener', 'mensajes-chat:crear') && authStore.id_ref() === null) {
+                    <a class="chat-link" [routerLink]="['/conversaciones/publicacion', publicacion.id_publi]">Chatear</a>
+                    }
+                </div>
+                } @else if (!authStore.isLoggedIn()) {
+                <a class="chat-login" routerLink="/auth/login">Iniciar sesión para chatear</a>
+                }
             </div>
         </section>
 

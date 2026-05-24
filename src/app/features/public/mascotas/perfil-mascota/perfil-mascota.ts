@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { Publicacion } from '../../../../core/models/publicaciones/publicacion.model'
+import { AuthStore } from '../../../../core/store/auth.store'
 import { PublicNavbarComponent } from '../../../../shared/components/public-navbar/public-navbar'
 import { PublicacionService } from '../../../../shared/services/publicaciones/publicacion.service'
 
@@ -14,6 +15,7 @@ import { PublicacionService } from '../../../../shared/services/publicaciones/pu
 export class PerfilMascotaComponent implements OnInit {
   private route = inject(ActivatedRoute)
   private publicacionService = inject(PublicacionService)
+  authStore = inject(AuthStore)
 
   publicacion = signal<Publicacion | null>(null)
   loading = signal(false)
@@ -71,4 +73,5 @@ export class PerfilMascotaComponent implements OnInit {
     image.style.display = 'none'
     image.nextElementSibling?.classList.remove('hidden')
   }
+
 }
