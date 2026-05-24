@@ -4,10 +4,10 @@
     </a>
 
     <nav class="public-tabs" aria-label="Navegación principal">
-        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
-        <a routerLink="/mascotas" routerLinkActive="active">Mascotas</a>
-        <a routerLink="/home" fragment="sobre-nosotros">Sobre nosotros</a>
-        <a routerLink="/home" fragment="contactanos">Contáctanos</a>
+        <a routerLink="/home" [class.active]="isActive('/home')">Inicio</a>
+        <a routerLink="/mascotas" [class.active]="isActive('/mascotas', undefined, false)">Mascotas</a>
+        <a routerLink="/home" fragment="sobre-nosotros" [class.active]="isActive('/home', 'sobre-nosotros')">Sobre nosotros</a>
+        <a routerLink="/home" fragment="contactanos" [class.active]="isActive('/home', 'contactanos')">Contáctanos</a>
     </nav>
 
     <nav class="public-actions">

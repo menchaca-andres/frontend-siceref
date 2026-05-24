@@ -1,10 +1,10 @@
 import { Component, HostListener, inject, signal } from '@angular/core'
-import { Router, RouterLink, RouterLinkActive } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { AuthStore } from '../../../core/store/auth.store'
 
 @Component({
   selector: 'app-public-navbar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink],
   templateUrl: './public-navbar.html',
   styleUrl: './public-navbar.scss'
 })
@@ -19,8 +19,14 @@ export class PublicNavbarComponent {
   }
 
   isAuthPage(): boolean {
-    const path = this.router.url.split('?')[0].split('#')[0]
+    const path = this.currentPath()
     return path === '/auth/login' || path === '/auth/register'
+  }
+
+  isActive(path: string, fragment?: string, exact = true): boolean {
+    const currentPath = this.currentPath()
+    const pathMatches = exact ? currentPath === path : currentPath === path || currentPath.startsWith(`${path}/`)
+    return pathMatches && this.currentFragment() === (fragment ?? '')
   }
 
   logout(): void {
@@ -33,5 +39,13 @@ export class PublicNavbarComponent {
     if (this.authStore.hasPermission('mascotas:obtener')) return '/refugio/mascotas'
     if (this.authStore.hasPermission('perfil:obtener')) return '/adoptante/perfil'
     return '/home'
+  }
+
+  private currentPath(): string {
+    return this.router.url.split('?')[0].split('#')[0]
+  }
+
+  private currentFragment(): string {
+    return this.router.url.split('#')[1]?.split('?')[0] ?? ''
   }
 }
