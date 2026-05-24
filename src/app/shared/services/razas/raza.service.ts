@@ -16,6 +16,10 @@ export class RazaService {
         return this.http.get<Raza[]>(`${this.apiUrl}/razas`)
     }
 
+    getPublic(): Observable<Raza[]> {
+        return this.http.get<Raza[]>(`${this.apiUrl}/razas/public`)
+    }
+
     getById(id: number): Observable<Raza> {
         return this.http.get<Raza>(`${this.apiUrl}/razas/${id}`)
     }
