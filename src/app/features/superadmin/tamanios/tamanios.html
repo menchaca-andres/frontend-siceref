@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (tamanio of tamanios(); track tamanio.id_tam) {
+            @for (tamanio of tamaniosPaginados(); track tamanio.id_tam) {
             <tr>
                 <td>{{ tamanio.id_tam }}</td>
                 <td>{{ tamanio.nom_tam }}</td>
@@ -43,6 +43,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="tamanios().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {

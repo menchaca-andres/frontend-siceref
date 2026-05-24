@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { EspecieService } from '../../../shared/services/especies/especie.service'
 import { Especie } from '../../../core/models/especies/especie.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-especies',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './especies.html'
 })
 export class EspeciesComponent implements OnInit {
@@ -19,6 +20,9 @@ export class EspeciesComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   especieEditando = signal<Especie | null>(null)
+  pageSize = 5
+  page = signal(1)
+  especiesPaginadas = computed(() => this.especies().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     nom_esp: ['', Validators.required]
@@ -33,6 +37,7 @@ export class EspeciesComponent implements OnInit {
     this.especieService.getAll().subscribe({
       next: (data) => {
         this.especies.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

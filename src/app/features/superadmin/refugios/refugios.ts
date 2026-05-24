@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { RefugioService } from '../../../shared/services/refugios/refugio.service'
 import { Refugio } from '../../../core/models/refugios/refugio.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-refugios',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './refugios.html'
 })
 export class RefugiosComponent implements OnInit {
@@ -19,6 +20,9 @@ export class RefugiosComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   refugioEditando = signal<Refugio | null>(null)
+  pageSize = 5
+  page = signal(1)
+  refugiosPaginados = computed(() => this.refugios().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     nom_ref: ['', Validators.required],
@@ -37,6 +41,7 @@ export class RefugiosComponent implements OnInit {
     this.refugioService.getAll().subscribe({
       next: (data) => {
         this.refugios.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

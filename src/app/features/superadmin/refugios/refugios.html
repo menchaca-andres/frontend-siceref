@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (refugio of refugios(); track refugio.id_ref) {
+            @for (refugio of refugiosPaginados(); track refugio.id_ref) {
             <tr>
                 <td>{{ refugio.nom_ref }}</td>
                 <td>{{ refugio.direc_ref }}</td>
@@ -44,6 +44,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="refugios().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {

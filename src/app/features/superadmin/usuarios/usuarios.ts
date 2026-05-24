@@ -1,13 +1,14 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { DatePipe } from '@angular/common'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-usuarios',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TablePaginationComponent],
   templateUrl: './usuarios.html'
 })
 export class UsuariosComponent implements OnInit {
@@ -20,6 +21,9 @@ export class UsuariosComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   usuarioEditando = signal<Usuario | null>(null)
+  pageSize = 5
+  page = signal(1)
+  usuariosPaginados = computed(() => this.usuarios().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     nom_usu: ['', Validators.required],
@@ -38,6 +42,7 @@ export class UsuariosComponent implements OnInit {
     this.usuarioService.getAll().subscribe({
       next: (data) => {
         this.usuarios.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

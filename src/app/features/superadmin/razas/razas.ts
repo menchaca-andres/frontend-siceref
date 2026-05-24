@@ -1,14 +1,15 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { RazaService } from '../../../shared/services/razas/raza.service'
 import { EspecieService } from '../../../shared/services/especies/especie.service'
 import { Raza } from '../../../core/models/razas/raza.model'
 import { Especie } from '../../../core/models/especies/especie.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-razas',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './razas.html'
 })
 export class RazasComponent implements OnInit {
@@ -23,6 +24,9 @@ export class RazasComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   razaEditando = signal<Raza | null>(null)
+  pageSize = 5
+  page = signal(1)
+  razasPaginadas = computed(() => this.razas().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     id_esp: ['', Validators.required],
@@ -39,6 +43,7 @@ export class RazasComponent implements OnInit {
     this.razaService.getAll().subscribe({
       next: (data) => {
         this.razas.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

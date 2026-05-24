@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { RolService } from '../../../shared/services/roles/rol.service'
 import { Rol } from '../../../core/models/roles/rol.model'
 import { AuthStore } from '../../../core/store/auth.store'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-roles',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './roles.html'
 })
 export class RolesComponent implements OnInit {
@@ -19,6 +20,9 @@ export class RolesComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   rolEditando = signal<Rol | null>(null)
+  pageSize = 5
+  page = signal(1)
+  rolesPaginados = computed(() => this.roles().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     codigo: ['', Validators.required],
@@ -35,6 +39,7 @@ export class RolesComponent implements OnInit {
     this.rolService.getAll().subscribe({
       next: (data) => {
         this.roles.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

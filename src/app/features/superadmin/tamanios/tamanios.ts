@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TamanioService } from '../../../shared/services/tamanios/tamanio.service'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-tamanios',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './tamanios.html'
 })
 export class TamaniosComponent implements OnInit {
@@ -19,6 +20,9 @@ export class TamaniosComponent implements OnInit {
   error = signal<string | null>(null)
   mostrarForm = signal(false)
   tamanioEditando = signal<Tamanio | null>(null)
+  pageSize = 5
+  page = signal(1)
+  tamaniosPaginados = computed(() => this.tamanios().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     nom_tam: ['', Validators.required],
@@ -34,6 +38,7 @@ export class TamaniosComponent implements OnInit {
     this.tamanioService.getAll(true).subscribe({
       next: (data) => {
         this.tamanios.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

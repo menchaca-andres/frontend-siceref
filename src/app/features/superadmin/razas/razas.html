@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (raza of razas(); track raza.id_raza) {
+            @for (raza of razasPaginadas(); track raza.id_raza) {
             <tr>
                 <td>{{ raza.nom_raza }}</td>
                 <td>{{ raza.especie?.nom_esp }}</td>
@@ -38,6 +38,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="razas().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {

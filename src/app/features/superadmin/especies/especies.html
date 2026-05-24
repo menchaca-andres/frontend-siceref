@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (especie of especies(); track especie.id_esp) {
+            @for (especie of especiesPaginadas(); track especie.id_esp) {
             <tr>
                 <td>{{ especie.id_esp }}</td>
                 <td>{{ especie.nom_esp }}</td>
@@ -38,6 +38,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="especies().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {

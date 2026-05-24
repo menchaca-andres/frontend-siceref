@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (rol of roles(); track rol.id_rol) {
+            @for (rol of rolesPaginados(); track rol.id_rol) {
             <tr>
                 <td>{{ rol.id_rol }}</td>
                 <td>{{ rol.codigo }}</td>
@@ -42,6 +42,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="roles().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {
