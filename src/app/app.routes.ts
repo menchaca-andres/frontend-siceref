@@ -118,8 +118,28 @@ export const routes: Routes = [
                         loadComponent: () => import('./features/adoptante/perfil/perfil').then(m => m.PerfilComponent)
                     }
                 ]
+            },
+            {
+                path: 'conversaciones/publicacion/:id_publi',
+                canActivate: [permissionGuard('conversaciones:obtener')],
+                loadComponent: () => import('./features/conversaciones/conversacion/conversacion').then(m => m.ConversacionComponent)
+            },
+            {
+                path: 'conversaciones/:id_conv',
+                canActivate: [permissionGuard('conversaciones:obtener')],
+                loadComponent: () => import('./features/conversaciones/conversacion/conversacion').then(m => m.ConversacionComponent)
+            },
+            {
+                path: 'conversaciones',
+                canActivate: [permissionGuard('conversaciones:obtener')],
+                loadComponent: () => import('./features/conversaciones/bandeja-conversaciones/bandeja-conversaciones').then(m => m.ConversacionesComponent)
             }
         ]
+    },
+    {
+        path: 'notificaciones',
+        loadComponent: () => import('./features/notificaciones/notificaciones').then(m => m.NotificacionesComponent),
+        canActivate: [authGuard, permissionGuard('notificaciones:obtener')]
     },
     {
         path: 'not-found',
