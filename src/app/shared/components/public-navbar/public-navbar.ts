@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { Component, HostListener, inject, signal } from '@angular/core'
 import { Router, RouterLink, RouterLinkActive } from '@angular/router'
 import { AuthStore } from '../../../core/store/auth.store'
 
@@ -11,6 +11,12 @@ import { AuthStore } from '../../../core/store/auth.store'
 export class PublicNavbarComponent {
   authStore = inject(AuthStore)
   private router = inject(Router)
+  scrolled = signal(false)
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.scrolled.set(window.scrollY > 0)
+  }
 
   isAuthPage(): boolean {
     const path = this.router.url.split('?')[0].split('#')[0]
