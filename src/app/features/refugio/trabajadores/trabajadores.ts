@@ -1,14 +1,15 @@
 import { DatePipe } from '@angular/common'
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { AuthStore } from '../../../core/store/auth.store'
 import { Usuario } from '../../../core/models/usuarios/usuario.model'
 import { AuthService } from '../../../shared/services/auth/auth.service'
 import { UsuarioService } from '../../../shared/services/usuarios/usuario.service'
+import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
 
 @Component({
   selector: 'app-trabajadores',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TablePaginationComponent],
   templateUrl: './trabajadores.html'
 })
 export class TrabajadoresComponent implements OnInit {
@@ -22,6 +23,9 @@ export class TrabajadoresComponent implements OnInit {
   error = signal<string | null>(null)
   success = signal<string | null>(null)
   mostrarForm = signal(false)
+  pageSize = 5
+  page = signal(1)
+  trabajadoresPaginados = computed(() => this.trabajadores().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
 
   form: FormGroup = this.fb.group({
     nom_usu: ['', Validators.required],
@@ -41,6 +45,7 @@ export class TrabajadoresComponent implements OnInit {
     this.usuarioService.getMyWorkers().subscribe({
       next: (data) => {
         this.trabajadores.set(data)
+        this.page.set(1)
         this.loading.set(false)
       },
       error: (err) => {

@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (trabajador of trabajadores(); track trabajador.id_usu) {
+            @for (trabajador of trabajadoresPaginados(); track trabajador.id_usu) {
             <tr>
                 <td>{{ trabajador.nom_usu }} {{ trabajador.apell_usu }}</td>
                 <td>{{ trabajador.email_usu }}</td>
@@ -37,6 +37,8 @@
             }
         </tbody>
     </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="trabajadores().length"
+        (pageChange)="page.set($event)" />
     }
 
     @if (mostrarForm()) {
