@@ -1,4 +1,4 @@
-<header class="public-navbar">
+<header class="public-navbar" [class.scrolled]="scrolled()">
     <a class="brand" routerLink="/home">
         <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
     </a>
@@ -7,7 +7,7 @@
         <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
         <a routerLink="/mascotas" routerLinkActive="active">Mascotas</a>
         <a routerLink="/home" fragment="sobre-nosotros">Sobre nosotros</a>
-        <a routerLink="/home" fragment="contactanos">Contactanos</a>
+        <a routerLink="/home" fragment="contactanos">Contáctanos</a>
     </nav>
 
     <nav class="public-actions">
