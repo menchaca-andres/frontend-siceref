@@ -4,6 +4,16 @@
     color: #0f172a;
 }
 
+@keyframes liquid-shimmer {
+    0% {
+        transform: translateX(-100%) skewX(-12deg);
+    }
+
+    100% {
+        transform: translateX(200%) skewX(-12deg);
+    }
+}
+
 .profile-shell {
     display: flex;
     flex-direction: column;
@@ -115,24 +125,69 @@ h1 {
 
 .pet-actions .chat-link,
 .chat-login {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #000;
+    border: 0;
     border-radius: 999px;
-    padding: 0.75rem 1rem;
-    background: #ff8800;
+    padding: 0.68rem 1rem;
+    background: rgba(255, 249, 133, 0.85);
     color: #000;
     font: inherit;
     font-weight: 900;
     text-decoration: none;
     cursor: pointer;
+    overflow: hidden;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.55) inset,
+        0 2px 8px rgba(255, 220, 0, 0.20);
+    transition:
+        background 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(105deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.30) 50%,
+                transparent 60%);
+        transform: translateX(-100%) skewX(-12deg);
+    }
 }
 
-.pet-actions .chat-link {
-    border-color: #0c7001;
-    background: #0c7001;
-    color: #fff;
+.pet-actions .chat-link:hover,
+.chat-login:hover {
+    background: rgba(255, 247, 89, 0.95);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.70) inset,
+        0 4px 14px rgba(255, 200, 0, 0.28);
+    transform: translateY(-1px);
+
+    &::after {
+        animation: liquid-shimmer 0.6s ease forwards;
+    }
+}
+
+.pet-actions .chat-link:focus-visible,
+.chat-login:focus-visible {
+    outline: 3px solid rgba(9, 90, 1, 0.30);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pet-actions .chat-link,
+    .chat-login,
+    .pet-actions .chat-link::after,
+    .chat-login::after {
+        transition: none;
+        animation: none;
+    }
 }
 
 .detail-grid {
