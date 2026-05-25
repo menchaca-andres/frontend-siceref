@@ -1,34 +1,95 @@
+@keyframes liquid-shimmer {
+    0% {
+        transform: translateX(-100%) skewX(-12deg);
+    }
+
+    100% {
+        transform: translateX(200%) skewX(-12deg);
+    }
+}
+
+$glass-border: rgba(255, 255, 255, 0.55);
+$glass-border-scroll: rgba(255, 255, 255, 0.70);
+$accent: #095a01;
+$brand-dark: #0f172a;
+
 .public-navbar {
     position: sticky;
-    top: clamp(0.75rem, 2vw, 1.25rem);
+    top: 0.4rem;
     z-index: 30;
     display: grid;
     grid-template-columns: minmax(160px, 1fr) auto minmax(160px, 1fr);
     align-items: center;
     gap: clamp(0.75rem, 2vw, 1.5rem);
     min-height: 82px;
-    margin: clamp(0.25rem, 2vw, 1rem) clamp(0.25rem, 1vw, 2rem) 0;
+    margin: 0.4rem 0.7rem 0;
     padding: 0.75rem clamp(1rem, 4vw, 4rem);
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 100px;
-    box-shadow: none;
-    transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, backdrop-filter 160ms ease;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid $glass-border;
+    box-shadow:
+        0 1px 0 0 rgba(255, 255, 255, 0.80) inset,
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+
+    // ── Capa 1: blur estilo Apple ─────────────────────────────────────────
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        pointer-events: none;
+    }
+
+    // ── Capa 2: highlight de luz superior ────────────────────────────────
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        z-index: 0;
+        background: linear-gradient(180deg,
+                rgba(255, 255, 255, 0.55) 0%,
+                rgba(255, 255, 255, 0.10) 40%,
+                rgba(255, 255, 255, 0.00) 100%);
+        pointer-events: none;
+    }
+
+    // ── Todo el contenido por encima de las capas ─────────────────────────
+    >* {
+        position: relative;
+        z-index: 1;
+    }
+
+    // ── Estado scrolled ───────────────────────────────────────────────────
+    &.scrolled {
+        border-color: $glass-border-scroll;
+        box-shadow:
+            0 1px 0 0 rgba(255, 255, 255, 0.90) inset,
+            0 12px 40px rgba(0, 0, 0, 0.10),
+            0 4px 12px rgba(0, 0, 0, 0.06);
+
+        &::before {
+            background: rgba(255, 255, 255, 0.24);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+        }
+    }
 }
 
-.public-navbar.scrolled {
-    background: rgba(255, 255, 255, 0.54);
-    border-color: rgba(255, 255, 255, 0.52);
-    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.1);
-    backdrop-filter: blur(22px) saturate(150%);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
-}
-
+// ─── Brand / Logo ─────────────────────────────────────────────────────────────
 .brand {
     display: inline-flex;
     align-items: center;
     flex: 0 0 auto;
-    color: #0f172a;
+    color: $brand-dark;
     font-size: 1.35rem;
     font-weight: 800;
     text-decoration: none;
@@ -41,6 +102,7 @@
     object-fit: contain;
 }
 
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
 .public-tabs,
 .public-actions {
     display: flex;
@@ -53,93 +115,129 @@
     justify-content: center;
     gap: clamp(0.75rem, 2vw, 1.5rem);
     padding: 0;
+
+    a {
+        position: relative;
+        padding: 0.7rem 0.15rem;
+        color: #334155;
+        font-weight: 800;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 160ms ease;
+
+        &:hover {
+            color: $accent;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0.25rem;
+            height: 3px;
+            border-radius: 999px;
+            background: $accent;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 160ms ease;
+        }
+
+        &:hover::after,
+        &.active::after {
+            transform: scaleX(1);
+        }
+
+        &.active {
+            color: $accent;
+        }
+    }
 }
 
-.public-tabs a {
-    position: relative;
-    padding: 0.7rem 0.15rem;
-    color: #334155;
-    font-weight: 800;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
-}
-
-.public-tabs a:hover {
-    //color: #ff8800;
-    color: #095a01
-}
-
-.public-tabs a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0.25rem;
-    height: 3px;
-    border-radius: 999px;
-    //background: #ff8800;
-    background: #095a01;
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 160ms ease;
-}
-
-.public-tabs a:hover::after,
-.public-tabs a.active::after {
-    transform: scaleX(1);
-}
-
-.public-tabs a.active {
-    //color: #ff8800;
-    color: #095a01;
-}
-
-.public-actions a,
-.public-actions button {
-    border: 0;
-    border-radius: 999px;
-    padding: 0.68rem 1rem;
-    font: inherit;
-    font-weight: 900;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
-}
-
+// ─── Acciones ─────────────────────────────────────────────────────────────────
 .public-actions {
     justify-self: end;
+
+    a,
+    button {
+        position: relative;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.68rem 1rem;
+        font: inherit;
+        font-weight: 900;
+        text-decoration: none;
+        cursor: pointer;
+        overflow: hidden;
+        transition:
+            background 160ms ease,
+            color 160ms ease,
+            box-shadow 160ms ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(105deg,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.30) 50%,
+                    transparent 60%);
+            transform: translateX(-100%) skewX(-12deg);
+        }
+
+        &:hover::after {
+            animation: liquid-shimmer 0.6s ease forwards;
+        }
+    }
 }
 
 .secondary-link {
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    background: rgba(255, 255, 255, 0.45);
     color: #475569;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.60) inset,
+        0 2px 6px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.70);
+        color: #0f172a;
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.80) inset,
+            0 4px 12px rgba(0, 0, 0, 0.08);
+    }
 }
 
 .login-link,
 .public-actions button {
-    background: #fff985;
+    background: rgba(255, 249, 133, 0.85);
     color: #000;
-    //box-shadow: 0 10px 24px rgba(12, 112, 1, 0.22);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.55) inset,
+        0 2px 8px rgba(255, 220, 0, 0.20);
+
+    &:hover {
+        background: rgba(255, 247, 89, 0.95);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.70) inset,
+            0 4px 14px rgba(255, 200, 0, 0.28);
+    }
 }
 
-.secondary-link:hover {
-    background: #fff;
-    color: #0f172a;
-}
-
-.login-link:hover,
-.public-actions button:hover {
-    background: #fff759;
-}
-
+// ─── Mobile ───────────────────────────────────────────────────────────────────
 @media (max-width: 640px) {
     .public-navbar {
         align-items: flex-start;
         grid-template-columns: 1fr;
-        flex-direction: column;
-        border-radius: 1.75rem;
+        border-radius: 1.25rem;
+        margin: 0.35rem 0.5rem 0;
+        padding: 0.75rem 1rem;
+
+        &::before {
+            backdrop-filter: blur(30px) saturate(160%);
+            -webkit-backdrop-filter: blur(30px) saturate(160%);
+        }
     }
 
     .public-actions,
