@@ -1,23 +1,25 @@
 <div class="mascotas-page">
     <app-public-navbar />
 
-    <section class="page-hero">
-        <h1>Mascotas disponibles para adopción</h1>
-    </section>
-
     @if (error()) {
     <p class="error">{{ error() }}</p>
     }
 
     <main class="content-layout">
         <app-public-pet-filters [especies]="especies()" [razas]="razas()" [tamanios]="tamaniosFiltro()"
-            [especieSeleccionada]="especieSeleccionada()" [razaSeleccionada]="razaSeleccionada()"
-            [tamanioSeleccionado]="tamanioSeleccionado()" [sexoSeleccionado]="sexoSeleccionado()"
-            (especieChange)="actualizarEspecie($event)" (razaChange)="razaSeleccionada.set($event)"
-            (tamanioChange)="tamanioSeleccionado.set($event)" (sexoChange)="sexoSeleccionado.set($event)"
+            [especiesSeleccionadas]="especiesSeleccionadas()" [razasSeleccionadas]="razasSeleccionadas()"
+            [tamaniosSeleccionados]="tamaniosSeleccionados()" [sexosSeleccionados]="sexosSeleccionados()"
+            (especieChange)="actualizarEspecies($event)" (razaChange)="razasSeleccionadas.set($event)"
+            (tamanioChange)="tamaniosSeleccionados.set($event)" (sexoChange)="sexosSeleccionados.set($event)"
             (clearFilters)="limpiarFiltros()" />
 
         <section class="publications-section">
+            <label class="publications-search">
+                Buscar mascota
+                <input type="search" [value]="busqueda()" placeholder="Nombre, especie, raza o refugio"
+                    (input)="actualizarBusqueda($event)" />
+            </label>
+
             @if (loading()) {
             <p class="loading">Cargando publicaciones...</p>
             } @else if (publicaciones().length === 0) {

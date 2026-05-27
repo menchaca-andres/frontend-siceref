@@ -27,10 +27,11 @@ export class MascotasPublicasComponent implements OnInit {
   especiesCatalogo = signal<Especie[]>([])
   razasCatalogo = signal<Raza[]>([])
   tamaniosCatalogo = signal<Tamanio[]>([])
-  razaSeleccionada = signal('')
-  especieSeleccionada = signal('')
-  tamanioSeleccionado = signal('')
-  sexoSeleccionado = signal('')
+  razasSeleccionadas = signal<number[]>([])
+  especiesSeleccionadas = signal<number[]>([])
+  tamaniosSeleccionados = signal<number[]>([])
+  sexosSeleccionados = signal<string[]>([])
+  busqueda = signal('')
   loading = signal(false)
   error = signal<string | null>(null)
 
@@ -39,10 +40,10 @@ export class MascotasPublicasComponent implements OnInit {
     .sort((a, b) => a.nombre.localeCompare(b.nombre)))
 
   razas = computed(() => {
-    const especieSeleccionada = Number(this.especieSeleccionada())
+    const especiesSeleccionadas = this.especiesSeleccionadas()
 
     return this.razasCatalogo()
-      .filter((raza) => !especieSeleccionada || raza.id_esp === especieSeleccionada)
+      .filter((raza) => especiesSeleccionadas.length === 0 || especiesSeleccionadas.includes(raza.id_esp))
       .map((raza) => ({ id: raza.id_raza, nombre: raza.nom_raza, id_esp: raza.id_esp }))
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
   })
@@ -52,18 +53,20 @@ export class MascotasPublicasComponent implements OnInit {
     .sort((a, b) => a.nombre.localeCompare(b.nombre)))
 
   publicacionesFiltradas = computed(() => {
-    const razaSeleccionada = Number(this.razaSeleccionada())
-    const especieSeleccionada = Number(this.especieSeleccionada())
-    const tamanioSeleccionado = Number(this.tamanioSeleccionado())
-    const sexoSeleccionado = this.sexoSeleccionado()
+    const razasSeleccionadas = this.razasSeleccionadas()
+    const especiesSeleccionadas = this.especiesSeleccionadas()
+    const tamaniosSeleccionados = this.tamaniosSeleccionados()
+    const sexosSeleccionados = this.sexosSeleccionados()
+    const busqueda = this.normalizarTexto(this.busqueda())
 
     return this.publicaciones().filter((publicacion) => {
       const mascota = publicacion.mascota
       if (!mascota) return false
-      if (razaSeleccionada && mascota.id_raza !== razaSeleccionada) return false
-      if (especieSeleccionada && mascota.raza?.id_esp !== especieSeleccionada) return false
-      if (tamanioSeleccionado && mascota.id_tam !== tamanioSeleccionado) return false
-      if (sexoSeleccionado && mascota.sexo_mascot !== sexoSeleccionado) return false
+      if (razasSeleccionadas.length > 0 && !razasSeleccionadas.includes(mascota.id_raza)) return false
+      if (especiesSeleccionadas.length > 0 && !especiesSeleccionadas.includes(mascota.raza?.id_esp ?? 0)) return false
+      if (tamaniosSeleccionados.length > 0 && !tamaniosSeleccionados.includes(mascota.id_tam)) return false
+      if (sexosSeleccionados.length > 0 && !sexosSeleccionados.includes(mascota.sexo_mascot)) return false
+      if (busqueda && !this.coincideBusqueda(publicacion, busqueda)) return false
 
       return true
     })
@@ -104,16 +107,49 @@ export class MascotasPublicasComponent implements OnInit {
     })
   }
 
-  actualizarEspecie(id: string): void {
-    this.especieSeleccionada.set(id)
-    this.razaSeleccionada.set('')
+  actualizarEspecies(ids: number[]): void {
+    this.especiesSeleccionadas.set(ids)
+    this.razasSeleccionadas.update((razasSeleccionadas) => {
+      if (ids.length === 0) return razasSeleccionadas
+
+      const razasPermitidas = new Set(this.razasCatalogo()
+        .filter((raza) => ids.includes(raza.id_esp))
+        .map((raza) => raza.id_raza))
+
+      return razasSeleccionadas.filter((id) => razasPermitidas.has(id))
+    })
   }
 
   limpiarFiltros(): void {
-    this.razaSeleccionada.set('')
-    this.especieSeleccionada.set('')
-    this.tamanioSeleccionado.set('')
-    this.sexoSeleccionado.set('')
+    this.razasSeleccionadas.set([])
+    this.especiesSeleccionadas.set([])
+    this.tamaniosSeleccionados.set([])
+    this.sexosSeleccionados.set([])
+  }
+
+  actualizarBusqueda(event: Event): void {
+    this.busqueda.set((event.target as HTMLInputElement).value)
+  }
+
+  private coincideBusqueda(publicacion: Publicacion, busqueda: string): boolean {
+    const mascota = publicacion.mascota
+    const campos = [
+      mascota?.nom_mascot,
+      mascota?.raza?.especie?.nom_esp,
+      mascota?.raza?.nom_raza,
+      publicacion.refugio?.nom_ref,
+      mascota?.refugio?.nom_ref
+    ]
+
+    return campos.some((campo) => this.normalizarTexto(campo).includes(busqueda))
+  }
+
+  private normalizarTexto(value: string | undefined | null): string {
+    return (value ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
   }
 
   useImageFallback(event: Event): void {
