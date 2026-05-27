@@ -9,7 +9,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-usuarios',
   imports: [ReactiveFormsModule, DatePipe, TablePaginationComponent],
-  templateUrl: './usuarios.html'
+  templateUrl: './usuarios.html',
+  styleUrl: './usuarios.scss'
 })
 export class UsuariosComponent implements OnInit {
   private usuarioService = inject(UsuarioService)

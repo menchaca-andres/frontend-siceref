@@ -8,7 +8,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-roles',
   imports: [ReactiveFormsModule, TablePaginationComponent],
-  templateUrl: './roles.html'
+  templateUrl: './roles.html',
+  styleUrl: './roles.scss'
 })
 export class RolesComponent implements OnInit {
   private rolService = inject(RolService)

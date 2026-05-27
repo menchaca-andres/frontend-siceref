@@ -8,7 +8,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-refugios',
   imports: [ReactiveFormsModule, TablePaginationComponent],
-  templateUrl: './refugios.html'
+  templateUrl: './refugios.html',
+  styleUrl: './refugios.scss'
 })
 export class RefugiosComponent implements OnInit {
   private refugioService = inject(RefugioService)

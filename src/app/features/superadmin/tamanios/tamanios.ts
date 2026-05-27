@@ -8,7 +8,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-tamanios',
   imports: [ReactiveFormsModule, TablePaginationComponent],
-  templateUrl: './tamanios.html'
+  templateUrl: './tamanios.html',
+  styleUrl: './tamanios.scss'
 })
 export class TamaniosComponent implements OnInit {
   private tamanioService = inject(TamanioService)
