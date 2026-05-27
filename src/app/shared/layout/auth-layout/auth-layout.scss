@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.auth-wrapper {
+  min-height: 100vh;
+  background-color: #fff;
+  background-image: url('/assets/background-login-register.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.auth-card {
+  min-height: 100vh;
+}
