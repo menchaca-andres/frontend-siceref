@@ -8,7 +8,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-especies',
   imports: [ReactiveFormsModule, TablePaginationComponent],
-  templateUrl: './especies.html'
+  templateUrl: './especies.html',
+  styleUrl: './especies.scss'
 })
 export class EspeciesComponent implements OnInit {
   private especieService = inject(EspecieService)
