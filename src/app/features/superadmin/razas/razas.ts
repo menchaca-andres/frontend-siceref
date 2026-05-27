@@ -10,7 +10,8 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 @Component({
   selector: 'app-razas',
   imports: [ReactiveFormsModule, TablePaginationComponent],
-  templateUrl: './razas.html'
+  templateUrl: './razas.html',
+  styleUrl: './razas.scss'
 })
 export class RazasComponent implements OnInit {
   private razaService = inject(RazaService)
