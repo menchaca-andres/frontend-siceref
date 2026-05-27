@@ -2,46 +2,62 @@
     <div class="filters-heading">
         <span>Filtros</span>
         <strong>Encontrá tu mascota</strong>
+        @if (filtrosSeleccionados.length > 0) {
+        <div class="selected-filters" aria-label="Filtros seleccionados">
+            @for (filtro of filtrosSeleccionados; track filtro) {
+            <span>{{ filtro }}</span>
+            }
+        </div>
+        }
     </div>
 
-    <label>
-        Especie
-        <select [value]="especieSeleccionada" (change)="actualizarEspecie($event)">
-            <option value="">Todas las especies</option>
+    <fieldset>
+        <legend>Especie</legend>
+        <div class="filter-options">
             @for (especie of especies; track especie.id) {
-            <option [value]="especie.id">{{ especie.nombre }}</option>
+            <button type="button" class="filter-chip" [class.selected]="especiesSeleccionadas.includes(especie.id)"
+                (click)="toggleEspecie(especie.id)">
+                {{ especie.nombre }}
+            </button>
             }
-        </select>
-    </label>
+        </div>
+    </fieldset>
 
-    <label>
-        Raza
-        <select [value]="razaSeleccionada" (change)="actualizarRaza($event)">
-            <option value="">Todas las razas</option>
+    <fieldset>
+        <legend>Raza</legend>
+        <div class="filter-options">
             @for (raza of razas; track raza.id) {
-            <option [value]="raza.id">{{ raza.nombre }}</option>
+            <button type="button" class="filter-chip" [class.selected]="razasSeleccionadas.includes(raza.id)"
+                (click)="toggleRaza(raza.id)">
+                {{ raza.nombre }}
+            </button>
             }
-        </select>
-    </label>
+        </div>
+    </fieldset>
 
-    <label>
-        Sexo
-        <select [value]="sexoSeleccionado" (change)="actualizarSexo($event)">
-            <option value="">Todos</option>
-            <option value="Macho">Macho</option>
-            <option value="Hembra">Hembra</option>
-        </select>
-    </label>
+    <fieldset>
+        <legend>Sexo</legend>
+        <div class="filter-options">
+            @for (sexo of sexos; track sexo) {
+            <button type="button" class="filter-chip" [class.selected]="sexosSeleccionados.includes(sexo)"
+                (click)="toggleSexo(sexo)">
+                {{ sexo }}
+            </button>
+            }
+        </div>
+    </fieldset>
 
-    <label>
-        Tamaño
-        <select [value]="tamanioSeleccionado" (change)="actualizarTamanio($event)">
-            <option value="">Todos los tamaños</option>
+    <fieldset>
+        <legend>Tamaño</legend>
+        <div class="filter-options">
             @for (tamanio of tamanios; track tamanio.id) {
-            <option [value]="tamanio.id">{{ tamanio.nombre }}</option>
+            <button type="button" class="filter-chip" [class.selected]="tamaniosSeleccionados.includes(tamanio.id)"
+                (click)="toggleTamanio(tamanio.id)">
+                {{ tamanio.nombre }}
+            </button>
             }
-        </select>
-    </label>
+        </div>
+    </fieldset>
 
-    <button type="button" (click)="clearFilters.emit()">Limpiar filtros</button>
+    <button class="clear-filters" type="button" (click)="clearFilters.emit()">Limpiar filtros</button>
 </aside>

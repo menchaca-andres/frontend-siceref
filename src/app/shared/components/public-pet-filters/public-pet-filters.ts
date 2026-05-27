@@ -24,30 +24,49 @@ export class PublicPetFiltersComponent {
   @Input() razas: PublicPetBreedFilter[] = []
   @Input() especies: PublicPetSpeciesFilter[] = []
   @Input() tamanios: PublicPetSizeFilter[] = []
-  @Input() razaSeleccionada = ''
-  @Input() especieSeleccionada = ''
-  @Input() tamanioSeleccionado = ''
-  @Input() sexoSeleccionado = ''
+  @Input() razasSeleccionadas: number[] = []
+  @Input() especiesSeleccionadas: number[] = []
+  @Input() tamaniosSeleccionados: number[] = []
+  @Input() sexosSeleccionados: string[] = []
 
-  @Output() razaChange = new EventEmitter<string>()
-  @Output() especieChange = new EventEmitter<string>()
-  @Output() tamanioChange = new EventEmitter<string>()
-  @Output() sexoChange = new EventEmitter<string>()
+  @Output() razaChange = new EventEmitter<number[]>()
+  @Output() especieChange = new EventEmitter<number[]>()
+  @Output() tamanioChange = new EventEmitter<number[]>()
+  @Output() sexoChange = new EventEmitter<string[]>()
   @Output() clearFilters = new EventEmitter<void>()
 
-  actualizarRaza(event: Event): void {
-    this.razaChange.emit((event.target as HTMLSelectElement).value)
+  sexos = ['Macho', 'Hembra']
+
+  get filtrosSeleccionados(): string[] {
+    return [
+      ...this.especies.filter((especie) => this.especiesSeleccionadas.includes(especie.id)).map((especie) => especie.nombre),
+      ...this.razas.filter((raza) => this.razasSeleccionadas.includes(raza.id)).map((raza) => raza.nombre),
+      ...this.sexos.filter((sexo) => this.sexosSeleccionados.includes(sexo)),
+      ...this.tamanios.filter((tamanio) => this.tamaniosSeleccionados.includes(tamanio.id)).map((tamanio) => tamanio.nombre)
+    ]
   }
 
-  actualizarEspecie(event: Event): void {
-    this.especieChange.emit((event.target as HTMLSelectElement).value)
+  toggleRaza(id: number): void {
+    this.razaChange.emit(this.toggleNumber(this.razasSeleccionadas, id))
   }
 
-  actualizarTamanio(event: Event): void {
-    this.tamanioChange.emit((event.target as HTMLSelectElement).value)
+  toggleEspecie(id: number): void {
+    this.especieChange.emit(this.toggleNumber(this.especiesSeleccionadas, id))
   }
 
-  actualizarSexo(event: Event): void {
-    this.sexoChange.emit((event.target as HTMLSelectElement).value)
+  toggleTamanio(id: number): void {
+    this.tamanioChange.emit(this.toggleNumber(this.tamaniosSeleccionados, id))
+  }
+
+  toggleSexo(sexo: string): void {
+    this.sexoChange.emit(this.sexosSeleccionados.includes(sexo)
+      ? this.sexosSeleccionados.filter((value) => value !== sexo)
+      : [...this.sexosSeleccionados, sexo])
+  }
+
+  private toggleNumber(values: number[], value: number): number[] {
+    return values.includes(value)
+      ? values.filter((item) => item !== value)
+      : [...values, value]
   }
 }
