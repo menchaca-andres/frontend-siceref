@@ -12,15 +12,17 @@
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top left, rgba(12, 112, 1, 0.08), transparent 32rem),
-        #f6f8fb;
+    background-color: #fff;
+    background-image: url('/assets/background-login-register.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     color: #172033;
     transition: grid-template-columns 180ms ease;
-}
 
-.main-wrapper.sidebar-collapsed {
-    grid-template-columns: 88px minmax(0, 1fr);
+    &.sidebar-collapsed {
+        grid-template-columns: 104px minmax(0, 1fr);
+    }
 }
 
 .main-content {
@@ -417,6 +419,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     :host ::ng-deep .page-content button,
     :host ::ng-deep .page-content button::after {
         transition: none;
