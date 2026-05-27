@@ -4,7 +4,7 @@
     <main class="register-content">
         <div class="register-container">
             <a class="brand" routerLink="/home">
-                <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
+                <img class="logo" src="/assets/logo-siceref3.png" alt="Logo de Siceref" />
             </a>
 
             <div class="titulo-container">
@@ -35,7 +35,8 @@
                     </div>
 
                     <div class="contrasenia-container full-row">
-                        <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu" placeholder="Contraseña" />
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="pass_usu"
+                            placeholder="Contraseña" />
                         @if (form.get('pass_usu')?.invalid && form.get('pass_usu')?.touched) {
                         <span>Mínimo 6 caracteres</span>
                         }
