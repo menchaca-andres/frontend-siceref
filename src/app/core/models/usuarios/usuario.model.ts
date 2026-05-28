@@ -3,6 +3,7 @@ import { Rol } from '../roles/rol.model'
 
 export interface Usuario {
     id_usu: number
+    img_usu: string | null
     nom_usu: string
     apell_usu: string
     fecnac_usu: Date | string
@@ -15,6 +16,7 @@ export interface Usuario {
 }
 
 export interface CreateUsuarioDto {
+    img_usu?: string
     nom_usu: string
     apell_usu: string
     fecnac_usu: Date | string
@@ -26,6 +28,7 @@ export interface CreateUsuarioDto {
 }
 
 export interface UpdateUsuarioDto {
+    img_usu?: string
     nom_usu?: string
     apell_usu?: string
     fecnac_usu?: Date | string
