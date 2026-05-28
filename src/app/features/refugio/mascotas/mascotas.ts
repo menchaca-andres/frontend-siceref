@@ -41,6 +41,7 @@ export class MascotasComponent implements OnInit {
     nom_mascot: ['', Validators.required],
     fechanac_mascot: ['', Validators.required],
     caract_mascot: ['', Validators.required],
+    hist_mascot: ['', Validators.required],
     sexo_mascot: ['Macho', Validators.required],
     esteril_mascot: [false, Validators.required]
   })
@@ -94,6 +95,7 @@ export class MascotasComponent implements OnInit {
       nom_mascot: mascota.nom_mascot,
       fechanac_mascot: this.toDateInputValue(mascota.fechanac_mascot),
       caract_mascot: mascota.caract_mascot,
+      hist_mascot: mascota.hist_mascot,
       sexo_mascot: mascota.sexo_mascot,
       esteril_mascot: mascota.esteril_mascot
     })
@@ -179,17 +181,13 @@ export class MascotasComponent implements OnInit {
       return null
     }
 
-    if (!editando && !image) {
-      this.error.set('La imagen de la mascota es obligatoria')
-      return null
-    }
-
     const formData = new FormData()
     formData.append('nom_mascot', this.form.value.nom_mascot)
     formData.append('fechanac_mascot', this.form.value.fechanac_mascot)
     formData.append('esteril_mascot', String(this.form.value.esteril_mascot))
     formData.append('sexo_mascot', this.form.value.sexo_mascot)
     formData.append('caract_mascot', this.form.value.caract_mascot)
+    formData.append('hist_mascot', this.form.value.hist_mascot)
     formData.append('id_raza', String(this.form.value.id_raza))
     formData.append('id_tam', String(this.form.value.id_tam))
     formData.append('id_ref', String(idRef))
