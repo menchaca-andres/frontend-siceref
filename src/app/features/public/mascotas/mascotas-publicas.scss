@@ -218,10 +218,24 @@
 }
 
 .pet-shelter {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
     margin: 0 0 1rem;
     color: #64748b;
     font-size: 0.9rem;
     font-weight: 700;
+}
+
+.shelter-logo {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 999px;
+    background: rgba(226, 232, 240, 0.65);
+    object-fit: cover;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.70) inset;
 }
 
 .more-button {
@@ -233,8 +247,9 @@
     border: 0;
     border-radius: 999px;
     padding: 0.68rem 1rem;
-    background: rgba(255, 249, 133, 0.85);
-    color: #000;
+    background: rgba(192, 255, 229, 0.85);
+    border: 1px solid rgb(0, 255, 149);
+    color: rgb(0, 161, 94);
     font: inherit;
     font-weight: 900;
     text-decoration: none;
@@ -264,7 +279,8 @@
 }
 
 .more-button:hover {
-    background: rgba(255, 247, 89, 0.95);
+    background: rgba(134, 255, 198, 0.786);
+    color: rgb(0, 129, 75);
     box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.70) inset,
         0 4px 14px rgba(255, 200, 0, 0.28);

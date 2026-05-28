@@ -53,10 +53,17 @@
                         </p>
 
                         <p class="pet-shelter">
-                            {{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'Refugio no registrado'
+                            @if (publicacion.refugio?.img_ref || publicacion.mascota?.refugio?.img_ref) {
+                            <img class="shelter-logo"
+                                [src]="publicacion.refugio?.img_ref || publicacion.mascota?.refugio?.img_ref"
+                                [alt]="'Logo de ' + (publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'refugio')"
+                                (error)="useImageFallback($event)" />
+                            }
+                            {{ publicacion.refugio?.nom_ref || publicacion.mascota?.refugio?.nom_ref || 'Refugio no
+                            registrado'
                             }}
                         </p>
-                        <a class="more-button" [routerLink]="['/mascotas', publicacion.id_publi]">Ver más</a>
+                        <a class="more-button" [routerLink]="['/mascotas', publicacion.id_publi]">Adóptame</a>
                     </div>
                 </article>
                 }
