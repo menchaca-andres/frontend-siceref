@@ -4,24 +4,67 @@
     <section class="hero cover-image" aria-label="Mascotas en adopción">
         <img src="/assets/cover-siceref.png" alt="Mascotas en adopción" />
         <div class="hero-content">
-            <h1>¿Puedes adoptarnos?</h1>
+            <h1 class="hero-title">{{ tituloPortada() }}</h1>
         </div>
     </section>
+
+    @if (publicacionesCarrusel().length > 0) {
+    <section class="pets-section" aria-labelledby="pets-title">
+        <div class="pets-heading">
+            <h2 id="pets-title">Nuestras mascotas</h2>
+        </div>
+
+        <div class="pets-carousel-wrap">
+            @if (carouselPages().length > 1) {
+            <button class="carousel-arrow carousel-arrow-left" type="button" (click)="previousPets()"
+                aria-label="Ver mascotas anteriores">‹</button>
+            }
+
+            <div class="pets-carousel">
+                @for (publicacion of currentCarouselItems(); track publicacion.id_publi) {
+                <article class="pet-card">
+                    <div class="pet-card-inner">
+                        <div class="pet-card-face pet-card-front">
+                            @if (publicacion.mascota?.img_mascot) {
+                            <img [src]="publicacion.mascota?.img_mascot" [alt]="publicacion.mascota?.nom_mascot"
+                                (error)="useImageFallback($event)" />
+                            <span class="image-fallback hidden">Sin imagen</span>
+                            } @else {
+                            <span class="image-fallback">Sin imagen</span>
+                            }
+                        </div>
+
+                        <div class="pet-card-face pet-card-back">
+                            <p>{{ publicacion.mascota?.hist_mascot || 'Esta mascota está esperando una familia.' }}</p>
+                        </div>
+                    </div>
+                </article>
+                }
+            </div>
+
+            @if (carouselPages().length > 1) {
+            <button class="carousel-arrow carousel-arrow-right" type="button" (click)="nextPets()"
+                aria-label="Ver más mascotas">›</button>
+            }
+        </div>
+
+        <a class="pets-cta" routerLink="/mascotas">Conocenos</a>
+
+        @if (carouselPages().length > 1) {
+        <div class="carousel-dots" aria-label="Página actual del carrusel">
+            @for (page of carouselPages(); track $index) {
+            <span [class.active]="$index === carouselPage()"></span>
+            }
+        </div>
+        }
+    </section>
+    }
 
     <section id="sobre-nosotros" class="about-section">
         <div class="about-copy">
             <p class="eyebrow">Sobre nosotros</p>
             <h2>Conectamos refugios con personas listas para adoptar</h2>
-            <p>
-                Siceref ayuda a centralizar publicaciones de mascotas disponibles para adopción,
-                facilitando que cada refugio pueda mostrar sus animales y que los adoptantes encuentren
-                una mascota compatible de forma simple y responsable.
-            </p>
-        </div>
-
-        <div class="about-card">
-            <span>Adopción responsable</span>
-            <strong>Más visibilidad para cada refugio y mejores oportunidades para cada mascota.</strong>
+            <p class="about-typewriter">{{ sobreNosotrosTexto() }}</p>
         </div>
     </section>
 
