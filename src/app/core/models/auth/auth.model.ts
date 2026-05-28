@@ -6,6 +6,7 @@ export interface LoginDto {
 }
 
 export interface RegisterDto {
+    img_usu?: string
     nom_usu: string
     apell_usu: string
     email_usu: string
@@ -28,6 +29,7 @@ export interface AuthResponse {
     token: string
     usuario: {
         id_usu: number
+        img_usu: string | null
         nom_usu: string
         apell_usu: string
         email_usu: string
