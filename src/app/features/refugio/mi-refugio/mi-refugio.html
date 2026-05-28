@@ -18,6 +18,14 @@
     } @else if (refugio()) {
     @if (!editando()) {
     <div class="perfil-info">
+        <div class="perfil-row">
+            <span class="label">Imagen</span>
+            @if (refugio()!.img_ref) {
+            <img [src]="refugio()!.img_ref" alt="Imagen del refugio" />
+            } @else {
+            <span>Sin imagen</span>
+            }
+        </div>
         <div class="perfil-row"><span class="label">Nombre</span><span>{{ refugio()!.nom_ref }}</span></div>
         <div class="perfil-row"><span class="label">Dirección</span><span>{{ refugio()!.direc_ref }}</span></div>
         <div class="perfil-row"><span class="label">Teléfono</span><span>{{ refugio()!.telef_ref }}</span></div>
@@ -30,6 +38,15 @@
         <div><label>Dirección</label><input type="text" formControlName="direc_ref" /></div>
         <div><label>Teléfono</label><input type="text" formControlName="telef_ref" /></div>
         <div><label>Correo</label><input type="email" formControlName="email_ref" /></div>
+        <div>
+            <label>Imagen del refugio opcional</label>
+            <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+            @if (imagePreviewUrl()) {
+            <img [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
+            } @else if (refugio()?.img_ref) {
+            <img [src]="refugio()?.img_ref" alt="Imagen actual del refugio" />
+            }
+        </div>
         <div>
             <label>Estado</label>
             <select formControlName="estado_ref">

@@ -19,6 +19,8 @@ export class MiRefugioComponent implements OnInit {
   error = signal<string | null>(null)
   success = signal<string | null>(null)
   editando = signal(false)
+  selectedImage = signal<File | null>(null)
+  imagePreviewUrl = signal<string | null>(null)
 
   form: FormGroup = this.fb.group({
     nom_ref: ['', Validators.required],
@@ -56,26 +58,61 @@ export class MiRefugioComponent implements OnInit {
   activarEdicion(): void {
     this.error.set(null)
     this.success.set(null)
+    this.clearSelectedImage()
     this.editando.set(true)
   }
 
   cancelarEdicion(): void {
     this.editando.set(false)
+    this.clearSelectedImage()
     const refugio = this.refugio()
     if (refugio) this.form.patchValue(refugio)
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage.set(file)
+
+    if (file) {
+      this.imagePreviewUrl.set(URL.createObjectURL(file))
+    }
+  }
+
+  private clearSelectedImage(): void {
+    const previewUrl = this.imagePreviewUrl()
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+    this.selectedImage.set(null)
+    this.imagePreviewUrl.set(null)
   }
 
   onSubmit(): void {
     const idRef = this.authStore.id_ref()
     if (this.form.invalid || !idRef) return
 
-    this.refugioService.update(idRef, this.form.value).subscribe({
+    this.refugioService.update(idRef, this.buildPayload()).subscribe({
       next: (data) => {
         this.refugio.set(data)
         this.editando.set(false)
+        this.clearSelectedImage()
         this.success.set('Refugio actualizado correctamente')
       },
       error: (err) => this.error.set(err.error?.message || 'Error al actualizar refugio')
     })
+  }
+
+  private buildPayload() {
+    const image = this.selectedImage()
+    if (!image) return this.form.value
+
+    const formData = new FormData()
+    Object.entries(this.form.value).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append('img_ref', image)
+
+    return formData
   }
 }
