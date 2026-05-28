@@ -20,6 +20,8 @@ export class AdminsRefugioComponent implements OnInit {
   error = signal<string | null>(null)
   success = signal<string | null>(null)
   loading = signal(false)
+  selectedImage = signal<File | null>(null)
+  imagePreviewUrl = signal<string | null>(null)
 
   form: FormGroup = this.fb.group({
     id_ref: [null, Validators.required],
@@ -49,10 +51,11 @@ export class AdminsRefugioComponent implements OnInit {
     this.error.set(null)
     this.success.set(null)
 
-    this.authService.registerAdminRefugio(this.form.value).subscribe({
+    this.authService.registerAdminRefugio(this.buildPayload()).subscribe({
       next: (response) => {
         this.success.set(response.message)
         this.form.reset()
+        this.clearSelectedImage()
         this.loading.set(false)
       },
       error: (err) => {
@@ -60,5 +63,37 @@ export class AdminsRefugioComponent implements OnInit {
         this.loading.set(false)
       }
     })
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage.set(file)
+
+    if (file) {
+      this.imagePreviewUrl.set(URL.createObjectURL(file))
+    }
+  }
+
+  private clearSelectedImage(): void {
+    const previewUrl = this.imagePreviewUrl()
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+    this.selectedImage.set(null)
+    this.imagePreviewUrl.set(null)
+  }
+
+  private buildPayload() {
+    const image = this.selectedImage()
+    if (!image) return this.form.value
+
+    const formData = new FormData()
+    Object.entries(this.form.value).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append('img_usu', image)
+
+    return formData
   }
 }
