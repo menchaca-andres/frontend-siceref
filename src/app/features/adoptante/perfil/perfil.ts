@@ -20,6 +20,8 @@ export class PerfilComponent implements OnInit {
   error = signal<string | null>(null)
   success = signal<string | null>(null)
   editando = signal(false)
+  selectedImage = signal<File | null>(null)
+  imagePreviewUrl = signal<string | null>(null)
 
   form: FormGroup = this.fb.group({
     nom_usu: ['', Validators.required],
@@ -55,12 +57,33 @@ export class PerfilComponent implements OnInit {
     this.editando.set(true)
     this.success.set(null)
     this.error.set(null)
+    this.clearSelectedImage()
   }
 
   cancelarEdicion(): void {
     this.editando.set(false)
+    this.clearSelectedImage()
     const u = this.usuario()
     if (u) this.patchForm(u)
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage.set(file)
+
+    if (file) {
+      this.imagePreviewUrl.set(URL.createObjectURL(file))
+    }
+  }
+
+  private clearSelectedImage(): void {
+    const previewUrl = this.imagePreviewUrl()
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+    this.selectedImage.set(null)
+    this.imagePreviewUrl.set(null)
   }
 
   onSubmit(): void {
@@ -69,17 +92,31 @@ export class PerfilComponent implements OnInit {
     const id = this.authStore.id_usu()
     if (!id) return
 
-    this.usuarioService.update(id, this.form.value).subscribe({
+    this.usuarioService.update(id, this.buildPayload()).subscribe({
       next: (data) => {
         this.usuario.set(data)
         this.authStore.updateUsuarioBasico(data)
         this.editando.set(false)
+        this.clearSelectedImage()
         this.success.set('Perfil actualizado correctamente')
       },
       error: (err) => {
         this.error.set(err.error.message)
       }
     })
+  }
+
+  private buildPayload() {
+    const image = this.selectedImage()
+    if (!image) return this.form.value
+
+    const formData = new FormData()
+    Object.entries(this.form.value).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append('img_usu', image)
+
+    return formData
   }
 
   private patchForm(usuario: Usuario): void {
