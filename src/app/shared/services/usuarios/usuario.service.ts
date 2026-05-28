@@ -24,11 +24,11 @@ export class UsuarioService {
         return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios/trabajadores/mis-trabajadores`)
     }
 
-    create(data: CreateUsuarioDto): Observable<Usuario> {
+    create(data: CreateUsuarioDto | FormData): Observable<Usuario> {
         return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, data)
     }
 
-    update(id: number, data: UpdateUsuarioDto): Observable<Usuario> {
+    update(id: number, data: UpdateUsuarioDto | FormData): Observable<Usuario> {
         return this.http.put<Usuario>(`${this.apiUrl}/usuarios/${id}`, data)
     }
 

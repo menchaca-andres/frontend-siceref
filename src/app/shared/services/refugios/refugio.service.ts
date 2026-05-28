@@ -20,11 +20,11 @@ export class RefugioService {
         return this.http.get<Refugio>(`${this.apiUrl}/refugios/${id}`)
     }
 
-    create(data: CreateRefugioDto): Observable<Refugio> {
+    create(data: CreateRefugioDto | FormData): Observable<Refugio> {
         return this.http.post<Refugio>(`${this.apiUrl}/refugios`, data)
     }
 
-    update(id: number, data: UpdateRefugioDto): Observable<Refugio> {
+    update(id: number, data: UpdateRefugioDto | FormData): Observable<Refugio> {
         return this.http.put<Refugio>(`${this.apiUrl}/refugios/${id}`, data)
     }
 

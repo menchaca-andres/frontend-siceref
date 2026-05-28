@@ -15,19 +15,19 @@ export class AuthService {
         return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data)
     }
 
-    register(data: RegisterDto): Observable<RegisterResponse> {
+    register(data: RegisterDto | FormData): Observable<RegisterResponse> {
         return this.http.post<RegisterResponse>(`${this.apiUrl}/auth/register`, data)
     }
 
-    registerWorker(data: RegisterWorkerDto): Observable<RegisterResponse> {
+    registerWorker(data: RegisterWorkerDto | FormData): Observable<RegisterResponse> {
         return this.http.post<RegisterResponse>(`${this.apiUrl}/auth/register/worker`, data)
     }
 
-    registerSuperadmin(data: RegisterDto): Observable<RegisterResponse> {
+    registerSuperadmin(data: RegisterDto | FormData): Observable<RegisterResponse> {
         return this.http.post<RegisterResponse>(`${this.apiUrl}/auth/register/superadmin`, data)
     }
 
-    registerAdminRefugio(data: RegisterWorkerDto): Observable<RegisterResponse> {
+    registerAdminRefugio(data: RegisterWorkerDto | FormData): Observable<RegisterResponse> {
         return this.http.post<RegisterResponse>(`${this.apiUrl}/auth/register/admin-refugio`, data)
     }
 }
