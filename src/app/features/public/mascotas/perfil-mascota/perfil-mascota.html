@@ -99,6 +99,10 @@
                         <dt>Características</dt>
                         <dd>{{ publicacion.mascota?.caract_mascot || 'Sin descripción registrada.' }}</dd>
                     </div>
+                    <div class="full-row">
+                        <dt>Historia</dt>
+                        <dd>{{ publicacion.mascota?.hist_mascot || 'Sin historia registrada.' }}</dd>
+                    </div>
                     <div>
                         <dt>Publicado</dt>
                         <dd>{{ publicacion.fechapubli | date:'dd/MM/yyyy' }}</dd>
