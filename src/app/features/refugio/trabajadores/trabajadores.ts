@@ -24,6 +24,8 @@ export class TrabajadoresComponent implements OnInit {
   error = signal<string | null>(null)
   success = signal<string | null>(null)
   mostrarForm = signal(false)
+  selectedImage = signal<File | null>(null)
+  imagePreviewUrl = signal<string | null>(null)
   pageSize = 5
   page = signal(1)
   trabajadoresPaginados = computed(() => this.trabajadores().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
@@ -59,20 +61,41 @@ export class TrabajadoresComponent implements OnInit {
   abrirFormCrear(): void {
     this.error.set(null)
     this.success.set(null)
+    this.clearSelectedImage()
     this.form.reset()
     this.mostrarForm.set(true)
   }
 
   cerrarForm(): void {
     this.mostrarForm.set(false)
+    this.clearSelectedImage()
     this.form.reset()
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage.set(file)
+
+    if (file) {
+      this.imagePreviewUrl.set(URL.createObjectURL(file))
+    }
+  }
+
+  private clearSelectedImage(): void {
+    const previewUrl = this.imagePreviewUrl()
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+    this.selectedImage.set(null)
+    this.imagePreviewUrl.set(null)
   }
 
   onSubmit(): void {
     const idRef = this.authStore.id_ref()
     if (this.form.invalid || !idRef) return
 
-    this.authService.registerWorker({ ...this.form.value, id_ref: idRef }).subscribe({
+    this.authService.registerWorker(this.buildPayload(idRef)).subscribe({
       next: (response) => {
         this.success.set(response.message)
         this.cerrarForm()
@@ -80,5 +103,19 @@ export class TrabajadoresComponent implements OnInit {
       },
       error: (err) => this.error.set(err.error?.message || 'Error al registrar trabajador')
     })
+  }
+
+  private buildPayload(idRef: number) {
+    const image = this.selectedImage()
+    const payload = { ...this.form.value, id_ref: idRef }
+    if (!image) return payload
+
+    const formData = new FormData()
+    Object.entries(payload).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append('img_usu', image)
+
+    return formData
   }
 }

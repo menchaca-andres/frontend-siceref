@@ -70,6 +70,13 @@
                     <label>Fecha de Nacimiento</label>
                     <input type="date" formControlName="fecnac_usu" />
                 </div>
+                <div>
+                    <label>Imagen de perfil opcional</label>
+                    <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+                    @if (imagePreviewUrl()) {
+                    <img [src]="imagePreviewUrl()" alt="Previsualización del trabajador" />
+                    }
+                </div>
                 <div class="form-actions">
                     <button type="button" (click)="cerrarForm()">Cancelar</button>
                     @if (authStore.hasPermission('trabajadores:crear')) {
