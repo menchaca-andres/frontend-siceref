@@ -149,11 +149,10 @@ a {
     }
 
     &.active {
-        background: rgba(255, 255, 255, 0.60);
+        background: rgba(223, 223, 223, 0.6);
         color: $accent;
         transform: translateX(2px);
         box-shadow:
-            inset 4px 0 0 $accent,
             0 1px 0 rgba(255, 255, 255, 0.80) inset,
             0 2px 8px rgba(0, 0, 0, 0.05);
     }
