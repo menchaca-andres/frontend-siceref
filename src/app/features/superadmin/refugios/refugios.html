@@ -17,6 +17,7 @@
         <thead>
             <tr>
                 <th>Nombre</th>
+                <th>Imagen</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
@@ -28,6 +29,13 @@
             @for (refugio of refugiosPaginados(); track refugio.id_ref) {
             <tr>
                 <td>{{ refugio.nom_ref }}</td>
+                <td>
+                    @if (refugio.img_ref) {
+                    <img [src]="refugio.img_ref" [alt]="refugio.nom_ref" />
+                    } @else {
+                    Sin imagen
+                    }
+                </td>
                 <td>{{ refugio.direc_ref }}</td>
                 <td>{{ refugio.telef_ref }}</td>
                 <td>{{ refugio.email_ref }}</td>
@@ -73,6 +81,16 @@
                 <div>
                     <label>Correo</label>
                     <input type="email" formControlName="email_ref" />
+                </div>
+
+                <div>
+                    <label>Imagen del refugio opcional</label>
+                    <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+                    @if (imagePreviewUrl()) {
+                    <img [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
+                    } @else if (refugioEditando()?.img_ref) {
+                    <img [src]="refugioEditando()?.img_ref" alt="Imagen actual del refugio" />
+                    }
                 </div>
 
                 <div>
