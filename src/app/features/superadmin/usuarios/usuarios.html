@@ -14,6 +14,7 @@
         <thead>
             <tr>
                 <th>Nombre</th>
+                <th>Imagen</th>
                 <th>Apellido</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
@@ -27,6 +28,13 @@
             @for (usuario of usuariosPaginados(); track usuario.id_usu) {
             <tr>
                 <td>{{ usuario.nom_usu }}</td>
+                <td>
+                    @if (usuario.img_usu) {
+                    <img [src]="usuario.img_usu" [alt]="usuario.nom_usu" />
+                    } @else {
+                    Sin imagen
+                    }
+                </td>
                 <td>{{ usuario.apell_usu }}</td>
                 <td>{{ usuario.email_usu }}</td>
                 <td>{{ usuario.numcel_usu }}</td>
@@ -79,6 +87,16 @@
                 <div>
                     <label>Fecha de Nacimiento</label>
                     <input type="date" formControlName="fecnac_usu" />
+                </div>
+
+                <div>
+                    <label>Imagen de perfil opcional</label>
+                    <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+                    @if (imagePreviewUrl()) {
+                    <img [src]="imagePreviewUrl()" alt="Previsualización de usuario" />
+                    } @else if (usuarioEditando()?.img_usu) {
+                    <img [src]="usuarioEditando()?.img_usu" alt="Imagen actual de usuario" />
+                    }
                 </div>
 
                 <div class="form-actions">
