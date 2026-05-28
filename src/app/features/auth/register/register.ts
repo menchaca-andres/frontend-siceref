@@ -28,9 +28,29 @@ export class RegisterComponent {
   success: string | null = null
   loading = false
   showPassword = false
+  selectedImage: File | null = null
+  imagePreviewUrl: string | null = null
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
+    this.clearSelectedImage()
+    this.selectedImage = file
+
+    if (file) {
+      this.imagePreviewUrl = URL.createObjectURL(file)
+    }
+  }
+
+  private clearSelectedImage(): void {
+    if (this.imagePreviewUrl) URL.revokeObjectURL(this.imagePreviewUrl)
+
+    this.selectedImage = null
+    this.imagePreviewUrl = null
   }
 
   onSubmit(): void {
@@ -40,7 +60,7 @@ export class RegisterComponent {
     this.error = null
     this.success = null
 
-    this.authService.register(this.form.value).subscribe({
+    this.authService.register(this.buildPayload()).subscribe({
       next: () => {
         this.success = 'Registro exitoso, ya puedes iniciar sesión'
         this.loading = false
@@ -51,5 +71,17 @@ export class RegisterComponent {
         this.loading = false
       }
     })
+  }
+
+  private buildPayload() {
+    if (!this.selectedImage) return this.form.value
+
+    const formData = new FormData()
+    Object.entries(this.form.value).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append('img_usu', this.selectedImage)
+
+    return formData
   }
 }

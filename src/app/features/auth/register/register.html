@@ -55,6 +55,14 @@
                         <span>Campo requerido</span>
                         }
                     </div>
+
+                    <div class="full-row">
+                        <label>Imagen de perfil opcional</label>
+                        <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+                        @if (imagePreviewUrl) {
+                        <img [src]="imagePreviewUrl" alt="Previsualización de perfil" />
+                        }
+                    </div>
                 </div>
 
                 <label class="show-password-check">
