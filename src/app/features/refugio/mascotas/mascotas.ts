@@ -1,9 +1,11 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
+import { EspecieService } from '../../../shared/services/especies/especie.service'
 import { RazaService } from '../../../shared/services/razas/raza.service'
 import { TamanioService } from '../../../shared/services/tamanios/tamanio.service'
 import { Mascota } from '../../../core/models/mascotas/mascota.model'
+import { Especie } from '../../../core/models/especies/especie.model'
 import { Raza } from '../../../core/models/razas/raza.model'
 import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
@@ -17,12 +19,14 @@ import { TablePaginationComponent } from '../../../shared/components/table-pagin
 })
 export class MascotasComponent implements OnInit {
   private mascotaService = inject(MascotaService)
+  private especieService = inject(EspecieService)
   private razaService = inject(RazaService)
   private tamanioService = inject(TamanioService)
   private fb = inject(FormBuilder)
   authStore = inject(AuthStore)
 
   mascotas = signal<Mascota[]>([])
+  especies = signal<Especie[]>([])
   razas = signal<Raza[]>([])
   tamanios = signal<Tamanio[]>([])
   loading = signal(false)
@@ -33,9 +37,18 @@ export class MascotasComponent implements OnInit {
   imagePreviewUrl = signal<string | null>(null)
   pageSize = 5
   page = signal(1)
+  especieSeleccionada = signal<number | null>(null)
   mascotasPaginadas = computed(() => this.mascotas().slice((this.page() - 1) * this.pageSize, this.page() * this.pageSize))
+  razasFiltradas = computed(() => {
+    const idEspecie = this.especieSeleccionada()
+
+    return this.razas()
+      .filter((raza) => !idEspecie || raza.id_esp === idEspecie)
+      .sort((a, b) => a.nom_raza.localeCompare(b.nom_raza))
+  })
 
   form: FormGroup = this.fb.group({
+    id_esp: [null, Validators.required],
     id_raza: ['', Validators.required],
     id_tam: ['', Validators.required],
     nom_mascot: ['', Validators.required],
@@ -48,6 +61,7 @@ export class MascotasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarMascotas()
+    this.cargarEspecies()
     this.cargarRazas()
     this.cargarTamanios()
   }
@@ -73,6 +87,12 @@ export class MascotasComponent implements OnInit {
     })
   }
 
+  cargarEspecies(): void {
+    this.especieService.getAll().subscribe({
+      next: (data) => this.especies.set(data.sort((a, b) => a.nom_esp.localeCompare(b.nom_esp)))
+    })
+  }
+
   cargarTamanios(): void {
     this.tamanioService.getAll().subscribe({
       next: (data) => this.tamanios.set(data)
@@ -82,14 +102,18 @@ export class MascotasComponent implements OnInit {
   abrirFormCrear(): void {
     this.mascotaEditando.set(null)
     this.clearSelectedImage()
-    this.form.reset({ sexo_mascot: 'Macho', esteril_mascot: false })
+    this.especieSeleccionada.set(null)
+    this.form.reset({ id_esp: null, id_raza: null, sexo_mascot: 'Macho', esteril_mascot: false })
     this.mostrarForm.set(true)
   }
 
   abrirFormEditar(mascota: Mascota): void {
     this.mascotaEditando.set(mascota)
     this.clearSelectedImage()
+    const idEspecie = mascota.raza?.id_esp ?? this.razas().find((raza) => raza.id_raza === mascota.id_raza)?.id_esp ?? null
+    this.especieSeleccionada.set(idEspecie)
     this.form.patchValue({
+      id_esp: idEspecie,
       id_raza: mascota.id_raza,
       id_tam: mascota.id_tam,
       nom_mascot: mascota.nom_mascot,
@@ -100,6 +124,13 @@ export class MascotasComponent implements OnInit {
       esteril_mascot: mascota.esteril_mascot
     })
     this.mostrarForm.set(true)
+  }
+
+  onEspecieChange(): void {
+    const idEspecie = this.form.value.id_esp ?? null
+
+    this.especieSeleccionada.set(idEspecie)
+    this.form.patchValue({ id_raza: null })
   }
 
   cerrarForm(): void {

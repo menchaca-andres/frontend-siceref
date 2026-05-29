@@ -30,11 +30,13 @@
             <tr>
                 <td>{{ refugio.nom_ref }}</td>
                 <td>
+                    <div class="shelter-image-cell">
                     @if (refugio.img_ref) {
-                    <img [src]="refugio.img_ref" [alt]="refugio.nom_ref" />
+                    <img class="shelter-image" [src]="refugio.img_ref" [alt]="refugio.nom_ref" />
                     } @else {
-                    Sin imagen
+                    <span class="shelter-image-fallback">Sin imagen</span>
                     }
+                    </div>
                 </td>
                 <td>{{ refugio.direc_ref }}</td>
                 <td>{{ refugio.telef_ref }}</td>
@@ -87,9 +89,9 @@
                     <label>Imagen del refugio opcional</label>
                     <input type="file" accept="image/*" (change)="onImageSelected($event)" />
                     @if (imagePreviewUrl()) {
-                    <img [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
+                    <img class="shelter-form-image" [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
                     } @else if (refugioEditando()?.img_ref) {
-                    <img [src]="refugioEditando()?.img_ref" alt="Imagen actual del refugio" />
+                    <img class="shelter-form-image" [src]="refugioEditando()?.img_ref" alt="Imagen actual del refugio" />
                     }
                 </div>
 

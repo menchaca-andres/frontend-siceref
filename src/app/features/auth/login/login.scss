@@ -5,7 +5,11 @@
 
 .login-page {
   min-height: 100vh;
-  //background: #ffecad;
+  background-color: #d0d0d0;
+  background-image: url('/assets/background-login-register.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: #0f172a;
 
   display: flex;

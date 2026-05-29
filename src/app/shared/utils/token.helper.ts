@@ -35,18 +35,18 @@ export class TokenHelper {
         localStorage.removeItem('permissions')
     }
 
-    static getUser(): { nom_usu: string | null; apell_usu: string | null; email_usu: string | null } | null {
+    static getUser(): { img_usu?: string | null; nom_usu: string | null; apell_usu: string | null; email_usu: string | null } | null {
         const user = localStorage.getItem(this.USER_KEY)
         if (!user) return null
 
         try {
-            return JSON.parse(user) as { nom_usu: string | null; apell_usu: string | null; email_usu: string | null }
+            return JSON.parse(user) as { img_usu?: string | null; nom_usu: string | null; apell_usu: string | null; email_usu: string | null }
         } catch {
             return null
         }
     }
 
-    static setUser(user: { nom_usu: string | null; apell_usu: string | null; email_usu: string | null }): void {
+    static setUser(user: { img_usu?: string | null; nom_usu: string | null; apell_usu: string | null; email_usu: string | null }): void {
         localStorage.setItem(this.USER_KEY, JSON.stringify(user))
     }
 

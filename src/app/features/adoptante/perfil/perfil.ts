@@ -8,7 +8,8 @@ import { DatePipe } from '@angular/common'
 @Component({
   selector: 'app-perfil',
   imports: [ReactiveFormsModule, DatePipe],
-  templateUrl: './perfil.html'
+  templateUrl: './perfil.html',
+  styleUrl: './perfil.scss'
 })
 export class PerfilComponent implements OnInit {
   private usuarioService = inject(UsuarioService)
@@ -19,7 +20,7 @@ export class PerfilComponent implements OnInit {
   loading = signal(false)
   error = signal<string | null>(null)
   success = signal<string | null>(null)
-  editando = signal(false)
+  campoEditando = signal<string | null>(null)
   selectedImage = signal<File | null>(null)
   imagePreviewUrl = signal<string | null>(null)
 
@@ -54,14 +55,14 @@ export class PerfilComponent implements OnInit {
   }
 
   activarEdicion(): void {
-    this.editando.set(true)
+    this.campoEditando.set('perfil')
     this.success.set(null)
     this.error.set(null)
     this.clearSelectedImage()
   }
 
   cancelarEdicion(): void {
-    this.editando.set(false)
+    this.campoEditando.set(null)
     this.clearSelectedImage()
     const u = this.usuario()
     if (u) this.patchForm(u)
@@ -86,7 +87,7 @@ export class PerfilComponent implements OnInit {
     this.imagePreviewUrl.set(null)
   }
 
-  onSubmit(): void {
+  guardarEdicion(): void {
     if (this.form.invalid) return
 
     const id = this.authStore.id_usu()
@@ -96,7 +97,7 @@ export class PerfilComponent implements OnInit {
       next: (data) => {
         this.usuario.set(data)
         this.authStore.updateUsuarioBasico(data)
-        this.editando.set(false)
+        this.campoEditando.set(null)
         this.clearSelectedImage()
         this.success.set('Perfil actualizado correctamente')
       },

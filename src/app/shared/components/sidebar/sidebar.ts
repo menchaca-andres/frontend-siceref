@@ -53,12 +53,6 @@ export class SidebarComponent {
       items: [
         { label: 'Conversaciones', icon: 'bx-message-dots', route: '/conversaciones', permission: 'conversaciones:obtener' }
       ]
-    },
-    {
-      title: 'Mi Cuenta',
-      items: [
-        { label: 'Mi Perfil', icon: 'bx-user-circle', route: '/adoptante/perfil', permission: 'perfil:obtener' }
-      ]
     }
   ]
 

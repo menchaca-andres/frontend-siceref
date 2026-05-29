@@ -41,12 +41,22 @@
         </div>
         }
 
-        <div class="profile-chip" aria-label="Mi perfil">
-            <i class="bx bx-user-circle"></i>
-            <div>
-                <span>{{ authStore.nombreCompleto() || 'Usuario' }}</span>
-                <small>{{ authStore.nom_rol() || 'Mi perfil' }}</small>
+        <div class="profile-chip" aria-label="Información del usuario">
+            <div class="profile-summary">
+                @if (authStore.img_usu()) {
+                <img class="profile-avatar" [src]="authStore.img_usu()" alt="Imagen de perfil" />
+                } @else {
+                <i class="bx bx-user-circle"></i>
+                }
+                <div class="profile-text">
+                    <span>{{ authStore.nombreCompleto() || 'Usuario' }}</span>
+                    <small>{{ authStore.nom_rol() || 'Mi perfil' }}</small>
+                </div>
             </div>
+
+            <a class="profile-info-link" routerLink="/adoptante/perfil" aria-label="Ver mi perfil">
+                <i class="bx bx-info-circle"></i>
+            </a>
         </div>
 
         <a class="site-button" routerLink="/home">

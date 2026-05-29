@@ -1,11 +1,4 @@
 <div class="page">
-    <div class="page-header">
-        <h2>Mi Refugio</h2>
-        @if (!editando() && authStore.hasPermission('refugio:modificar:propio')) {
-        <button (click)="activarEdicion()">Editar Refugio</button>
-        }
-    </div>
-
     @if (error()) {
     <p class="error">{{ error() }}</p>
     }
@@ -16,51 +9,83 @@
     @if (loading()) {
     <p>Cargando...</p>
     } @else if (refugio()) {
-    @if (!editando()) {
-    <div class="perfil-info">
-        <div class="perfil-row">
-            <span class="label">Imagen</span>
-            @if (refugio()!.img_ref) {
-            <img [src]="refugio()!.img_ref" alt="Imagen del refugio" />
-            } @else {
-            <span>Sin imagen</span>
-            }
-        </div>
-        <div class="perfil-row"><span class="label">Nombre</span><span>{{ refugio()!.nom_ref }}</span></div>
-        <div class="perfil-row"><span class="label">Dirección</span><span>{{ refugio()!.direc_ref }}</span></div>
-        <div class="perfil-row"><span class="label">Teléfono</span><span>{{ refugio()!.telef_ref }}</span></div>
-        <div class="perfil-row"><span class="label">Correo</span><span>{{ refugio()!.email_ref }}</span></div>
-        <div class="perfil-row"><span class="label">Estado</span><span>{{ refugio()!.estado_ref ? 'Activo' : 'Inactivo' }}</span></div>
-    </div>
-    } @else {
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div><label>Nombre</label><input type="text" formControlName="nom_ref" /></div>
-        <div><label>Dirección</label><input type="text" formControlName="direc_ref" /></div>
-        <div><label>Teléfono</label><input type="text" formControlName="telef_ref" /></div>
-        <div><label>Correo</label><input type="email" formControlName="email_ref" /></div>
-        <div>
-            <label>Imagen del refugio opcional</label>
-            <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+    <form class="refuge-card" [formGroup]="form">
+        <div class="refuge-photo-wrap">
+            <div class="refuge-photo-frame">
             @if (imagePreviewUrl()) {
-            <img [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
-            } @else if (refugio()?.img_ref) {
-            <img [src]="refugio()?.img_ref" alt="Imagen actual del refugio" />
+            <img class="refuge-photo" [src]="imagePreviewUrl()" alt="Previsualización del refugio" />
+            } @else if (refugio()!.img_ref) {
+            <img class="refuge-photo" [src]="refugio()!.img_ref" alt="Imagen actual del refugio" />
+            } @else {
+            <div class="refuge-photo-fallback">Sin imagen</div>
+            }
+            </div>
+
+            @if (editando()) {
+            <input type="file" accept="image/*" (change)="onImageSelected($event)" />
             }
         </div>
-        <div>
-            <label>Estado</label>
-            <select formControlName="estado_ref">
+
+        <div class="refuge-details">
+            <div class="refuge-row" [class.editing]="editando()">
+                <span class="label">Nombre</span>
+                @if (editando()) {
+                <input type="text" formControlName="nom_ref" aria-label="Nombre" />
+                } @else {
+                <strong>{{ refugio()!.nom_ref }}</strong>
+                }
+            </div>
+
+            <div class="refuge-row" [class.editing]="editando()">
+                <span class="label">Dirección</span>
+                @if (editando()) {
+                <input type="text" formControlName="direc_ref" aria-label="Dirección" />
+                } @else {
+                <strong>{{ refugio()!.direc_ref }}</strong>
+                }
+            </div>
+
+            <div class="refuge-row" [class.editing]="editando()">
+                <span class="label">Teléfono</span>
+                @if (editando()) {
+                <input type="text" formControlName="telef_ref" aria-label="Teléfono" />
+                } @else {
+                <strong>{{ refugio()!.telef_ref }}</strong>
+                }
+            </div>
+
+            <div class="refuge-row" [class.editing]="editando()">
+                <span class="label">Correo</span>
+                @if (editando()) {
+                <input type="email" formControlName="email_ref" aria-label="Correo" />
+                } @else {
+                <strong>{{ refugio()!.email_ref }}</strong>
+                }
+            </div>
+
+            <div class="refuge-row" [class.editing]="editando()">
+                <span class="label">Estado</span>
+                @if (editando()) {
+                <select formControlName="estado_ref" aria-label="Estado">
                 <option [ngValue]="true">Activo</option>
                 <option [ngValue]="false">Inactivo</option>
             </select>
+                } @else {
+                <strong>{{ refugio()!.estado_ref ? 'Activo' : 'Inactivo' }}</strong>
+                }
+            </div>
         </div>
-        <div class="form-actions">
+
+        @if (authStore.hasPermission('refugio:modificar:propio')) {
+        <div class="refuge-card-actions">
+            @if (editando()) {
+            <button type="button" (click)="onSubmit()" [disabled]="form.invalid">Guardar</button>
             <button type="button" (click)="cancelarEdicion()">Cancelar</button>
-            @if (authStore.hasPermission('refugio:modificar:propio')) {
-            <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+            } @else {
+            <button type="button" (click)="activarEdicion()">Editar Refugio</button>
             }
         </div>
+        }
     </form>
-    }
     }
 </div>

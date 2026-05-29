@@ -29,11 +29,13 @@
             <tr>
                 <td>{{ usuario.nom_usu }}</td>
                 <td>
+                    <div class="user-image-cell">
                     @if (usuario.img_usu) {
-                    <img [src]="usuario.img_usu" [alt]="usuario.nom_usu" />
+                    <img class="user-image" [src]="usuario.img_usu" [alt]="usuario.nom_usu" />
                     } @else {
-                    Sin imagen
+                    <span class="user-image-fallback">Sin imagen</span>
                     }
+                    </div>
                 </td>
                 <td>{{ usuario.apell_usu }}</td>
                 <td>{{ usuario.email_usu }}</td>
@@ -93,9 +95,9 @@
                     <label>Imagen de perfil opcional</label>
                     <input type="file" accept="image/*" (change)="onImageSelected($event)" />
                     @if (imagePreviewUrl()) {
-                    <img [src]="imagePreviewUrl()" alt="Previsualización de usuario" />
+                    <img class="user-form-image" [src]="imagePreviewUrl()" alt="Previsualización de usuario" />
                     } @else if (usuarioEditando()?.img_usu) {
-                    <img [src]="usuarioEditando()?.img_usu" alt="Imagen actual de usuario" />
+                    <img class="user-form-image" [src]="usuarioEditando()?.img_usu" alt="Imagen actual de usuario" />
                     }
                 </div>
 

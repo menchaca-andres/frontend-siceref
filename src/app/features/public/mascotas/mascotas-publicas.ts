@@ -41,10 +41,23 @@ export class MascotasPublicasComponent implements OnInit {
 
   razas = computed(() => {
     const especiesSeleccionadas = this.especiesSeleccionadas()
+    const razasPorNombre = new Map<string, { id: number, ids: number[], nombre: string }>()
 
-    return this.razasCatalogo()
+    this.razasCatalogo()
       .filter((raza) => especiesSeleccionadas.length === 0 || especiesSeleccionadas.includes(raza.id_esp))
-      .map((raza) => ({ id: raza.id_raza, nombre: raza.nom_raza, id_esp: raza.id_esp }))
+      .forEach((raza) => {
+        const key = this.normalizarTexto(raza.nom_raza)
+        const existente = razasPorNombre.get(key)
+
+        if (existente) {
+          existente.ids.push(raza.id_raza)
+          return
+        }
+
+        razasPorNombre.set(key, { id: raza.id_raza, ids: [raza.id_raza], nombre: raza.nom_raza })
+      })
+
+    return Array.from(razasPorNombre.values())
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
   })
 

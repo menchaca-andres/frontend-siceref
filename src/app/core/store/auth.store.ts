@@ -5,6 +5,7 @@ import { AuthResponse } from '../models/auth/auth.model'
 
 export interface AuthState {
     id_usu: number | null
+    img_usu: string | null
     nom_usu: string | null
     apell_usu: string | null
     email_usu: string | null
@@ -17,6 +18,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
     id_usu: null,
+    img_usu: null,
     nom_usu: null,
     apell_usu: null,
     email_usu: null,
@@ -57,12 +59,14 @@ export const AuthStore = signalStore(
             TokenHelper.setToken(response.token)
             TokenHelper.setPermissions(response.usuario.permisos)
             TokenHelper.setUser({
+                img_usu: response.usuario.img_usu,
                 nom_usu: response.usuario.nom_usu,
                 apell_usu: response.usuario.apell_usu,
                 email_usu: response.usuario.email_usu
             })
             patchState(store, {
                 id_usu: response.usuario.id_usu,
+                img_usu: response.usuario.img_usu,
                 nom_usu: response.usuario.nom_usu,
                 apell_usu: response.usuario.apell_usu,
                 email_usu: response.usuario.email_usu,
@@ -74,8 +78,9 @@ export const AuthStore = signalStore(
             })
         },
 
-        updateUsuarioBasico(usuario: { nom_usu?: string; apell_usu?: string; email_usu?: string }): void {
+        updateUsuarioBasico(usuario: { img_usu?: string | null; nom_usu?: string; apell_usu?: string; email_usu?: string }): void {
             const updatedUser = {
+                img_usu: usuario.img_usu ?? store.img_usu(),
                 nom_usu: usuario.nom_usu ?? store.nom_usu(),
                 apell_usu: usuario.apell_usu ?? store.apell_usu(),
                 email_usu: usuario.email_usu ?? store.email_usu()
@@ -83,6 +88,7 @@ export const AuthStore = signalStore(
 
             TokenHelper.setUser(updatedUser)
             patchState(store, {
+                img_usu: updatedUser.img_usu,
                 nom_usu: updatedUser.nom_usu,
                 apell_usu: updatedUser.apell_usu,
                 email_usu: updatedUser.email_usu
@@ -103,6 +109,7 @@ export const AuthStore = signalStore(
 
             patchState(store, {
                 id_usu: payload.id_usu,
+                img_usu: user?.img_usu ?? null,
                 nom_usu: user?.nom_usu ?? null,
                 apell_usu: user?.apell_usu ?? null,
                 email_usu: user?.email_usu ?? null,

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
 
 export interface PublicPetBreedFilter {
   id: number
+  ids: number[]
   nombre: string
 }
 
@@ -40,14 +41,21 @@ export class PublicPetFiltersComponent {
   get filtrosSeleccionados(): string[] {
     return [
       ...this.especies.filter((especie) => this.especiesSeleccionadas.includes(especie.id)).map((especie) => especie.nombre),
-      ...this.razas.filter((raza) => this.razasSeleccionadas.includes(raza.id)).map((raza) => raza.nombre),
+      ...this.razas.filter((raza) => raza.ids.some((id) => this.razasSeleccionadas.includes(id))).map((raza) => raza.nombre),
       ...this.sexos.filter((sexo) => this.sexosSeleccionados.includes(sexo)),
       ...this.tamanios.filter((tamanio) => this.tamaniosSeleccionados.includes(tamanio.id)).map((tamanio) => tamanio.nombre)
     ]
   }
 
-  toggleRaza(id: number): void {
-    this.razaChange.emit(this.toggleNumber(this.razasSeleccionadas, id))
+  toggleRaza(raza: PublicPetBreedFilter): void {
+    const selected = raza.ids.some((id) => this.razasSeleccionadas.includes(id))
+    this.razaChange.emit(selected
+      ? this.razasSeleccionadas.filter((id) => !raza.ids.includes(id))
+      : [...this.razasSeleccionadas, ...raza.ids.filter((id) => !this.razasSeleccionadas.includes(id))])
+  }
+
+  isRazaSelected(raza: PublicPetBreedFilter): boolean {
+    return raza.ids.some((id) => this.razasSeleccionadas.includes(id))
   }
 
   toggleEspecie(id: number): void {

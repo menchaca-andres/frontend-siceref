@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common'
 import { Component, inject, OnInit, signal } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { Publicacion } from '../../../../core/models/publicaciones/publicacion.model'
@@ -8,7 +7,7 @@ import { PublicacionService } from '../../../../shared/services/publicaciones/pu
 
 @Component({
   selector: 'app-perfil-mascota',
-  imports: [DatePipe, RouterLink, PublicNavbarComponent],
+  imports: [RouterLink, PublicNavbarComponent],
   templateUrl: './perfil-mascota.html',
   styleUrl: './perfil-mascota.scss'
 })

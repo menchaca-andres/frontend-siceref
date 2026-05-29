@@ -1,11 +1,4 @@
 <div class="page">
-    <div class="page-header">
-        <h2>Mi Perfil</h2>
-        @if (!editando() && authStore.hasPermission('perfil:modificar')) {
-        <button (click)="activarEdicion()">Editar Perfil</button>
-        }
-    </div>
-
     @if (error()) {
     <p class="error">{{ error() }}</p>
     }
@@ -17,102 +10,85 @@
     @if (loading()) {
     <p>Cargando...</p>
     } @else if (usuario()) {
-
-    @if (!editando()) {
-    <!-- Vista de solo lectura -->
-    <div class="perfil-info">
-        <div class="perfil-row">
-            <span class="label">Imagen</span>
-            @if (usuario()!.img_usu) {
-            <img [src]="usuario()!.img_usu" alt="Imagen de perfil" />
-            } @else {
-            <span>Sin imagen</span>
-            }
-        </div>
-        <div class="perfil-row">
-            <span class="label">Nombre</span>
-            <span>{{ usuario()!.nom_usu }} {{ usuario()!.apell_usu }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Correo</span>
-            <span>{{ usuario()!.email_usu }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Teléfono</span>
-            <span>{{ usuario()!.numcel_usu }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Fecha de Nacimiento</span>
-            <span>{{ usuario()!.fecnac_usu | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <div class="perfil-row">
-            <span class="label">Rol</span>
-            <span>{{ usuario()!.rol?.nom_rol }}</span>
-        </div>
-    </div>
-
-    } @else {
-    <!-- Formulario de edición -->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-        <div>
-            <label>Nombre</label>
-            <input type="text" formControlName="nom_usu" />
-            @if (form.get('nom_usu')?.invalid && form.get('nom_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Apellido</label>
-            <input type="text" formControlName="apell_usu" />
-            @if (form.get('apell_usu')?.invalid && form.get('apell_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Correo</label>
-            <input type="email" formControlName="email_usu" />
-            @if (form.get('email_usu')?.invalid && form.get('email_usu')?.touched) {
-            <span>Correo inválido</span>
-            }
-        </div>
-
-        <div>
-            <label>Teléfono</label>
-            <input type="text" formControlName="numcel_usu" />
-            @if (form.get('numcel_usu')?.invalid && form.get('numcel_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Fecha de Nacimiento</label>
-            <input type="date" formControlName="fecnac_usu" />
-            @if (form.get('fecnac_usu')?.invalid && form.get('fecnac_usu')?.touched) {
-            <span>Campo requerido</span>
-            }
-        </div>
-
-        <div>
-            <label>Imagen de perfil opcional</label>
-            <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+    <form class="profile-card" [formGroup]="form">
+        <div class="profile-photo-wrap">
+            <div class="profile-photo-frame">
             @if (imagePreviewUrl()) {
-            <img [src]="imagePreviewUrl()" alt="Previsualización de perfil" />
-            } @else if (usuario()?.img_usu) {
-            <img [src]="usuario()?.img_usu" alt="Imagen actual de perfil" />
+            <img class="profile-photo" [src]="imagePreviewUrl()" alt="Previsualización de perfil" />
+            } @else if (usuario()!.img_usu) {
+            <img class="profile-photo" [src]="usuario()!.img_usu" alt="Imagen de perfil" />
+            } @else {
+            <div class="profile-photo-fallback">Sin imagen</div>
+            }
+            </div>
+
+            @if (campoEditando() === 'perfil') {
+            <input type="file" accept="image/*" (change)="onImageSelected($event)" />
             }
         </div>
 
-        <div class="form-actions">
+        <div class="profile-details">
+            <div class="profile-row" [class.editing]="campoEditando() === 'perfil'">
+                <div class="profile-value">
+                    <span class="label">Nombre</span>
+                    @if (campoEditando() === 'perfil') {
+                    <div class="inline-inputs two-columns">
+                        <input type="text" formControlName="nom_usu" aria-label="Nombre" />
+                        <input type="text" formControlName="apell_usu" aria-label="Apellido" />
+                    </div>
+                    } @else {
+                    <strong>{{ usuario()!.nom_usu }} {{ usuario()!.apell_usu }}</strong>
+                    }
+                </div>
+            </div>
+            <div class="profile-row" [class.editing]="campoEditando() === 'perfil'">
+                <div class="profile-value">
+                    <span class="label">Correo</span>
+                    @if (campoEditando() === 'perfil') {
+                    <input type="email" formControlName="email_usu" aria-label="Correo" />
+                    } @else {
+                    <strong>{{ usuario()!.email_usu }}</strong>
+                    }
+                </div>
+            </div>
+            <div class="profile-row" [class.editing]="campoEditando() === 'perfil'">
+                <div class="profile-value">
+                    <span class="label">Teléfono</span>
+                    @if (campoEditando() === 'perfil') {
+                    <input type="text" formControlName="numcel_usu" aria-label="Teléfono" />
+                    } @else {
+                    <strong>{{ usuario()!.numcel_usu }}</strong>
+                    }
+                </div>
+            </div>
+            <div class="profile-row" [class.editing]="campoEditando() === 'perfil'">
+                <div class="profile-value">
+                    <span class="label">Fecha de Nacimiento</span>
+                    @if (campoEditando() === 'perfil') {
+                    <input type="date" formControlName="fecnac_usu" aria-label="Fecha de nacimiento" />
+                    } @else {
+                    <strong>{{ usuario()!.fecnac_usu | date:'dd/MM/yyyy' }}</strong>
+                    }
+                </div>
+            </div>
+            <div class="profile-row readonly">
+                <div class="profile-value">
+                    <span class="label">Rol</span>
+                    <strong>{{ usuario()!.rol?.nom_rol }}</strong>
+                </div>
+            </div>
+        </div>
+
+        @if (authStore.hasPermission('perfil:modificar')) {
+        <div class="profile-card-actions">
+            @if (campoEditando() === 'perfil') {
+            <button type="button" (click)="guardarEdicion()" [disabled]="form.invalid">Guardar</button>
             <button type="button" (click)="cancelarEdicion()">Cancelar</button>
-            @if (authStore.hasPermission('perfil:modificar')) {
-            <button type="submit" [disabled]="form.invalid">Guardar Cambios</button>
+            } @else {
+            <button type="button" (click)="activarEdicion()">Editar perfil</button>
             }
         </div>
-
+        }
     </form>
-    }
     }
 </div>

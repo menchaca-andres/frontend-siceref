@@ -1,14 +1,60 @@
+.notifications-page {
+    min-height: 100vh;
+    background: url('/assets/background-login-register.png') center / cover no-repeat;
+    background-color: #d0d0d0;
+}
+
+.notifications-content {
+    padding: clamp(1rem, 4vw, 3rem);
+}
+
 .notification-list {
+    position: relative;
     display: grid;
     gap: 0.85rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 28px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.80) inset,
+        0 18px 45px rgba(15, 23, 42, 0.10);
 }
 
 .notification-card,
 .empty-card {
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 24px;
-    background: #fff;
-    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.80) inset,
+        0 18px 45px rgba(15, 23, 42, 0.12),
+        0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.notification-card::before,
+.empty-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.50) 0%,
+            rgba(255, 255, 255, 0.10) 42%,
+            rgba(255, 255, 255, 0.00) 100%);
+    pointer-events: none;
+}
+
+.notification-card>*,
+.empty-card>* {
+    position: relative;
+    z-index: 1;
 }
 
 .notification-card {
@@ -19,8 +65,8 @@
 }
 
 .notification-card.unread {
-    border-color: rgba(12, 112, 1, 0.35);
-    background: linear-gradient(135deg, #fff, #f0fdf4);
+    border-color: rgba(159, 243, 199, 0.72);
+    background: rgba(240, 253, 244, 0.30);
 }
 
 .notification-icon {
@@ -30,8 +76,10 @@
     width: 54px;
     height: 54px;
     border-radius: 18px;
-    background: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.60);
+    background: rgba(255, 255, 255, 0.34);
     color: #0c7001;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.70) inset;
 }
 
 .notification-icon i {
@@ -77,11 +125,11 @@ p {
 .notification-actions button,
 .notification-actions .disabled-action,
 .empty-card a {
-    border: 1px solid #0c7001;
+    border: 1px solid rgba(159, 243, 199, 0.72);
     border-radius: 999px;
     padding: 0.55rem 0.8rem;
-    background: #0c7001;
-    color: #fff;
+    background: rgba(159, 243, 199, 0.92);
+    color: #064e3b;
     font: inherit;
     font-size: 0.84rem;
     font-weight: 900;
@@ -97,8 +145,7 @@ p {
 }
 
 .notification-actions button {
-    background: #fff;
-    color: #0c7001;
+    background: rgba(255, 255, 255, 0.42);
 }
 
 .empty-card {

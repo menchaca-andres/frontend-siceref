@@ -127,6 +127,13 @@ $accent: #2db0ce;
     font-size: 1.25rem;
 }
 
+.profile-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    object-fit: cover;
+}
+
 .notification-badge {
     position: absolute;
     top: -0.35rem;
@@ -299,8 +306,8 @@ $accent: #2db0ce;
 .profile-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.7rem;
-    min-width: 210px;
+    gap: 0.75rem;
+    min-width: 250px;
     border: 1px solid rgba(255, 255, 255, 0.60);
     border-radius: 18px;
     padding: 0.55rem 0.75rem;
@@ -309,12 +316,21 @@ $accent: #2db0ce;
         0 1px 0 rgba(255, 255, 255, 0.70) inset,
         0 4px 12px rgba(15, 23, 42, 0.06);
 
-    >i {
+    .profile-summary {
+        display: inline-flex;
+        align-items: center;
+        min-width: 0;
+        flex: 1;
+        flex-direction: row;
+        gap: 0.7rem;
+    }
+
+    .profile-summary>i {
         color: $accent;
         font-size: 2.15rem;
     }
 
-    div {
+    .profile-text {
         display: flex;
         min-width: 0;
         flex-direction: column;
@@ -334,6 +350,15 @@ $accent: #2db0ce;
         font-size: 0.76rem;
         font-weight: 800;
     }
+}
+
+.profile-info-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $accent;
+    font-size: 1.35rem;
+    text-decoration: none;
 }
 
 .site-button,

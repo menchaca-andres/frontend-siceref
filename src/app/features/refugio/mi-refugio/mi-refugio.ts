@@ -7,7 +7,8 @@ import { RefugioService } from '../../../shared/services/refugios/refugio.servic
 @Component({
   selector: 'app-mi-refugio',
   imports: [ReactiveFormsModule],
-  templateUrl: './mi-refugio.html'
+  templateUrl: './mi-refugio.html',
+  styleUrl: './mi-refugio.scss'
 })
 export class MiRefugioComponent implements OnInit {
   private refugioService = inject(RefugioService)

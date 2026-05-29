@@ -1,10 +1,7 @@
+<div class="notifications-page">
 <app-public-navbar />
 
-<div class="page">
-    <div class="page-header">
-        <h2>Notificaciones</h2>
-    </div>
-
+<div class="page notifications-content">
     @if (error()) {
     <p class="error">{{ error() }}</p>
     }
@@ -34,7 +31,7 @@
                 <p>{{ notificacion.mensaje }}</p>
                 <div class="notification-actions">
                     @if (notificacion.id_publi) {
-                    <a [routerLink]="['/conversaciones/publicacion', notificacion.id_publi]">Abrir conversación</a>
+                    <a [routerLink]="conversationLink(notificacion)">Abrir conversación</a>
                     }
                     @if (!notificacion.leida) {
                     <button type="button" (click)="marcarLeida(notificacion.id_noti)">Marcar leída</button>
@@ -45,4 +42,5 @@
         }
     </section>
     }
+</div>
 </div>

@@ -27,8 +27,8 @@
         <legend>Raza</legend>
         <div class="filter-options">
             @for (raza of razas; track raza.id) {
-            <button type="button" class="filter-chip" [class.selected]="razasSeleccionadas.includes(raza.id)"
-                (click)="toggleRaza(raza.id)">
+            <button type="button" class="filter-chip" [class.selected]="isRazaSelected(raza)"
+                (click)="toggleRaza(raza)">
                 {{ raza.nombre }}
             </button>
             }

@@ -78,11 +78,21 @@
                 </div>
 
                 <div>
+                    <label>Especie</label>
+                    <select formControlName="id_esp" (change)="onEspecieChange()">
+                        <option [ngValue]="null">Selecciona una especie</option>
+                        @for (especie of especies(); track especie.id_esp) {
+                        <option [ngValue]="especie.id_esp">{{ especie.nom_esp }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div>
                     <label>Raza</label>
-                    <select formControlName="id_raza">
-                        <option [ngValue]="null">Selecciona una raza</option>
-                        @for (raza of razas(); track raza.id_raza) {
-                        <option [ngValue]="raza.id_raza">{{ raza.nom_raza }} - {{ raza.especie?.nom_esp }}</option>
+                    <select formControlName="id_raza" [disabled]="!especieSeleccionada()">
+                        <option [ngValue]="null">{{ especieSeleccionada() ? 'Selecciona una raza' : 'Primero selecciona una especie' }}</option>
+                        @for (raza of razasFiltradas(); track raza.id_raza) {
+                        <option [ngValue]="raza.id_raza">{{ raza.nom_raza }}</option>
                         }
                     </select>
                 </div>
