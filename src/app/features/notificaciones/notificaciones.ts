@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common'
-import { Component, inject, OnInit, signal } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RouterLink } from '@angular/router'
 import { Conversacion } from '../../core/models/conversaciones/conversacion.model'
 import { Notificacion } from '../../core/models/notificaciones/notificacion.model'
@@ -8,6 +9,7 @@ import { PublicNavbarComponent } from '../../shared/components/public-navbar/pub
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge'
 import { ConversacionService } from '../../shared/services/conversaciones/conversacion.service'
 import { NotificacionService } from '../../shared/services/notificaciones/notificacion.service'
+import { RealtimeService } from '../../shared/services/realtime/realtime.service'
 
 @Component({
   selector: 'app-notificaciones',
@@ -18,6 +20,8 @@ import { NotificacionService } from '../../shared/services/notificaciones/notifi
 export class NotificacionesComponent implements OnInit {
   private notificacionService = inject(NotificacionService)
   private conversacionService = inject(ConversacionService)
+  private realtimeService = inject(RealtimeService)
+  private destroyRef = inject(DestroyRef)
   authStore = inject(AuthStore)
 
   notificaciones = signal<Notificacion[]>([])
@@ -26,6 +30,11 @@ export class NotificacionesComponent implements OnInit {
   error = signal<string | null>(null)
 
   ngOnInit(): void {
+    this.realtimeService.connect()
+    this.realtimeService.notificaciones$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((notificacion) => this.agregarNotificacion(notificacion))
+
     this.cargarNotificaciones()
     this.cargarConversaciones()
   }
@@ -73,5 +82,10 @@ export class NotificacionesComponent implements OnInit {
       next: (data) => this.conversaciones.set(data),
       error: () => this.conversaciones.set([])
     })
+  }
+
+  private agregarNotificacion(notificacion: Notificacion): void {
+    if (this.notificaciones().some((item) => item.id_noti === notificacion.id_noti)) return
+    this.notificaciones.update((notificaciones) => [notificacion, ...notificaciones])
   }
 }
