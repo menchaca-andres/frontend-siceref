@@ -41,7 +41,7 @@
     font-size: clamp(2rem, 5.5vw, 5rem);
     line-height: 0.95;
     letter-spacing: -0.06em;
-    white-space: nowrap;
+    text-wrap: balance;
 }
 
 .hero-title::after {
@@ -52,7 +52,7 @@
 .cover-image {
     position: relative;
     overflow: hidden;
-    min-height: clamp(260px, 48vw, 560px);
+    min-height: clamp(320px, 48vw, 560px);
     margin: 0 0 4rem;
     //background: #fff4d1;
 }
@@ -133,12 +133,12 @@
 
 .pets-carousel {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: 1rem;
 }
 
 .pet-card {
-    min-height: 380px;
+    min-height: clamp(300px, 38vw, 380px);
     perspective: 1000px;
 }
 
@@ -267,7 +267,7 @@
 .site-footer {
     scroll-margin-top: 6rem;
     display: block;
-    overflow: hidden;
+    overflow-x: auto;
     margin-top: clamp(2rem, 5vw, 4rem);
     //background: #fff4d1;
 }
@@ -275,15 +275,37 @@
 .site-footer img {
     display: block;
     width: 100%;
+    min-width: 760px;
     height: auto;
 }
 
 @media (max-width: 640px) {
-    .pets-carousel {
-        grid-template-columns: 1fr;
+    .home-page app-public-navbar {
+        position: absolute;
+    }
+
+    .cover-image {
+        min-height: 430px;
+        margin-bottom: 2.5rem;
+    }
+
+    .hero-content {
+        justify-content: flex-start;
+        padding-top: 12rem;
+        transform: none;
+    }
+
+    .hero-title {
+        max-width: 100%;
+        font-size: clamp(2.35rem, 13vw, 3.8rem);
+        line-height: 1;
     }
 
     .about-section {
-        grid-template-columns: 1fr;
+        padding: 2.5rem 1rem;
+    }
+
+    .site-footer img {
+        width: auto;
     }
 }
