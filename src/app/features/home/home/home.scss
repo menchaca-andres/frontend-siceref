@@ -285,13 +285,13 @@
     }
 
     .cover-image {
-        min-height: 430px;
-        margin-bottom: 2.5rem;
+        min-height: 300px;
+        margin-bottom: 2rem;
     }
 
     .hero-content {
         justify-content: flex-start;
-        padding-top: 12rem;
+        padding-top: 9rem;
         transform: none;
     }
 
@@ -306,6 +306,6 @@
     }
 
     .site-footer img {
-        width: auto;
+        min-width: 0;
     }
 }
