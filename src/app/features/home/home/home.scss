@@ -24,10 +24,6 @@
     display: block;
 }
 
-.hero {
-    max-width: none;
-}
-
 .eyebrow {
     color: #2563eb;
     font-weight: 800;
@@ -54,11 +50,6 @@
     overflow: hidden;
     min-height: clamp(320px, 48vw, 560px);
     margin: 0 0 4rem;
-    //background: #fff4d1;
-}
-
-.cover-image::after {
-    display: none;
 }
 
 .cover-image img {
@@ -67,7 +58,6 @@
     height: calc(100% + 2px);
     min-height: inherit;
     object-fit: cover;
-    transform: translateY(1px);
 }
 
 .hero-content {
@@ -91,14 +81,15 @@
 .pets-heading {
     position: relative;
     display: flex;
-    align-items: center;
     justify-content: center;
     margin-bottom: 1.25rem;
 }
 
 .pets-heading h2 {
+    width: 100%;
     margin: 0;
     font-size: clamp(2rem, 4.8vw, 4rem);
+    text-align: center;
 }
 
 .pets-carousel-wrap {
@@ -133,12 +124,13 @@
 
 .pets-carousel {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
 }
 
 .pet-card {
-    min-height: clamp(300px, 38vw, 380px);
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
     perspective: 1000px;
 }
 
@@ -149,8 +141,14 @@
     transform-style: preserve-3d;
 }
 
-.pet-card:hover .pet-card-inner {
+.pet-card.flipped .pet-card-inner {
     transform: rotateY(180deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .pet-card:hover .pet-card-inner {
+        transform: rotateY(180deg);
+    }
 }
 
 .pet-card-face {
@@ -267,15 +265,12 @@
 .site-footer {
     scroll-margin-top: 6rem;
     display: block;
-    overflow-x: auto;
     margin-top: clamp(2rem, 5vw, 4rem);
-    //background: #fff4d1;
 }
 
 .site-footer img {
     display: block;
     width: 100%;
-    min-width: 760px;
     height: auto;
 }
 
@@ -291,21 +286,22 @@
 
     .hero-content {
         justify-content: flex-start;
-        padding-top: 9rem;
+        padding-top: 5.5rem;
         transform: none;
     }
 
     .hero-title {
         max-width: 100%;
-        font-size: clamp(2.35rem, 13vw, 3.8rem);
+        font-size: clamp(1.8rem, 10vw, 3rem);
         line-height: 1;
+    }
+
+    .pets-carousel {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .about-section {
         padding: 2.5rem 1rem;
     }
 
-    .site-footer img {
-        min-width: 0;
-    }
 }

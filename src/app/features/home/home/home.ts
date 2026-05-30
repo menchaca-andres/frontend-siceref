@@ -26,6 +26,7 @@ export class Home implements OnInit, OnDestroy {
   carouselPage = signal(0)
   tituloPortada = signal('')
   sobreNosotrosTexto = signal('')
+  flippedPetId = signal<number | null>(null)
 
   publicacionesCarrusel = computed(() => this.publicaciones()
     .filter((publicacion) => publicacion.estad_publ && publicacion.mascota)
@@ -68,6 +69,7 @@ export class Home implements OnInit, OnDestroy {
     const totalPages = this.carouselPages().length
     if (totalPages === 0) return
 
+    this.flippedPetId.set(null)
     this.carouselPage.update((page) => page === 0 ? totalPages - 1 : page - 1)
   }
 
@@ -75,7 +77,12 @@ export class Home implements OnInit, OnDestroy {
     const totalPages = this.carouselPages().length
     if (totalPages === 0) return
 
+    this.flippedPetId.set(null)
     this.carouselPage.update((page) => page === totalPages - 1 ? 0 : page + 1)
+  }
+
+  togglePetCard(id: number): void {
+    this.flippedPetId.update((flippedId) => flippedId === id ? null : id)
   }
 
   useImageFallback(event: Event): void {

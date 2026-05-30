@@ -22,7 +22,8 @@
 
             <div class="pets-carousel">
                 @for (publicacion of currentCarouselItems(); track publicacion.id_publi) {
-                <article class="pet-card">
+                <article class="pet-card" [class.flipped]="flippedPetId() === publicacion.id_publi"
+                    (click)="togglePetCard(publicacion.id_publi)">
                     <div class="pet-card-inner">
                         <div class="pet-card-face pet-card-front">
                             @if (publicacion.mascota?.img_mascot) {
