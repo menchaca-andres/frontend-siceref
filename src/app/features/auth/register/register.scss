@@ -1,9 +1,5 @@
-* {
-    box-sizing: border-box;
-    font-family: Source Sans Pro, Arial, sans-serif;
-}
-
 .register-page {
+    position: relative;
     min-height: 100vh;
     background-color: #a5a5a5;
     background-image: url('/assets/background-login-register.png');
@@ -216,8 +212,25 @@ button:disabled {
 }
 
 @media (max-width: 640px) {
+    app-public-navbar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 2;
+    }
+
+    .register-content {
+        align-items: stretch;
+        min-height: 100vh;
+        padding: 0;
+    }
+
     .register-container {
-        min-height: auto;
+        width: 100%;
+        min-height: 100%;
+        border-radius: 0;
+        padding: 7.5rem 1rem 1.5rem;
     }
 
     .inputs-grid {
