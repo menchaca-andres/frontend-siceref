@@ -65,6 +65,7 @@
     gap: 10px;
     justify-content: center;
     align-items: center;
+    width: 100%;
   }
 
   .inputs-group {
@@ -223,8 +224,7 @@
 
   .login-container {
     width: 100%;
-    min-height: 100%;
-    height: auto;
+    min-height: 100vh;
     border-radius: 0;
     padding: 7.5rem 1rem 1.5rem;
 
