@@ -1,22 +1,30 @@
-<header class="public-navbar" [class.scrolled]="scrolled()">
-    <a class="brand" routerLink="/home">
+<header class="public-navbar" [class.scrolled]="scrolled()" [class.menu-open]="menuOpen()">
+    <a class="brand" routerLink="/home" (click)="closeMenu()">
         <img class="logo" src="/assets/logo-siceref.png" alt="Logo de Siceref" />
     </a>
 
-    <nav class="public-tabs" aria-label="Navegación principal">
-        <a routerLink="/home" [class.active]="isActive('/home')">Inicio</a>
-        <a routerLink="/mascotas" [class.active]="isActive('/mascotas', undefined, false)">Mascotas</a>
-        <a routerLink="/home" fragment="sobre-nosotros" [class.active]="isActive('/home', 'sobre-nosotros')">Sobre nosotros</a>
-        <a routerLink="/home" fragment="contactanos" [class.active]="isActive('/home', 'contactanos')">Contáctanos</a>
+    <button class="menu-toggle" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()"
+        aria-controls="public-navigation" aria-label="Abrir navegación">
+        Menu
+    </button>
+
+    <nav id="public-navigation" class="public-tabs" aria-label="Navegación principal">
+        <a routerLink="/home" [class.active]="isActive('/home')" (click)="closeMenu()">Inicio</a>
+        <a routerLink="/mascotas" [class.active]="isActive('/mascotas', undefined, false)"
+            (click)="closeMenu()">Mascotas</a>
+        <a routerLink="/home" fragment="sobre-nosotros" [class.active]="isActive('/home', 'sobre-nosotros')"
+            (click)="closeMenu()">Sobre nosotros</a>
+        <a routerLink="/home" fragment="contactanos" [class.active]="isActive('/home', 'contactanos')"
+            (click)="closeMenu()">Contáctanos</a>
     </nav>
 
     <nav class="public-actions">
         @if (authStore.isLoggedIn()) {
-        <a class="secondary-link" [routerLink]="panelRoute()">Panel</a>
+        <a class="secondary-link" [routerLink]="panelRoute()" (click)="closeMenu()">Panel</a>
         <button type="button" (click)="logout()">Cerrar sesión</button>
         } @else if (!isAuthPage()) {
-        <a class="secondary-link" routerLink="/auth/register">Registrarse</a>
-        <a class="login-link" routerLink="/auth/login">Iniciar sesión</a>
+        <a class="secondary-link" routerLink="/auth/register" (click)="closeMenu()">Registrarse</a>
+        <a class="login-link" routerLink="/auth/login" (click)="closeMenu()">Iniciar sesión</a>
         }
     </nav>
 </header>

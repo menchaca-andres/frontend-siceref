@@ -35,7 +35,6 @@ $brand-dark: #0f172a;
         border-color 160ms ease,
         box-shadow 160ms ease;
 
-    // ── Capa 1: blur estilo Apple ─────────────────────────────────────────
     &::before {
         content: '';
         position: absolute;
@@ -48,7 +47,6 @@ $brand-dark: #0f172a;
         pointer-events: none;
     }
 
-    // ── Capa 2: highlight de luz superior ────────────────────────────────
     &::after {
         content: '';
         position: absolute;
@@ -62,13 +60,11 @@ $brand-dark: #0f172a;
         pointer-events: none;
     }
 
-    // ── Todo el contenido por encima de las capas ─────────────────────────
     >* {
         position: relative;
         z-index: 1;
     }
 
-    // ── Estado scrolled ───────────────────────────────────────────────────
     &.scrolled {
         border-color: $glass-border-scroll;
         box-shadow:
@@ -84,7 +80,6 @@ $brand-dark: #0f172a;
     }
 }
 
-// ─── Brand / Logo ─────────────────────────────────────────────────────────────
 .brand {
     display: inline-flex;
     align-items: center;
@@ -102,7 +97,10 @@ $brand-dark: #0f172a;
     object-fit: contain;
 }
 
-// ─── Tabs ─────────────────────────────────────────────────────────────────────
+.menu-toggle {
+    display: none;
+}
+
 .public-tabs,
 .public-actions {
     display: flex;
@@ -154,7 +152,6 @@ $brand-dark: #0f172a;
     }
 }
 
-// ─── Acciones ─────────────────────────────────────────────────────────────────
 .public-actions {
     justify-self: end;
 
@@ -225,11 +222,9 @@ $brand-dark: #0f172a;
     }
 }
 
-// ─── Mobile ───────────────────────────────────────────────────────────────────
 @media (max-width: 640px) {
     .public-navbar {
-        align-items: flex-start;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
         border-radius: 1.25rem;
         margin: 0.35rem 0.5rem 0;
         padding: 0.75rem 1rem;
@@ -240,19 +235,37 @@ $brand-dark: #0f172a;
         }
     }
 
+    .menu-toggle {
+        display: block;
+        justify-self: end;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 999px;
+        padding: 0.68rem 1rem;
+        background: rgba(255, 249, 133, 0.85);
+        font: inherit;
+        font-weight: 900;
+        cursor: pointer;
+    }
+
     .public-actions,
     .public-tabs {
+        display: none;
+        grid-column: 1 / -1;
         width: 100%;
     }
 
+    .public-navbar.menu-open .public-actions,
+    .public-navbar.menu-open .public-tabs {
+        display: flex;
+    }
+
     .public-actions {
-        justify-self: stretch;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .public-tabs {
-        justify-self: stretch;
-        justify-content: center;
-        overflow-x: auto;
+        flex-direction: column;
+        align-items: stretch;
     }
 }

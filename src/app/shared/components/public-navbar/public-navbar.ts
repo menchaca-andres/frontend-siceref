@@ -12,6 +12,7 @@ export class PublicNavbarComponent {
   authStore = inject(AuthStore)
   private router = inject(Router)
   scrolled = signal(false)
+  menuOpen = signal(false)
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
@@ -29,7 +30,16 @@ export class PublicNavbarComponent {
     return pathMatches && this.currentFragment() === (fragment ?? '')
   }
 
+  toggleMenu(): void {
+    this.menuOpen.update((isOpen) => !isOpen)
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false)
+  }
+
   logout(): void {
+    this.closeMenu()
     this.authStore.logout()
     this.router.navigate(['/home'])
   }
