@@ -79,7 +79,6 @@
 }
 
 .pets-heading {
-    position: relative;
     display: flex;
     justify-content: center;
     margin-bottom: 1.25rem;
@@ -274,6 +273,12 @@
     height: auto;
 }
 
+@media (max-width: 980px) {
+    .pets-carousel {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 @media (max-width: 640px) {
     .home-page app-public-navbar {
         position: absolute;
@@ -294,10 +299,6 @@
         max-width: 100%;
         font-size: clamp(1.8rem, 10vw, 3rem);
         line-height: 1;
-    }
-
-    .pets-carousel {
-        grid-template-columns: minmax(0, 1fr);
     }
 
     .about-section {

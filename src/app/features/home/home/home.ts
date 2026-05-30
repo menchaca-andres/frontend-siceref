@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core'
+import { Component, computed, HostListener, inject, OnDestroy, OnInit, signal } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { gsap } from 'gsap'
 import { Subscription } from 'rxjs'
@@ -24,6 +24,7 @@ export class Home implements OnInit, OnDestroy {
 
   publicaciones = signal<Publicacion[]>([])
   carouselPage = signal(0)
+  carouselItemsPerPage = signal(3)
   tituloPortada = signal('')
   sobreNosotrosTexto = signal('')
   flippedPetId = signal<number | null>(null)
@@ -36,8 +37,10 @@ export class Home implements OnInit, OnDestroy {
     const publicaciones = this.publicacionesCarrusel()
     const pages: Publicacion[][] = []
 
-    for (let index = 0; index < publicaciones.length; index += 3) {
-      pages.push(publicaciones.slice(index, index + 3))
+    const itemsPerPage = this.carouselItemsPerPage()
+
+    for (let index = 0; index < publicaciones.length; index += itemsPerPage) {
+      pages.push(publicaciones.slice(index, index + itemsPerPage))
     }
 
     return pages
@@ -46,6 +49,7 @@ export class Home implements OnInit, OnDestroy {
   currentCarouselItems = computed(() => this.carouselPages()[this.carouselPage()] ?? [])
 
   ngOnInit(): void {
+    this.updateCarouselItemsPerPage()
     this.iniciarTypewriterPortada()
     this.iniciarTypewriterSobreNosotros()
     this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
@@ -56,6 +60,11 @@ export class Home implements OnInit, OnDestroy {
       next: (data) => this.publicaciones.set(data),
       error: () => this.publicaciones.set([])
     })
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.updateCarouselItemsPerPage()
   }
 
   ngOnDestroy(): void {
@@ -83,6 +92,15 @@ export class Home implements OnInit, OnDestroy {
 
   togglePetCard(id: number): void {
     this.flippedPetId.update((flippedId) => flippedId === id ? null : id)
+  }
+
+  private updateCarouselItemsPerPage(): void {
+    const itemsPerPage = window.innerWidth <= 980 ? 1 : 3
+    if (itemsPerPage === this.carouselItemsPerPage()) return
+
+    this.flippedPetId.set(null)
+    this.carouselPage.set(0)
+    this.carouselItemsPerPage.set(itemsPerPage)
   }
 
   useImageFallback(event: Event): void {
