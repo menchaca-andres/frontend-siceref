@@ -1,4 +1,10 @@
-<aside class="filters-card" aria-label="Filtros de mascotas">
+<button class="filters-toggle" type="button" (click)="toggleMobileFilters()" [attr.aria-expanded]="mobileFiltersOpen()"
+    aria-controls="public-pet-filters">
+    Filtros
+</button>
+
+<aside id="public-pet-filters" class="filters-card" [class.mobile-open]="mobileFiltersOpen()"
+    aria-label="Filtros de mascotas">
     <div class="filters-heading">
         <span>Filtros</span>
         <strong>Encuentra tu mascota</strong>
@@ -60,4 +66,5 @@
     </fieldset>
 
     <button class="clear-filters" type="button" (click)="clearFilters.emit()">Limpiar filtros</button>
+    <button class="apply-filters" type="button" (click)="closeMobileFilters()">Aplicar filtros</button>
 </aside>

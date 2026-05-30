@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core'
 
 export interface PublicPetBreedFilter {
   id: number
@@ -37,6 +37,7 @@ export class PublicPetFiltersComponent {
   @Output() clearFilters = new EventEmitter<void>()
 
   sexos = ['Macho', 'Hembra']
+  mobileFiltersOpen = signal(false)
 
   get filtrosSeleccionados(): string[] {
     return [
@@ -70,6 +71,14 @@ export class PublicPetFiltersComponent {
     this.sexoChange.emit(this.sexosSeleccionados.includes(sexo)
       ? this.sexosSeleccionados.filter((value) => value !== sexo)
       : [...this.sexosSeleccionados, sexo])
+  }
+
+  toggleMobileFilters(): void {
+    this.mobileFiltersOpen.update((isOpen) => !isOpen)
+  }
+
+  closeMobileFilters(): void {
+    this.mobileFiltersOpen.set(false)
   }
 
   private toggleNumber(values: number[], value: number): number[] {
