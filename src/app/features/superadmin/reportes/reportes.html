@@ -1,0 +1,368 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2>Reportes</h2>
+            <p class="page-subtitle">
+                @if (esAdminSistema()) {
+                Estadísticas, usuarios, procesos de adopción, transacciones y donaciones del sistema.
+                } @else {
+                Estadísticas y reportes operativos de tu refugio.
+                }
+            </p>
+        </div>
+        <button type="button" (click)="recargar()">Actualizar</button>
+    </div>
+
+    <nav class="tabs">
+        @for (tab of tabs(); track tab.id) {
+        <button type="button" class="tab" [class.active]="activeTab() === tab.id" (click)="cambiarTab(tab.id)">
+            {{ tab.label }}
+        </button>
+        }
+    </nav>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (activeTab() === 'resumen') {
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (estadisticas(); as stats) {
+    <section class="summary-grid">
+        <article class="summary-card highlight">
+            <span>Usuarios registrados</span>
+            <strong>{{ stats.usuarios_registrados }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Mascotas registradas</span>
+            <strong>{{ stats.mascotas_registradas }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Publicaciones activas</span>
+            <strong>{{ stats.publicaciones_activas }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Publicaciones finalizadas</span>
+            <strong>{{ stats.publicaciones_inactivas }}</strong>
+        </article>
+        @if (esAdminSistema()) {
+        <article class="summary-card">
+            <span>Refugios activos</span>
+            <strong>{{ stats.refugios_activos }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Refugios inactivos</span>
+            <strong>{{ stats.refugios_inactivos }}</strong>
+        </article>
+        }
+        <article class="summary-card">
+            <span>Conversaciones</span>
+            <strong>{{ stats.conversaciones_registradas }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Donaciones registradas</span>
+            <strong>{{ stats.donaciones_registradas }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Donaciones pagadas</span>
+            <strong>{{ stats.donaciones_pagadas }}</strong>
+        </article>
+        <article class="summary-card total-card">
+            <span>Total donado</span>
+            <strong>{{ stats.total_donado }} {{ stats.moneda }}</strong>
+        </article>
+        @if (esAdminSistema()) {
+        <article class="summary-card">
+            <span>Transacciones registradas</span>
+            <strong>{{ stats.transacciones_registradas }}</strong>
+        </article>
+        }
+    </section>
+
+    @if (stats.usuarios_por_rol.length > 0) {
+    <section class="panel">
+        <h3>Usuarios por rol</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rol</th>
+                    <th>Código</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of stats.usuarios_por_rol; track item.codigo) {
+                <tr>
+                    <td>{{ item.nom_rol }}</td>
+                    <td>{{ item.codigo }}</td>
+                    <td>{{ item.total }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+    }
+    }
+    }
+
+    @if (activeTab() === 'usuarios') {
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+        <label>
+            Rol ID
+            <input type="number" name="id_rol" [(ngModel)]="usuarioFilters.id_rol" placeholder="Ej: 4" />
+        </label>
+        <label>
+            Refugio ID
+            <input type="number" name="id_ref" [(ngModel)]="usuarioFilters.id_ref" placeholder="Ej: 2" />
+        </label>
+        <div class="filter-actions">
+            <button type="submit">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+    </form>
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Celular</th>
+                    <th>Rol</th>
+                    <th>Refugio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (usuario of usuarios(); track usuario.id_usu) {
+                <tr>
+                    <td>{{ usuario.id_usu }}</td>
+                    <td>{{ nombreCompleto(usuario.nom_usu, usuario.apell_usu) }}</td>
+                    <td>{{ usuario.email_usu }}</td>
+                    <td>{{ usuario.numcel_usu }}</td>
+                    <td>{{ usuario.nom_rol }}</td>
+                    <td>{{ usuario.nom_ref ?? 'Sin refugio' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6">No hay usuarios para los filtros seleccionados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
+        (pageChange)="onPageChange($event)" />
+    }
+    }
+
+    @if (activeTab() === 'procesos') {
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+        <label>
+            Estado del proceso
+            <select name="estado_proceso" [(ngModel)]="procesoFilters.estado_proceso">
+                <option value="">Todos</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EN_REVISION">En revisión</option>
+                <option value="FINALIZADA">Finalizada</option>
+            </select>
+        </label>
+        <div class="filter-actions">
+            <button type="submit">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+    </form>
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Publicación</th>
+                    <th>Mascota</th>
+                    @if (esAdminSistema()) {
+                    <th>Refugio</th>
+                    }
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Conversaciones</th>
+                    <th>Mensajes</th>
+                    <th>Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (proceso of procesos(); track proceso.id_publi) {
+                <tr>
+                    <td>#{{ proceso.id_publi }}</td>
+                    <td>{{ proceso.nom_mascot }}</td>
+                    @if (esAdminSistema()) {
+                    <td>{{ proceso.nom_ref }}</td>
+                    }
+                    <td>{{ proceso.fechapubli | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <span class="status" [class.pendiente]="proceso.estado_proceso === 'PENDIENTE'"
+                            [class.revision]="proceso.estado_proceso === 'EN_REVISION'"
+                            [class.finalizada]="proceso.estado_proceso === 'FINALIZADA'">
+                            {{ estadoProcesoLabel(proceso.estado_proceso) }}
+                        </span>
+                    </td>
+                    <td>{{ proceso.total_conversaciones }}</td>
+                    <td>{{ proceso.mensajes_totales }}</td>
+                    <td>{{ proceso.tiene_responsable ? 'Asignado' : 'Sin asignar' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td [attr.colspan]="esAdminSistema() ? 8 : 7">No hay procesos para los filtros seleccionados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
+        (pageChange)="onPageChange($event)" />
+    }
+    }
+
+    @if (activeTab() === 'transacciones') {
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+        <label>
+            Usuario ID
+            <input type="number" name="id_usu" [(ngModel)]="transaccionFilters.id_usu" />
+        </label>
+        <label>
+            Acción
+            <input type="text" name="accion" [(ngModel)]="transaccionFilters.accion" placeholder="Ej: mascotas.crear" />
+        </label>
+        <label>
+            Entidad
+            <input type="text" name="entidad" [(ngModel)]="transaccionFilters.entidad" placeholder="Ej: mascotas" />
+        </label>
+        <label>
+            Desde
+            <input type="date" name="fecha_desde" [(ngModel)]="transaccionFilters.fecha_desde" />
+        </label>
+        <label>
+            Hasta
+            <input type="date" name="fecha_hasta" [(ngModel)]="transaccionFilters.fecha_hasta" />
+        </label>
+        <div class="filter-actions">
+            <button type="submit">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+    </form>
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Acción</th>
+                    <th>Entidad</th>
+                    <th>ID entidad</th>
+                    <th>IP</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of transacciones(); track item.id_log) {
+                <tr>
+                    <td>{{ item.fecha_log | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>{{ nombreCompleto(item.nom_usu, item.apell_usu) }}</td>
+                    <td>{{ item.nom_rol ?? '-' }}</td>
+                    <td><span class="action-pill">{{ item.accion }}</span></td>
+                    <td>{{ item.entidad ?? '-' }}</td>
+                    <td>{{ item.id_entidad ?? '-' }}</td>
+                    <td>{{ item.ip ?? '-' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="7">No hay transacciones para los filtros seleccionados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
+        (pageChange)="onPageChange($event)" />
+    }
+    }
+
+    @if (activeTab() === 'donaciones') {
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+        <label>
+            Estado
+            <select name="estado_pago" [(ngModel)]="donacionFilters.estado_pago">
+                <option value="">Todos</option>
+                <option value="PAGADO">Pagado</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EXPIRADO">Expirado</option>
+                <option value="FALLIDO">Fallido</option>
+                <option value="ERROR">Error</option>
+            </select>
+        </label>
+        <div class="filter-actions">
+            <button type="submit">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+    </form>
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Donante</th>
+                    <th>Código</th>
+                    <th>Glosa</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                    @if (esAdminSistema()) {
+                    <th>Receptor</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of donaciones(); track item.id_pago) {
+                <tr>
+                    <td>{{ item.fecha_creado | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ nombreCompleto(item.nom_usu, item.apell_usu) }}</td>
+                    <td>{{ item.codigo }}</td>
+                    <td>{{ item.glosa }}</td>
+                    <td>{{ item.monto_a_pagar ?? item.monto }} {{ item.moneda }}</td>
+                    <td>
+                        <span class="status" [class.pagado]="item.estado === 'PAGADO'"
+                            [class.pendiente]="item.estado === 'PENDIENTE'"
+                            [class.expirado]="item.estado === 'EXPIRADO' || item.estado === 'FALLIDO' || item.estado === 'ERROR'">
+                            {{ item.estado }}
+                        </span>
+                    </td>
+                    @if (esAdminSistema()) {
+                    <td>{{ item.nom_receptor ?? '-' }}</td>
+                    }
+                </tr>
+                } @empty {
+                <tr>
+                    <td [attr.colspan]="esAdminSistema() ? 7 : 6">No hay donaciones para los filtros seleccionados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
+        (pageChange)="onPageChange($event)" />
+    }
+    }
+</div>

@@ -34,13 +34,14 @@ export class SidebarComponent {
         { label: 'Refugios', icon: 'bx-building-house', route: '/superadmin/refugios', permission: 'refugios:obtener' },
         { label: 'Usuarios', icon: 'bx-user', route: '/superadmin/usuarios', permission: 'usuarios:obtener' },
         { label: 'Pagos', icon: 'bx-money-withdraw', route: '/superadmin/pagos', permission: 'usuarios:obtener' },
+        { label: 'Reportes', icon: 'bx-bar-chart-alt-2', route: '/superadmin/reportes', role: 'Administrador del sistema' },
         { label: 'Roles', icon: 'bx-shield-quarter', route: '/superadmin/roles', permission: 'roles:obtener' },
         { label: 'Razas', icon: 'bx-category', route: '/superadmin/razas', permission: 'razas:obtener' },
         { label: 'Especies', icon: 'bx-leaf', route: '/superadmin/especies', permission: 'especies:obtener' },
         { label: 'Tamaños', icon: 'bx-ruler', route: '/superadmin/tamanios', permission: 'tamanios:obtener' },
         { label: 'Admins Sistema', icon: 'bx-user-plus', route: '/superadmin/admins-sistema', permission: 'admins-sistema:crear' },
         { label: 'Admins Refugio', icon: 'bx-home-heart', route: '/superadmin/admins-refugio', permission: 'admins-refugio:crear' },
-        { label: 'Logs', icon: 'bx-history', route: '/superadmin/logs', role: 'Administrador del sistema' }
+        { label: 'Logs', icon: 'bx-history', route: '/superadmin/logs', permission: 'logs:obtener' }
       ]
     },
     {
@@ -49,7 +50,8 @@ export class SidebarComponent {
         { label: 'Datos del Refugio', icon: 'bx-home', route: '/refugio/mi-refugio', permission: 'refugio:obtener:propio', requiresRefugio: true },
         { label: 'Mascotas', icon: 'bx-bone', route: '/refugio/mascotas', permission: 'mascotas:obtener', requiresRefugio: true },
         { label: 'Publicaciones', icon: 'bx-news', route: '/refugio/publicaciones', permission: 'publicaciones:obtener', requiresRefugio: true },
-        { label: 'Trabajadores', icon: 'bx-id-card', route: '/refugio/trabajadores', permission: 'trabajadores:obtener', requiresRefugio: true }
+        { label: 'Trabajadores', icon: 'bx-id-card', route: '/refugio/trabajadores', permission: 'trabajadores:obtener', requiresRefugio: true },
+        { label: 'Reportes', icon: 'bx-bar-chart-alt-2', route: '/refugio/reportes', role: 'Administrador del refugio', requiresRefugio: true }
       ]
     },
     {

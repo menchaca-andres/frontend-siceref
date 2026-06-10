@@ -60,6 +60,11 @@ export const routes: Routes = [
                         loadComponent: () => import('./features/superadmin/pagos/pagos').then(m => m.PagosAdminComponent)
                     },
                     {
+                        path: 'reportes',
+                        canActivate: [roleGuard('Administrador del sistema')],
+                        loadComponent: () => import('./features/superadmin/reportes/reportes').then(m => m.ReportesComponent)
+                    },
+                    {
                         path: 'roles',
                         canActivate: [permissionGuard('roles:obtener')],
                         loadComponent: () => import('./features/superadmin/roles/roles').then(m => m.RolesComponent)
@@ -91,7 +96,7 @@ export const routes: Routes = [
                     },
                     {
                         path: 'logs',
-                        canActivate: [roleGuard('Administrador del sistema')],
+                        canActivate: [permissionGuard('logs:obtener')],
                         loadComponent: () => import('./features/superadmin/logs/logs').then(m => m.LogsComponent)
                     }
                 ]
@@ -118,6 +123,11 @@ export const routes: Routes = [
                         path: 'mi-refugio',
                         canActivate: [permissionGuard('refugio:obtener:propio'), refugioAssignedGuard],
                         loadComponent: () => import('./features/refugio/mi-refugio/mi-refugio').then(m => m.MiRefugioComponent)
+                    },
+                    {
+                        path: 'reportes',
+                        canActivate: [roleGuard('Administrador del refugio'), refugioAssignedGuard],
+                        loadComponent: () => import('./features/superadmin/reportes/reportes').then(m => m.ReportesComponent)
                     }
                 ]
             },
