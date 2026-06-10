@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router'
 import { authGuard } from './core/guards/auth.guard'
 import { permissionGuard } from './core/guards/permission.guard'
+import { refugioAssignedGuard } from './core/guards/refugio-assigned.guard'
+import { roleGuard } from './core/guards/role.guard'
 
 export const routes: Routes = [
     {
@@ -86,6 +88,11 @@ export const routes: Routes = [
                         path: 'admins-refugio',
                         canActivate: [permissionGuard('admins-refugio:crear')],
                         loadComponent: () => import('./features/superadmin/admins-refugio/admins-refugio').then(m => m.AdminsRefugioComponent)
+                    },
+                    {
+                        path: 'logs',
+                        canActivate: [roleGuard('Administrador del sistema')],
+                        loadComponent: () => import('./features/superadmin/logs/logs').then(m => m.LogsComponent)
                     }
                 ]
             },
@@ -94,22 +101,22 @@ export const routes: Routes = [
                 children: [
                     {
                         path: 'mascotas',
-                        canActivate: [permissionGuard('mascotas:obtener')],
+                        canActivate: [permissionGuard('mascotas:obtener'), refugioAssignedGuard],
                         loadComponent: () => import('./features/refugio/mascotas/mascotas').then(m => m.MascotasComponent)
                     },
                     {
                         path: 'publicaciones',
-                        canActivate: [permissionGuard('publicaciones:obtener')],
+                        canActivate: [permissionGuard('publicaciones:obtener'), refugioAssignedGuard],
                         loadComponent: () => import('./features/refugio/publicaciones/publicaciones').then(m => m.PublicacionesComponent)
                     },
                     {
                         path: 'trabajadores',
-                        canActivate: [permissionGuard('trabajadores:obtener')],
+                        canActivate: [permissionGuard('trabajadores:obtener'), refugioAssignedGuard],
                         loadComponent: () => import('./features/refugio/trabajadores/trabajadores').then(m => m.TrabajadoresComponent)
                     },
                     {
                         path: 'mi-refugio',
-                        canActivate: [permissionGuard('refugio:obtener:propio')],
+                        canActivate: [permissionGuard('refugio:obtener:propio'), refugioAssignedGuard],
                         loadComponent: () => import('./features/refugio/mi-refugio/mi-refugio').then(m => m.MiRefugioComponent)
                     }
                 ]

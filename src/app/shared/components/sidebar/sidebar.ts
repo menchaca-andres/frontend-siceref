@@ -6,7 +6,9 @@ interface SidebarItem {
   label: string
   icon: string
   route: string
-  permission: string
+  permission?: string
+  role?: string
+  requiresRefugio?: boolean
 }
 
 interface SidebarSection {
@@ -37,22 +39,22 @@ export class SidebarComponent {
         { label: 'Especies', icon: 'bx-leaf', route: '/superadmin/especies', permission: 'especies:obtener' },
         { label: 'Tamaños', icon: 'bx-ruler', route: '/superadmin/tamanios', permission: 'tamanios:obtener' },
         { label: 'Admins Sistema', icon: 'bx-user-plus', route: '/superadmin/admins-sistema', permission: 'admins-sistema:crear' },
-        { label: 'Admins Refugio', icon: 'bx-home-heart', route: '/superadmin/admins-refugio', permission: 'admins-refugio:crear' }
+        { label: 'Admins Refugio', icon: 'bx-home-heart', route: '/superadmin/admins-refugio', permission: 'admins-refugio:crear' },
+        { label: 'Logs', icon: 'bx-history', route: '/superadmin/logs', role: 'Administrador del sistema' }
       ]
     },
     {
       title: 'Mi Refugio',
       items: [
-        { label: 'Datos del Refugio', icon: 'bx-home', route: '/refugio/mi-refugio', permission: 'refugio:obtener:propio' },
-        { label: 'Mascotas', icon: 'bx-bone', route: '/refugio/mascotas', permission: 'mascotas:obtener' },
-        { label: 'Publicaciones', icon: 'bx-news', route: '/refugio/publicaciones', permission: 'publicaciones:obtener' },
-        { label: 'Trabajadores', icon: 'bx-id-card', route: '/refugio/trabajadores', permission: 'trabajadores:obtener' }
+        { label: 'Datos del Refugio', icon: 'bx-home', route: '/refugio/mi-refugio', permission: 'refugio:obtener:propio', requiresRefugio: true },
+        { label: 'Mascotas', icon: 'bx-bone', route: '/refugio/mascotas', permission: 'mascotas:obtener', requiresRefugio: true },
+        { label: 'Publicaciones', icon: 'bx-news', route: '/refugio/publicaciones', permission: 'publicaciones:obtener', requiresRefugio: true },
+        { label: 'Trabajadores', icon: 'bx-id-card', route: '/refugio/trabajadores', permission: 'trabajadores:obtener', requiresRefugio: true }
       ]
     },
     {
       title: 'Adoptante',
       items: [
-        { label: 'Mi perfil', icon: 'bx-user-circle', route: '/adoptante/perfil', permission: 'perfil:obtener' },
         { label: 'Donar', icon: 'bx-qr', route: '/adoptante/donar', permission: 'perfil:obtener' }
       ]
     },
@@ -68,12 +70,18 @@ export class SidebarComponent {
     this.sections
       .map((section) => ({
         ...section,
-        items: section.items.filter((item) => this.authStore.hasPermission(item.permission))
+        items: section.items.filter((item) => this.canShowItem(item))
       }))
       .filter((section) => section.items.length > 0)
   )
 
   toggleCollapsed(): void {
     this.collapsedChange.emit(!this.collapsed)
+  }
+
+  private canShowItem(item: SidebarItem): boolean {
+    if (item.requiresRefugio && !this.authStore.id_ref()) return false
+    if (item.permission && this.authStore.hasPermission(item.permission)) return true
+    return item.role === this.authStore.nom_rol()
   }
 }

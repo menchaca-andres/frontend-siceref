@@ -1,0 +1,77 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2>Logs de auditoría</h2>
+            <p class="page-subtitle">Registros de actividad del sistema visibles solo para superadmin.</p>
+        </div>
+        <button type="button" (click)="cargarLogs()">Actualizar</button>
+    </div>
+
+    <form class="filters" (ngSubmit)="aplicarFiltros()">
+        <label>
+            Usuario ID
+            <input type="number" name="id_usu" [(ngModel)]="filters.id_usu" placeholder="Ej: 12" />
+        </label>
+        <label>
+            Acción
+            <input type="text" name="accion" [(ngModel)]="filters.accion" placeholder="Ej: auth.login" />
+        </label>
+        <label>
+            Entidad
+            <input type="text" name="entidad" [(ngModel)]="filters.entidad" placeholder="Ej: usuarios" />
+        </label>
+        <div class="filter-actions">
+            <button type="submit">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+    </form>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Entidad</th>
+                    <th>ID entidad</th>
+                    <th>IP</th>
+                    <th>Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (log of logs(); track log.id_log) {
+                <tr>
+                    <td>{{ log.fecha_log | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>
+                        <strong>{{ nombreUsuario(log) }}</strong>
+                        @if (log.usuario?.email_usu) {
+                        <small>{{ log.usuario?.email_usu }}</small>
+                        }
+                    </td>
+                    <td><span class="action-pill">{{ log.accion }}</span></td>
+                    <td>{{ log.entidad ?? '-' }}</td>
+                    <td>{{ log.id_entidad ?? '-' }}</td>
+                    <td>{{ log.ip ?? '-' }}</td>
+                    <td><pre>{{ detalleTexto(log.detalle) }}</pre></td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="7">No hay logs para los filtros seleccionados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
+        (pageChange)="onPageChange($event)" />
+    }
+</div>

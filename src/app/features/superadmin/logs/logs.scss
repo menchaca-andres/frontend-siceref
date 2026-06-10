@@ -1,0 +1,62 @@
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.filters label {
+    display: grid;
+    gap: 0.35rem;
+    color: #334155;
+    font-weight: 600;
+}
+
+.filters input {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+}
+
+.filter-actions {
+    display: flex;
+    align-items: end;
+    gap: 0.5rem;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+td strong,
+td small {
+    display: block;
+}
+
+td small {
+    color: #64748b;
+}
+
+.action-pill {
+    display: inline-flex;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+pre {
+    max-width: 320px;
+    max-height: 120px;
+    overflow: auto;
+    margin: 0;
+    white-space: pre-wrap;
+    font-size: 0.8rem;
+}
