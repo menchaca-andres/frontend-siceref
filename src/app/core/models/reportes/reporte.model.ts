@@ -96,4 +96,4 @@ export interface ReporteFilters {
     fecha_hasta?: string
 }
 
-export type ReporteTab = 'resumen' | 'usuarios' | 'procesos' | 'transacciones' | 'donaciones'
+export type ReporteTab = 'resumen' | 'usuarios' | 'logs' | 'donaciones'

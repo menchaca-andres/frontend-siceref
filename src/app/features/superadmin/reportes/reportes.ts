@@ -2,10 +2,8 @@ import { DatePipe } from '@angular/common'
 import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import {
-    EstadoProcesoAdopcion,
     ReporteDonacionItem,
     ReporteEstadisticas,
-    ReporteProcesoItem,
     ReporteTab,
     ReporteTransaccionItem,
     ReporteUsuarioItem,
@@ -32,18 +30,15 @@ export class ReportesComponent implements OnInit {
 
     estadisticas = signal<ReporteEstadisticas | null>(null)
     usuarios = signal<ReporteUsuarioItem[]>([])
-    procesos = signal<ReporteProcesoItem[]>([])
-    transacciones = signal<ReporteTransaccionItem[]>([])
+    logs = signal<ReporteTransaccionItem[]>([])
     donaciones = signal<ReporteDonacionItem[]>([])
     totalItems = signal(0)
 
     usuarioFilters = { id_rol: null as number | null, id_ref: null as number | null }
-    procesoFilters = { estado_proceso: '' as EstadoProcesoAdopcion | '' }
-    transaccionFilters = { id_usu: null as number | null, accion: '', entidad: '', fecha_desde: '', fecha_hasta: '' }
+    logFilters = { id_usu: null as number | null, accion: '', entidad: '', fecha_desde: '', fecha_hasta: '' }
     donacionFilters = { estado_pago: '' }
 
     esAdminSistema = computed(() => this.authStore.isAdminSistema())
-    esAdminRefugio = computed(() => this.authStore.isAdminRefugio())
 
     tabs = computed(() => {
         const items: { id: ReporteTab; label: string }[] = [{ id: 'resumen', label: 'Resumen' }]
@@ -51,18 +46,13 @@ export class ReportesComponent implements OnInit {
         if (this.esAdminSistema()) {
             items.push(
                 { id: 'usuarios', label: 'Usuarios' },
-                { id: 'procesos', label: 'Procesos' },
-                { id: 'transacciones', label: 'Transacciones' },
+                { id: 'logs', label: 'Logs' },
                 { id: 'donaciones', label: 'Donaciones' },
             )
             return items
         }
 
-        items.push(
-            { id: 'procesos', label: 'Procesos' },
-            { id: 'donaciones', label: 'Donaciones' },
-        )
-
+        items.push({ id: 'donaciones', label: 'Donaciones' })
         return items
     })
 
@@ -88,8 +78,7 @@ export class ReportesComponent implements OnInit {
 
     limpiarFiltros(): void {
         this.usuarioFilters = { id_rol: null, id_ref: null }
-        this.procesoFilters = { estado_proceso: '' }
-        this.transaccionFilters = { id_usu: null, accion: '', entidad: '', fecha_desde: '', fecha_hasta: '' }
+        this.logFilters = { id_usu: null, accion: '', entidad: '', fecha_desde: '', fecha_hasta: '' }
         this.donacionFilters = { estado_pago: '' }
         this.aplicarFiltros()
     }
@@ -101,12 +90,6 @@ export class ReportesComponent implements OnInit {
 
     nombreCompleto(nombre?: string | null, apellido?: string | null): string {
         return [nombre, apellido].filter(Boolean).join(' ') || 'Sin nombre'
-    }
-
-    estadoProcesoLabel(estado: EstadoProcesoAdopcion): string {
-        if (estado === 'PENDIENTE') return 'Pendiente'
-        if (estado === 'EN_REVISION') return 'En revisión'
-        return 'Finalizada'
     }
 
     private cargarTabActivo(page = 1): void {
@@ -122,13 +105,8 @@ export class ReportesComponent implements OnInit {
             return
         }
 
-        if (tab === 'procesos') {
-            this.cargarProcesos(page)
-            return
-        }
-
-        if (tab === 'transacciones') {
-            this.cargarTransacciones(page)
+        if (tab === 'logs') {
+            this.cargarLogs(page)
             return
         }
 
@@ -178,55 +156,27 @@ export class ReportesComponent implements OnInit {
         })
     }
 
-    private cargarProcesos(page: number): void {
-        this.loading.set(true)
-        this.error.set(null)
-
-        const filters = {
-            page,
-            limit: this.pageSize,
-            estado_proceso: this.procesoFilters.estado_proceso,
-        }
-
-        const request = this.esAdminSistema()
-            ? this.reporteService.getProcesosSistema(filters)
-            : this.reporteService.getProcesosRefugio(filters)
-
-        request.subscribe({
-            next: (response) => {
-                this.procesos.set(response.items)
-                this.totalItems.set(response.total)
-                this.page.set(response.page)
-                this.loading.set(false)
-            },
-            error: (err) => {
-                this.error.set(err.error?.message ?? 'No se pudo cargar el reporte de procesos')
-                this.loading.set(false)
-            },
-        })
-    }
-
-    private cargarTransacciones(page: number): void {
+    private cargarLogs(page: number): void {
         this.loading.set(true)
         this.error.set(null)
 
         this.reporteService.getTransacciones({
             page,
             limit: this.pageSize,
-            id_usu: this.transaccionFilters.id_usu,
-            accion: this.transaccionFilters.accion.trim(),
-            entidad: this.transaccionFilters.entidad.trim(),
-            fecha_desde: this.transaccionFilters.fecha_desde,
-            fecha_hasta: this.transaccionFilters.fecha_hasta,
+            id_usu: this.logFilters.id_usu,
+            accion: this.logFilters.accion.trim(),
+            entidad: this.logFilters.entidad.trim(),
+            fecha_desde: this.logFilters.fecha_desde,
+            fecha_hasta: this.logFilters.fecha_hasta,
         }).subscribe({
             next: (response) => {
-                this.transacciones.set(response.items)
+                this.logs.set(response.items)
                 this.totalItems.set(response.total)
                 this.page.set(response.page)
                 this.loading.set(false)
             },
             error: (err) => {
-                this.error.set(err.error?.message ?? 'No se pudo cargar el reporte de transacciones')
+                this.error.set(err.error?.message ?? 'No se pudieron cargar los logs')
                 this.loading.set(false)
             },
         })

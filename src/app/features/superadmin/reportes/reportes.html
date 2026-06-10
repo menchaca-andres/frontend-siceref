@@ -4,7 +4,7 @@
             <h2>Reportes</h2>
             <p class="page-subtitle">
                 @if (esAdminSistema()) {
-                Estadísticas, usuarios, procesos de adopción, transacciones y donaciones del sistema.
+                Estadísticas, usuarios, logs de auditoría y donaciones del sistema.
                 } @else {
                 Estadísticas y reportes operativos de tu refugio.
                 }
@@ -74,7 +74,7 @@
         </article>
         @if (esAdminSistema()) {
         <article class="summary-card">
-            <span>Transacciones registradas</span>
+            <span>Logs registrados</span>
             <strong>{{ stats.transacciones_registradas }}</strong>
         </article>
         }
@@ -160,96 +160,27 @@
     }
     }
 
-    @if (activeTab() === 'procesos') {
-    <form class="filters" (ngSubmit)="aplicarFiltros()">
-        <label>
-            Estado del proceso
-            <select name="estado_proceso" [(ngModel)]="procesoFilters.estado_proceso">
-                <option value="">Todos</option>
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="EN_REVISION">En revisión</option>
-                <option value="FINALIZADA">Finalizada</option>
-            </select>
-        </label>
-        <div class="filter-actions">
-            <button type="submit">Filtrar</button>
-            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
-        </div>
-    </form>
-
-    @if (loading()) {
-    <p>Cargando...</p>
-    } @else {
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>Publicación</th>
-                    <th>Mascota</th>
-                    @if (esAdminSistema()) {
-                    <th>Refugio</th>
-                    }
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Conversaciones</th>
-                    <th>Mensajes</th>
-                    <th>Responsable</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (proceso of procesos(); track proceso.id_publi) {
-                <tr>
-                    <td>#{{ proceso.id_publi }}</td>
-                    <td>{{ proceso.nom_mascot }}</td>
-                    @if (esAdminSistema()) {
-                    <td>{{ proceso.nom_ref }}</td>
-                    }
-                    <td>{{ proceso.fechapubli | date:'dd/MM/yyyy' }}</td>
-                    <td>
-                        <span class="status" [class.pendiente]="proceso.estado_proceso === 'PENDIENTE'"
-                            [class.revision]="proceso.estado_proceso === 'EN_REVISION'"
-                            [class.finalizada]="proceso.estado_proceso === 'FINALIZADA'">
-                            {{ estadoProcesoLabel(proceso.estado_proceso) }}
-                        </span>
-                    </td>
-                    <td>{{ proceso.total_conversaciones }}</td>
-                    <td>{{ proceso.mensajes_totales }}</td>
-                    <td>{{ proceso.tiene_responsable ? 'Asignado' : 'Sin asignar' }}</td>
-                </tr>
-                } @empty {
-                <tr>
-                    <td [attr.colspan]="esAdminSistema() ? 8 : 7">No hay procesos para los filtros seleccionados.</td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="totalItems()"
-        (pageChange)="onPageChange($event)" />
-    }
-    }
-
-    @if (activeTab() === 'transacciones') {
+    @if (activeTab() === 'logs') {
     <form class="filters" (ngSubmit)="aplicarFiltros()">
         <label>
             Usuario ID
-            <input type="number" name="id_usu" [(ngModel)]="transaccionFilters.id_usu" />
+            <input type="number" name="id_usu" [(ngModel)]="logFilters.id_usu" />
         </label>
         <label>
             Acción
-            <input type="text" name="accion" [(ngModel)]="transaccionFilters.accion" placeholder="Ej: mascotas.crear" />
+            <input type="text" name="accion" [(ngModel)]="logFilters.accion" placeholder="Ej: mascotas.crear" />
         </label>
         <label>
             Entidad
-            <input type="text" name="entidad" [(ngModel)]="transaccionFilters.entidad" placeholder="Ej: mascotas" />
+            <input type="text" name="entidad" [(ngModel)]="logFilters.entidad" placeholder="Ej: mascotas" />
         </label>
         <label>
             Desde
-            <input type="date" name="fecha_desde" [(ngModel)]="transaccionFilters.fecha_desde" />
+            <input type="date" name="fecha_desde" [(ngModel)]="logFilters.fecha_desde" />
         </label>
         <label>
             Hasta
-            <input type="date" name="fecha_hasta" [(ngModel)]="transaccionFilters.fecha_hasta" />
+            <input type="date" name="fecha_hasta" [(ngModel)]="logFilters.fecha_hasta" />
         </label>
         <div class="filter-actions">
             <button type="submit">Filtrar</button>
@@ -274,7 +205,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for (item of transacciones(); track item.id_log) {
+                @for (item of logs(); track item.id_log) {
                 <tr>
                     <td>{{ item.fecha_log | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                     <td>{{ nombreCompleto(item.nom_usu, item.apell_usu) }}</td>
@@ -286,7 +217,7 @@
                 </tr>
                 } @empty {
                 <tr>
-                    <td colspan="7">No hay transacciones para los filtros seleccionados.</td>
+                    <td colspan="7">No hay logs para los filtros seleccionados.</td>
                 </tr>
                 }
             </tbody>
