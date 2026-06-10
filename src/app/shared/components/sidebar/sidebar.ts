@@ -31,6 +31,7 @@ export class SidebarComponent {
       items: [
         { label: 'Refugios', icon: 'bx-building-house', route: '/superadmin/refugios', permission: 'refugios:obtener' },
         { label: 'Usuarios', icon: 'bx-user', route: '/superadmin/usuarios', permission: 'usuarios:obtener' },
+        { label: 'Pagos', icon: 'bx-money-withdraw', route: '/superadmin/pagos', permission: 'usuarios:obtener' },
         { label: 'Roles', icon: 'bx-shield-quarter', route: '/superadmin/roles', permission: 'roles:obtener' },
         { label: 'Razas', icon: 'bx-category', route: '/superadmin/razas', permission: 'razas:obtener' },
         { label: 'Especies', icon: 'bx-leaf', route: '/superadmin/especies', permission: 'especies:obtener' },
@@ -46,6 +47,13 @@ export class SidebarComponent {
         { label: 'Mascotas', icon: 'bx-bone', route: '/refugio/mascotas', permission: 'mascotas:obtener' },
         { label: 'Publicaciones', icon: 'bx-news', route: '/refugio/publicaciones', permission: 'publicaciones:obtener' },
         { label: 'Trabajadores', icon: 'bx-id-card', route: '/refugio/trabajadores', permission: 'trabajadores:obtener' }
+      ]
+    },
+    {
+      title: 'Adoptante',
+      items: [
+        { label: 'Mi perfil', icon: 'bx-user-circle', route: '/adoptante/perfil', permission: 'perfil:obtener' },
+        { label: 'Donar', icon: 'bx-qr', route: '/adoptante/donar', permission: 'perfil:obtener' }
       ]
     },
     {

@@ -1,0 +1,77 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2>Pagos y donaciones</h2>
+            <p class="page-subtitle">Resumen de depósitos confirmados y movimientos QR.</p>
+        </div>
+        <button type="button" (click)="cargarPagos()">Actualizar</button>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    @if (resumen(); as data) {
+    <section class="summary-grid">
+        <article class="summary-card total-card">
+            <span>Total depositado</span>
+            <strong>{{ data.total_depositado }} {{ data.moneda }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Pagados</span>
+            <strong>{{ data.pagos_pagados }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Pendientes</span>
+            <strong>{{ data.pagos_pendientes }}</strong>
+        </article>
+        <article class="summary-card">
+            <span>Expirados</span>
+            <strong>{{ data.pagos_expirados }}</strong>
+        </article>
+    </section>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Donante</th>
+                <th>Código</th>
+                <th>Glosa</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Receptor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (movimiento of movimientosPaginados(); track movimiento.id_pago) {
+            <tr>
+                <td>{{ movimiento.fecha_creado | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ nombreCompleto(movimiento.usuario) }}</td>
+                <td>{{ movimiento.codigo }}</td>
+                <td>{{ movimiento.glosa }}</td>
+                <td>{{ montoPagado(movimiento) }} {{ movimiento.moneda }}</td>
+                <td>
+                    <span class="status" [class.pagado]="movimiento.estado === 'PAGADO'"
+                        [class.pendiente]="movimiento.estado === 'PENDIENTE'" [class.expirado]="movimiento.estado === 'EXPIRADO'"
+                        [class.error-state]="movimiento.estado === 'FALLIDO' || movimiento.estado === 'ERROR'">
+                        {{ movimiento.estado }}
+                    </span>
+                </td>
+                <td>{{ nombreCompleto(movimiento.receptor) }}</td>
+            </tr>
+            } @empty {
+            <tr>
+                <td colspan="7">Todavía no hay movimientos QR.</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <app-table-pagination [page]="page()" [pageSize]="pageSize" [totalItems]="movimientos().length"
+        (pageChange)="page.set($event)" />
+    }
+</div>

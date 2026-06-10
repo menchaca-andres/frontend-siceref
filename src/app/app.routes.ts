@@ -53,6 +53,11 @@ export const routes: Routes = [
                         loadComponent: () => import('./features/superadmin/usuarios/usuarios').then(m => m.UsuariosComponent)
                     },
                     {
+                        path: 'pagos',
+                        canActivate: [permissionGuard('usuarios:obtener')],
+                        loadComponent: () => import('./features/superadmin/pagos/pagos').then(m => m.PagosAdminComponent)
+                    },
+                    {
                         path: 'roles',
                         canActivate: [permissionGuard('roles:obtener')],
                         loadComponent: () => import('./features/superadmin/roles/roles').then(m => m.RolesComponent)
@@ -116,6 +121,10 @@ export const routes: Routes = [
                         path: 'perfil',
                         canActivate: [permissionGuard('perfil:obtener')],
                         loadComponent: () => import('./features/adoptante/perfil/perfil').then(m => m.PerfilComponent)
+                    },
+                    {
+                        path: 'donar',
+                        loadComponent: () => import('./features/adoptante/donar/donar').then(m => m.DonarComponent)
                     }
                 ]
             },
