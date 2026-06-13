@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Tamaños</h2>
         @if (authStore.hasPermission('tamanios:crear')) {
-        <button (click)="abrirFormCrear()">+ Nuevo Tamaño</button>
+        <button type="button" (click)="abrirFormCrear()">+ Nuevo Tamaño</button>
         }
     </div>
 
@@ -30,13 +30,13 @@
                 <td>{{ tamanio.estado_tam ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     @if (authStore.hasPermission('tamanios:modificar')) {
-                    <button (click)="abrirFormEditar(tamanio)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(tamanio)">Editar</button>
                     }
                     @if (tamanio.estado_tam && authStore.hasPermission('tamanios:eliminar')) {
-                    <button (click)="desactivar(tamanio.id_tam)">Desactivar</button>
+                    <button type="button" (click)="desactivar(tamanio.id_tam)">Desactivar</button>
                     }
                     @if (!tamanio.estado_tam && authStore.hasPermission('tamanios:modificar')) {
-                    <button (click)="activar(tamanio.id_tam)">Activar</button>
+                    <button type="button" (click)="activar(tamanio.id_tam)">Activar</button>
                     }
                 </td>
             </tr>

@@ -4,6 +4,7 @@ import { EspecieService } from '../../../shared/services/especies/especie.servic
 import { Especie } from '../../../core/models/especies/especie.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-especies',
@@ -93,7 +94,16 @@ export class EspeciesComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar esta especie?')) return
 
     this.especieService.delete(id).subscribe({
-      next: () => this.cargarEspecies(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.especies(),
+          this.page(),
+          this.pageSize,
+          (especie) => especie.id_esp === id,
+        )
+        this.especies.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

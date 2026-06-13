@@ -6,6 +6,7 @@ import { Raza } from '../../../core/models/razas/raza.model'
 import { Especie } from '../../../core/models/especies/especie.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-razas',
@@ -105,7 +106,16 @@ export class RazasComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar esta raza?')) return
 
     this.razaService.delete(id).subscribe({
-      next: () => this.cargarRazas(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.razas(),
+          this.page(),
+          this.pageSize,
+          (raza) => raza.id_raza === id,
+        )
+        this.razas.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

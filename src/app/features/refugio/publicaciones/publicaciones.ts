@@ -7,6 +7,7 @@ import { AuthStore } from '../../../core/store/auth.store'
 import { MascotaService } from '../../../shared/services/mascotas/mascota.service'
 import { PublicacionService } from '../../../shared/services/publicaciones/publicacion.service'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-publicaciones',
@@ -127,7 +128,16 @@ export class PublicacionesComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar esta publicación?')) return
 
     this.publicacionService.delete(id).subscribe({
-      next: () => this.cargarPublicaciones(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.publicaciones(),
+          this.page(),
+          this.pageSize,
+          (publicacion) => publicacion.id_publi === id,
+        )
+        this.publicaciones.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error?.message || 'Error al eliminar publicación')
     })
   }

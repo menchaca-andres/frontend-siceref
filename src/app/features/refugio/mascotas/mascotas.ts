@@ -10,6 +10,7 @@ import { Raza } from '../../../core/models/razas/raza.model'
 import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-mascotas',
@@ -238,7 +239,16 @@ export class MascotasComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar esta mascota?')) return
 
     this.mascotaService.delete(id).subscribe({
-      next: () => this.cargarMascotas(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.mascotas(),
+          this.page(),
+          this.pageSize,
+          (mascota) => mascota.id_ani === id,
+        )
+        this.mascotas.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

@@ -45,10 +45,10 @@
                 <td>{{ usuario.refugio?.nom_ref ?? 'Sin refugio' }}</td>
                 <td>
                     @if (authStore.hasPermission('usuarios:modificar')) {
-                    <button (click)="abrirFormEditar(usuario)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(usuario)">Editar</button>
                     }
                     @if (authStore.hasPermission('usuarios:eliminar')) {
-                    <button (click)="eliminar(usuario.id_usu)">Eliminar</button>
+                    <button type="button" (click)="eliminar(usuario.id_usu)">Eliminar</button>
                     }
                 </td>
             </tr>

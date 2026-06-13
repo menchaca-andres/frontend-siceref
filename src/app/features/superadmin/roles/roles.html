@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Roles</h2>
         @if (authStore.hasPermission('roles:crear')) {
-        <button (click)="abrirFormCrear()">+ Nuevo Rol</button>
+        <button type="button" (click)="abrirFormCrear()">+ Nuevo Rol</button>
         }
     </div>
 
@@ -32,10 +32,10 @@
                 <td>{{ rol.descrip_rol }}</td>
                 <td>
                     @if (authStore.hasPermission('roles:modificar')) {
-                    <button (click)="abrirFormEditar(rol)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(rol)">Editar</button>
                     }
                     @if (authStore.hasPermission('roles:eliminar')) {
-                    <button (click)="eliminar(rol.id_rol)">Eliminar</button>
+                    <button type="button" (click)="eliminar(rol.id_rol)">Eliminar</button>
                     }
                 </td>
             </tr>

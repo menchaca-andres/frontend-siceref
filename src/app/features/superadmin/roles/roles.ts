@@ -4,6 +4,7 @@ import { RolService } from '../../../shared/services/roles/rol.service'
 import { Rol } from '../../../core/models/roles/rol.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-roles',
@@ -95,7 +96,16 @@ export class RolesComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar este rol?')) return
 
     this.rolService.delete(id).subscribe({
-      next: () => this.cargarRoles(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.roles(),
+          this.page(),
+          this.pageSize,
+          (rol) => rol.id_rol === id,
+        )
+        this.roles.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

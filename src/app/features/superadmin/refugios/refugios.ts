@@ -4,6 +4,7 @@ import { RefugioService } from '../../../shared/services/refugios/refugio.servic
 import { Refugio } from '../../../core/models/refugios/refugio.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-refugios',
@@ -134,7 +135,16 @@ export class RefugiosComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar este refugio?')) return
 
     this.refugioService.delete(id).subscribe({
-      next: () => this.cargarRefugios(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.refugios(),
+          this.page(),
+          this.pageSize,
+          (refugio) => refugio.id_ref === id,
+        )
+        this.refugios.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

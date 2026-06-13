@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Especies</h2>
         @if (authStore.hasPermission('especies:crear')) {
-        <button (click)="abrirFormCrear()">+ Nueva Especie</button>
+        <button type="button" (click)="abrirFormCrear()">+ Nueva Especie</button>
         }
     </div>
 
@@ -28,10 +28,10 @@
                 <td>{{ especie.nom_esp }}</td>
                 <td>
                     @if (authStore.hasPermission('especies:modificar')) {
-                    <button (click)="abrirFormEditar(especie)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(especie)">Editar</button>
                     }
                     @if (authStore.hasPermission('especies:eliminar')) {
-                    <button (click)="eliminar(especie.id_esp)">Eliminar</button>
+                    <button type="button" (click)="eliminar(especie.id_esp)">Eliminar</button>
                     }
                 </td>
             </tr>

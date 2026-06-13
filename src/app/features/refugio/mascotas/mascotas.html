@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Mascotas</h2>
         @if (authStore.hasPermission('mascotas:crear')) {
-        <button (click)="abrirFormCrear()">+ Nueva Mascota</button>
+        <button type="button" (click)="abrirFormCrear()">+ Nueva Mascota</button>
         }
     </div>
 
@@ -51,10 +51,10 @@
                 <td>{{ mascota.refugio?.nom_ref }}</td>
                 <td>
                     @if (authStore.hasPermission('mascotas:modificar')) {
-                    <button (click)="abrirFormEditar(mascota)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(mascota)">Editar</button>
                     }
                     @if (authStore.hasPermission('mascotas:eliminar')) {
-                    <button (click)="eliminar(mascota.id_ani)">Eliminar</button>
+                    <button type="button" (click)="eliminar(mascota.id_ani)">Eliminar</button>
                     }
                 </td>
             </tr>

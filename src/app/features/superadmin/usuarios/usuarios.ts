@@ -5,6 +5,7 @@ import { Usuario } from '../../../core/models/usuarios/usuario.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { DatePipe } from '@angular/common'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-usuarios',
@@ -133,7 +134,16 @@ export class UsuariosComponent implements OnInit {
     if (!confirm('¿Estás seguro de eliminar este usuario?')) return
 
     this.usuarioService.delete(id).subscribe({
-      next: () => this.cargarUsuarios(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.usuarios(),
+          this.page(),
+          this.pageSize,
+          (usuario) => usuario.id_usu === id,
+        )
+        this.usuarios.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error.message)
     })
   }

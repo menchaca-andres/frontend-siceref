@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Publicaciones</h2>
         @if (authStore.hasPermission('publicaciones:crear')) {
-        <button (click)="abrirFormCrear()">+ Nueva Publicación</button>
+        <button type="button" (click)="abrirFormCrear()">+ Nueva Publicación</button>
         }
     </div>
 
@@ -45,10 +45,10 @@
                 <td>{{ publicacion.estad_publ ? 'Activa' : 'Inactiva' }}</td>
                 <td>
                     @if (authStore.hasPermission('publicaciones:modificar')) {
-                    <button (click)="abrirFormEditar(publicacion)">Editar</button>
+                    <button type="button" (click)="abrirFormEditar(publicacion)">Editar</button>
                     }
                     @if (authStore.hasPermission('publicaciones:eliminar')) {
-                    <button (click)="eliminar(publicacion.id_publi)">Eliminar</button>
+                    <button type="button" (click)="eliminar(publicacion.id_publi)">Eliminar</button>
                     }
                 </td>
             </tr>

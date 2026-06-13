@@ -4,6 +4,7 @@ import { Tamanio } from '../../../core/models/tamanios/tamanio.model'
 import { AuthStore } from '../../../core/store/auth.store'
 import { TamanioService } from '../../../shared/services/tamanios/tamanio.service'
 import { TablePaginationComponent } from '../../../shared/components/table-pagination/table-pagination'
+import { removeItemAndFixPage } from '../../../shared/utils/list-pagination.helper'
 
 @Component({
   selector: 'app-tamanios',
@@ -94,7 +95,16 @@ export class TamaniosComponent implements OnInit {
     if (!confirm('¿Estás seguro de desactivar este tamaño?')) return
 
     this.tamanioService.delete(id).subscribe({
-      next: () => this.cargarTamanios(),
+      next: () => {
+        const result = removeItemAndFixPage(
+          this.tamanios(),
+          this.page(),
+          this.pageSize,
+          (tamanio) => tamanio.id_tam === id,
+        )
+        this.tamanios.set(result.items)
+        this.page.set(result.page)
+      },
       error: (err) => this.error.set(err.error?.message || 'Error al desactivar tamaño')
     })
   }
